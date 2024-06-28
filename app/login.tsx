@@ -1,5 +1,7 @@
+import { StyleSheet, Text, TextInput, View } from "react-native";
+
 import CustomBtn from "@/components/CustomBtn";
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import CustomPressable from "@/components/CustomPressable";
 
 export default function Login () {
   return(
@@ -11,7 +13,7 @@ export default function Login () {
             width: '100%', 
             padding: 10}}>
           <View style={{padding: 3}}>
-            <Text style={{fontSize: 18, padding: 2, fontWeight: 'bold'}}>Username</Text>
+            <Text style={{fontSize: 18, padding: 2, fontWeight: 'bold',}}>Username</Text>
             <TextInput
               style={{borderColor: 'white', backgroundColor: 'gray', padding: 8, borderRadius: 5, fontSize: 18}}
             />
@@ -20,16 +22,17 @@ export default function Login () {
             <Text style={{fontSize: 18, padding: 2, fontWeight: 'bold'}}>Password</Text>
             <TextInput
               style={{borderColor: 'white', backgroundColor: 'gray', padding: 8, borderRadius: 5, fontSize: 18}}
+              secureTextEntry={true}
             />
           </View>
           <View style={{padding: 2}}>
             <Text style={{textAlign: 'right'}}>Forgot password?</Text>
           </View>
         </View>
-        <CustomBtn
-          text="LOGIN"
-          buttonStyle={{backgroundColor: '#83B4FF', width: '40%', borderRadius: 10}}
-          textStyle={{fontSize: 18, padding: 8,}}
+        <CustomPressable
+          text="Login"
+          buttonStyle={{backgroundColor: '#5A72A0', width: '40%', height: '8%', borderRadius: 10}}
+          textStyle={{fontSize: 18, padding: 8, color: 'white'}}
         />
         <Text>or</Text>
         <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>
