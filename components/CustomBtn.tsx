@@ -28,12 +28,13 @@ const CustomBtn = ({ text, buttonStyle, textStyle, iconName, iconSize = 24, icon
 const styles = StyleSheet.create({
   defaultButtonStyle: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'row',
     padding: 10,
     backgroundColor: 'green',
-    borderRadius: 10
+    borderRadius: 10,
+    gap: 10
   },
   defaultTextStyle: {
     fontSize: 10,
