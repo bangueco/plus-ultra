@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet, Text } from "react-native"
-import { MaterialIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 type BtnProps = {
   text: string;
   buttonStyle?: object;
   textStyle?: object;
-  iconName?: keyof typeof MaterialIcons.glyphMap;
+  iconName?: keyof typeof AntDesign.glyphMap;
   iconSize?: number;
   iconColor?: string;
 };
@@ -14,7 +14,7 @@ const CustomBtn = ({ text, buttonStyle, textStyle, iconName, iconSize = 24, icon
   return (
     <Pressable style={[styles.defaultButtonStyle, buttonStyle]}>
       {iconName && (
-          <MaterialIcons 
+          <AntDesign
             name={iconName} 
             size={iconSize} 
             color={iconColor} 
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     backgroundColor: 'green',
+    borderRadius: 10
   },
   defaultTextStyle: {
     fontSize: 10,
