@@ -34,16 +34,18 @@ export default function Login () {
         <Text>or</Text>
         <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>
           <CustomBtn
-            iconName="facebook"
-            iconSize={30}
-            text="LOGIN WITH FACEBOOK"
-            buttonStyle={{backgroundColor: 'blue', borderRadius: 5, width: '75%'}}
-            textStyle={{fontSize: 15, color: 'white', fontWeight: '600'}}
+            iconName="facebook-square"
+            iconSize={25}
+            text="Login with Facebook"
+            buttonStyle={{backgroundColor: '#3C66C4', width: '80%'}}
+            textStyle={{fontSize: 14, color: 'white'}}
           />
           <CustomBtn
-            text="LOGIN WITH GOOGLE"
-            buttonStyle={{backgroundColor: 'orange', borderRadius: 5, width: '70%'}}
-            textStyle={{fontSize: 15}}
+            iconName="google"
+            iconSize={25}
+            text="Login With Google"
+            buttonStyle={{backgroundColor: '#CF4332', width: '80%'}}
+            textStyle={{fontSize: 14, color: 'white'}}
           />
         </View>
       </View>
