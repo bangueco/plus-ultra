@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import { TextInput } from "react-native-paper";
 
+import TextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/CustomBtn";
 import CustomPressable from "@/components/CustomPressable";
 
@@ -15,13 +15,11 @@ export default function Login () {
             padding: 10}}>
           <View style={{padding: 3}}>
             <TextInput
-              label="Username"
               placeholder="Enter username"
             />
           </View>
           <View style={{padding: 3, marginTop: 10}}>
             <TextInput
-              label="Password"
               secureTextEntry={true}
               placeholder="Enter password"
             />
