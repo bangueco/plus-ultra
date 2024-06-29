@@ -39,13 +39,11 @@ const CustomBtn = ({ text, buttonStyle, textStyle, iconName, iconSize = 24, icon
 const styles = StyleSheet.create({
   defaultButtonStyle: {
     display: 'flex',
-    justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'row',
     padding: 10,
     backgroundColor: 'green',
     borderRadius: 10,
-    gap: 10,
   },
   pressedButtonStyle: {
     opacity: 0.7
@@ -53,6 +51,7 @@ const styles = StyleSheet.create({
   defaultTextStyle: {
     fontSize: 10,
     textAlign: 'center',
+    flex: 1
   },
 });
 
