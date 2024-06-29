@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 
 import TextInput from "@/components/custom/CustomTextInput";
-import CustomBtn from "@/components/CustomBtn";
-import CustomPressable from "@/components/CustomPressable";
+import CustomBtn from "@/components/custom/CustomBtn";
+import CustomPressable from "@/components/custom/CustomPressable";
 
 export default function Login () {
   return(
