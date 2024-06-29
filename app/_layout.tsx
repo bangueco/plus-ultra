@@ -6,10 +6,22 @@ import Register from './pages/auth/register';
 
 const Stack = createNativeStackNavigator()
 
+const AppTheme = {
+  dark: false,
+  colors: {
+    primary: '#204079',
+    background: '#204079',
+    card: '#42506A',
+    text: '#FFFFFF',
+    border: '#86BBD8',
+    notification: '#42506A',
+  },
+};
+
 export default function RootLayout() {
 
   return (
-    <NavigationContainer independent={true}>
+    <NavigationContainer theme={AppTheme} independent={true}>
       <Stack.Navigator>
         <Stack.Screen name ="Login" component={Login} options={{headerShown: false}} />
         <Stack.Screen name ="Register" component={Register} options={{headerShown: false}} />

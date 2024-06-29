@@ -1,15 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Link } from "@react-navigation/native";
+import { Link, useTheme } from "@react-navigation/native";
 
 import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
-export default function Login () {
+export default function Register () {
+  const { colors } = useTheme();
+
   return(
     <View style={styles.container}>
-      <View style={styles.registerContainer}>
-        <Text style={{fontWeight: '800',fontSize: 30, color: 'white'}}>Register</Text>
+      <View style={[styles.registerContainer, {backgroundColor: colors.card}]}>
+        <Text style={{fontWeight: '800', fontSize: 23, color: colors.text}}>Create New Account</Text>
         <View style={
           {
             width: '100%', 
@@ -61,7 +63,7 @@ export default function Login () {
           />
         </View>
         <View>
-          <Text style={{color: 'white'}}>
+          <Text style={{color: colors.text}}>
             Don't have account yet? <Link style={{color: 'skyblue', textDecorationLine: 'underline'}} to={{ screen: 'Login'}}>Login</Link> here
           </Text>
         </View>
@@ -73,7 +75,6 @@ export default function Login () {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: '#204079',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center'
@@ -82,7 +83,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#42506A',
     gap: 10,
     borderRadius: 30,
     width: '85%',
