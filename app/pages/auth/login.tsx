@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
+import { Link } from "@react-navigation/native";
 
-import TextInput from "@/components/custom/CustomTextInput";
+import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
@@ -14,12 +15,12 @@ export default function Login () {
             width: '100%', 
             padding: 10}}>
           <View style={{padding: 3}}>
-            <TextInput
+            <CustomTextInput
               placeholder="Enter username"
             />
           </View>
           <View style={{padding: 3, marginTop: 10}}>
-            <TextInput
+            <CustomTextInput
               secureTextEntry={true}
               placeholder="Enter password"
             />
@@ -49,6 +50,11 @@ export default function Login () {
             buttonStyle={{backgroundColor: '#CF4332', width: '80%'}}
             textStyle={{fontSize: 14, color: 'white'}}
           />
+        </View>
+        <View>
+          <Text style={{color: 'white'}}>
+            Don't have account yet? <Link style={{color: 'skyblue', textDecorationLine: 'underline'}} to={{ screen: 'Register'}}>Register</Link> here
+          </Text>
         </View>
       </View>
     </View>
