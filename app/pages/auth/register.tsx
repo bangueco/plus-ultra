@@ -64,7 +64,7 @@ export default function Register () {
         </View>
         <View>
           <Text style={{color: colors.text}}>
-            Don't have account yet? <Link style={{color: 'skyblue', textDecorationLine: 'underline'}} to={{ screen: 'Login'}}>Login</Link> here
+            Already have account yet? <Link style={{color: 'skyblue', textDecorationLine: 'underline'}} to={{ screen: 'Login'}}>Login</Link> here
           </Text>
         </View>
       </View>
