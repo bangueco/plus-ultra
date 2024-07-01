@@ -25,7 +25,7 @@ export default function TabsLayout() {
       <Tab.Navigator 
         screenOptions={{
           headerShown: false, 
-          tabBarStyle: {backgroundColor: 'transparent', borderTopWidth: 0, padding: 5},
+          tabBarStyle: {backgroundColor: 'transparent', borderTopWidth: 0, padding: 5, marginBottom: 10, elevation: 0},
         }}>
         <Tab.Screen name="Profile" component={Profile} options={{
             title: 'Profile',
