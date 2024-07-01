@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
 
 import Profile from './profile';
+import Workout from './workout';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,6 +31,12 @@ export default function TabsLayout() {
             title: 'Profile',
             tabBarLabelStyle: {color: 'white', fontSize: 14},
             tabBarIcon: ({}) => <AntDesign name="user" size={25} color="white" />,
+          }}
+        />
+        <Tab.Screen name="Workout" component={Workout} options={{
+            title: 'Start Workout',
+            tabBarLabelStyle: {color: 'white', fontSize: 14},
+            tabBarIcon: ({}) => <AntDesign name="plus" size={25} color="white" />,
           }}
         />
       </Tab.Navigator>
