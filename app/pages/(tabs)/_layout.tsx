@@ -1,9 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import Profile from './profile';
 import Workout from './workout';
+import History from './history';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,6 +38,12 @@ export default function TabsLayout() {
             title: 'Start Workout',
             tabBarLabelStyle: {color: 'white', fontSize: 14},
             tabBarIcon: ({}) => <AntDesign name="plus" size={25} color="white" />,
+          }}
+        />
+        <Tab.Screen name="History" component={History} options={{
+            title: 'History',
+            tabBarLabelStyle: {color: 'white', fontSize: 14},
+            tabBarIcon: ({}) => <MaterialIcons name="history" size={25} color="white" />,
           }}
         />
       </Tab.Navigator>
