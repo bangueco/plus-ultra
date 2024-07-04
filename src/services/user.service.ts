@@ -1,4 +1,5 @@
 import { PrismaClient, User } from "@prisma/client"
+import bcrypt from 'bcrypt'
 
 const prisma = new PrismaClient()
 
@@ -8,7 +9,7 @@ const registerUser = async (username: string, email: string, password: string): 
       data: {
         username: username,
         email: email,
-        password: password
+        password: bcrypt.hashSync(password, 10)
       }
     })
     return newUser
