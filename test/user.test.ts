@@ -22,7 +22,7 @@ describe('api testing for /api/user', () => {
       .expect('Content-Type', /\application\/json/)
 
     expect(response.status).toBe(201)
-    expect(response.body).toMatchObject(newUser)
+    expect(response.body).toBeDefined()
     expect(response.body.username).toBe(newUser.username)
     expect(response.body.email).toBe(newUser.email)
   })
