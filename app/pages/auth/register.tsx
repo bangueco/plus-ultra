@@ -1,12 +1,31 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Link, useTheme } from "@react-navigation/native";
 
 import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
+import authService from "@/services/auth.service";
+import { useState } from "react";
+import { AxiosError } from "axios";
+
 export default function Register () {
   const { colors } = useTheme();
+
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const onPressRegister = async () => {
+    try {
+      await authService.register(username, email, password)
+      Alert.alert('Registered Succesfully')
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response?.data) {
+        Alert.alert(error.response.data.error)
+      }
+    }
+  }
 
   return(
     <View style={styles.container}>
@@ -20,11 +39,13 @@ export default function Register () {
           <View style={{padding: 3, marginTop: 10}}>
             <CustomTextInput
               placeholder="Enter username"
+              onChangeText={(e) => setUsername(e)}
             />
           </View>
           <View style={{padding: 3, marginTop: 10}}>
             <CustomTextInput
               placeholder="Enter email"
+              onChangeText={(e) => setEmail(e)}
             />
           </View>
           <View style={{padding: 3, marginTop: 10}}>
@@ -37,6 +58,7 @@ export default function Register () {
             <CustomTextInput
               secureTextEntry={true}
               placeholder="Confirm password"
+              onChangeText={(e) => setPassword(e)}
             />
           </View>
         </View>
@@ -44,6 +66,7 @@ export default function Register () {
           text="Sign Up"
           buttonStyle={{backgroundColor: '#5A72A0', width: '40%', height: 45, borderRadius: 10}}
           textStyle={{fontSize: 18, color: 'white'}}
+          onPress={onPressRegister}
         />
         <Text>or</Text>
         <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>

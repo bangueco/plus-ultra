@@ -1,13 +1,13 @@
 import { useState } from "react"
-import { Pressable, StyleSheet, Text } from "react-native"
+import { Pressable, StyleSheet, Text, PressableProps } from "react-native"
 
-type PressableProps = {
-  text: any,
+type CustomPressableProps = PressableProps & {
+  text: string,
   buttonStyle?: object,
   textStyle?: object
 }
 
-const CustomPressable = ({ text, buttonStyle, textStyle }: PressableProps) => {
+const CustomPressable = ({ text, buttonStyle, textStyle, ...props }: CustomPressableProps) => {
 
   const [isPressed, setIsPressed] = useState(false)
 
@@ -16,6 +16,7 @@ const CustomPressable = ({ text, buttonStyle, textStyle }: PressableProps) => {
       style={[styles.defaultButtonStyle, buttonStyle, isPressed && styles.buttonPressed]}
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}
+      {...props}
     >
       <Text style={[styles.defaultTextStyle, textStyle]}>
         {text}
