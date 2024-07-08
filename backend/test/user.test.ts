@@ -1,12 +1,17 @@
-import { test, describe, expect, } from 'vitest'
+import { test, describe, expect, beforeEach, } from 'vitest'
 
 import app from '../src/app'
 import supertest from 'supertest'
 import { faker } from '@faker-js/faker'
+import userHelper from './helpers/user.helper'
 
 const api = supertest(app)
 
 describe('api testing for /api/user', () => {
+  beforeEach(async () => {
+    await userHelper.deleteUsersFromDB()
+  })
+
   test('registering new user from POST: /api/user/register', async () => {
 
     const newUser = {
