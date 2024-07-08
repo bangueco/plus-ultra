@@ -30,6 +30,8 @@ const errorHandler = (error: unknown, _request: Request, response: Response, nex
   } else if (error instanceof PrismaClientKnownRequestError) {
     const errorMessage = handlePrismaError(error)
     return response.status(400).json({error: `${errorMessage}`})
+  } else if (error instanceof Error) {
+    return response.status(400).json({error: error})
   }
 
   return next()
