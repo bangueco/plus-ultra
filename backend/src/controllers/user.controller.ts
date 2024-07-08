@@ -11,10 +11,21 @@ const register = async (request: Request, response: Response, next: NextFunction
   }
 }
 
+const login = async (request: Request, response: Response, next: NextFunction) => {
+  try {
+    const {username, password} = request.body
+    const user = await userService.loginUser(username, password)
+    return response.status(200).json({token: user})
+  } catch (error) {
+    return next(error)
+  }
+}
+
 // Export as an object
 
 const userController = {
-  register
+  register,
+  login
 }
 
 export default userController
