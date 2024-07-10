@@ -1,33 +1,70 @@
+import { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { Link, useTheme } from "@react-navigation/native";
+
+import authService from "@/services/auth.service";
 
 import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
-import { useState } from "react";
-import authService from "@/services/auth.service";
+
 import { AxiosError } from "axios";
+import ErrorMessage from "@/components/custom/ErrorMessage";
 
 export default function Register () {
   const { colors } = useTheme();
 
-  const [username, setUsername] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [username, setUsername] = useState<string | undefined>(undefined)
+  const [email, setEmail] = useState<string | undefined>(undefined)
+  const [password, setPassword] = useState<string | undefined>(undefined)
+  const [confirmPassword, setConfirmPassword] = useState<string | undefined>(undefined)
 
-  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState<string>('')
+  const [emailErrorMessage, setEmailErrorMessage] = useState<string>('')
+  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState<string>('')
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('')
+
+  const clearErrorMessage = () => {
+    setUsernameErrorMessage('')
+    setEmailErrorMessage('')
+    setConfirmPasswordErrorMessage('')
+    setPasswordErrorMessage('')
+  }
+
+  const handleErrorMessage = (error: unknown) => {
+    if (error instanceof AxiosError && Array.isArray(error.response?.data)) {
+      error.response.data.map(data => {
+        if (data.error.path === 'username') {
+          setUsernameErrorMessage(data.error.message)
+        } else if (data.error.path === 'email') {
+          setEmailErrorMessage(data.error.message)
+        } else if (data.error.path === 'password') {
+          setPasswordErrorMessage(data.error.message)
+        }
+      })
+    } else if (error instanceof AxiosError && error.response?.data) {
+      if (error.response.data.error.path === 'username') {
+        setUsernameErrorMessage(error.response.data.error.message)
+      } else if (error.response.data.error.path === 'email') {
+        setEmailErrorMessage(error.response.data.error.message)
+      }
+    }
+  }
 
   const onPressRegister = async () => {
     try {
-      if (errorMessage) setErrorMessage('')
-      if (password !== confirmPassword) return setErrorMessage('Passwords must be identical to each other.')
+      clearErrorMessage()
+      if (password !== confirmPassword) return setConfirmPasswordErrorMessage('Passwords must be identical to each other.')
       await authService.register(username, email, password)
-      Alert.alert('Registered Succesfully')
+      return Alert.alert('Registered Succesfully')
     } catch (error: unknown) {
-      if (error instanceof AxiosError && error.response?.data) setErrorMessage(error.response.data.message)
+      if (error instanceof AxiosError) handleErrorMessage(error)
     }
   }
+
+  const handleChangeText = (setter: React.Dispatch<React.SetStateAction<string | undefined>>) => (text: string) => {
+    setter(text === '' ? undefined : text);
+  };
 
   return(
     <View style={styles.container}>
@@ -41,32 +78,33 @@ export default function Register () {
           <View style={{padding: 3, marginTop: 10}}>
             <CustomTextInput
               placeholder="Enter username"
-              onChangeText={(e) => setUsername(e)}
+              onChangeText={handleChangeText(setUsername)}
             />
+            <ErrorMessage text={usernameErrorMessage} />
           </View>
           <View style={{padding: 3, marginTop: 10}}>
             <CustomTextInput
               placeholder="Enter email"
-              onChangeText={(e) => setEmail(e)}
+              onChangeText={handleChangeText(setEmail)}
             />
+            <ErrorMessage text={emailErrorMessage} />
           </View>
           <View style={{padding: 3, marginTop: 10}}>
             <CustomTextInput
               secureTextEntry={true}
               placeholder="Enter password"
-              onChangeText={(e) => setPassword(e)}
+              onChangeText={handleChangeText(setConfirmPassword)}
             />
+            <ErrorMessage text={passwordErrorMessage} />
           </View>
           <View style={{padding: 3, marginTop: 10}}>
             <CustomTextInput
               secureTextEntry={true}
               placeholder="Confirm password"
-              onChangeText={(e) => setConfirmPassword(e)}
+              onChangeText={handleChangeText(setPassword)}
             />
+            <ErrorMessage text={confirmPasswordErrorMessage} />
           </View>
-          <Text style={{color: 'red'}}>
-            {errorMessage}
-          </Text>
         </View>
         <CustomPressable
           text="Sign Up"
