@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError } from "@prisma/client/runtime/library";
-import { ZodError } from "zod";
+import { ZodError, ZodIssue, ZodIssueCode } from "zod";
 
 const handlePrismaError = (error: unknown) => {
   if (error instanceof PrismaClientKnownRequestError && error.meta?.target) {
@@ -18,20 +18,25 @@ const handlePrismaError = (error: unknown) => {
   } else if (error instanceof PrismaClientUnknownRequestError) {
     return error.message
   } else {
-    return
+    return 'Unknown instance error.'
   }
 }
 
-const handleZodError = (error: unknown) => {
-  if (error instanceof ZodError && error.issues[0].code === 'invalid_type') {
-    const errorsMap = error.issues.map(error => ({
-      path: error.path,
-      message: error.message
-    }))
-    return {error: errorsMap}
-  } else {
-    return
-  }
+const handleZodError = (error: ZodError) => {
+  const errorsMap = error.issues.map((issue: ZodIssue) => {
+    switch (issue.code) {
+      case ZodIssueCode.invalid_type:
+        return {error: {path: issue.path[0], message: issue.message}}
+      case ZodIssueCode.invalid_string:
+        return {error: {path: issue.path[0], message: issue.message}}
+      case ZodIssueCode.too_small:
+        return {error: {path: issue.path[0], message: issue.message}}
+      default:
+        return {error: `unspecified zod issue error: ${issue.code}.`}
+    }
+  })
+
+  return errorsMap
 }
 
 const errorHandler = (error: unknown, _request: Request, response: Response, next: NextFunction) => {
