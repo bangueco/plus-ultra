@@ -28,6 +28,26 @@ const userRegistration = (request: Request, _response: Response, next: NextFunct
   }
 }
 
+const userAuthentication = (request: Request, _response: Response, next: NextFunction) => {
+
+  const userCredentials = z.object({
+    username: z.string({message: 'Username is required.'}).min(2).max(16),
+    password: z.string({message: 'Password is required.'}).min(6).max(32)
+  })
+  
+  try {
+
+    // Validate input from zod schema
+    const validatedData = userCredentials.parse(request.body)
+
+    // Reattach validated data into body
+    request.body = validatedData
+  } catch (error: unknown) {
+    next(error)
+  }
+}
+
 export default {
-  userRegistration
+  userRegistration,
+  userAuthentication
 }
