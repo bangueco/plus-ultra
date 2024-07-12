@@ -1,11 +1,64 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Link } from "@react-navigation/native";
 
 import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
+import ErrorMessage from "@/components/custom/ErrorMessage";
+import { useState } from "react";
+import authService from "@/services/auth.service";
+import { AxiosError } from "axios";
+
 export default function Login () {
+
+  const [username, setUsername] = useState<string | undefined>()
+  const [password, setPassword] = useState<string | undefined>()
+
+  const [usernameErrorMessage, setUsernameErrorMessage] =  useState<string>('')
+  const [passwordErrorMessage, setPasswordErrorMessage] =  useState<string>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const clearErrorMessage = () => {
+    setUsernameErrorMessage('')
+    setPasswordErrorMessage('')
+    setErrorMessage('')
+  }
+
+  const handleErrorMessage = (error: unknown) => {
+    if (error instanceof AxiosError && Array.isArray(error.response?.data)) {
+      error.response.data.map(data => {
+        if (data.error.path === 'username') {
+          setUsernameErrorMessage(data.error.message)
+        } else if (data.error.path === 'password') {
+          setPasswordErrorMessage(data.error.message)
+        }
+      })
+    } else if (error instanceof AxiosError && error.response?.data) {
+      if (error.response.data.error.path === 'username') {
+        setUsernameErrorMessage(error.response.data.error.message)
+      } else if (error.response.data.error.path === 'password') {
+        setPasswordErrorMessage(error.response.data.error.message)
+      } else {
+        setErrorMessage(error.response.data.error)
+      }
+    }
+  }
+
+  const onPressLogin = async () => {
+    try {
+      clearErrorMessage()
+      await authService.login(username, password)
+      return Alert.alert('Registered Succesfully')
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) handleErrorMessage(error)
+    }
+  }
+
+  const handleChangeText = (setter: React.Dispatch<React.SetStateAction<string | undefined>>) => (text: string) => {
+    setter(text === '' ? undefined : text);
+  };
+
   return(
     <View style={styles.container}>
       <View style={styles.loginContainer}>
@@ -17,14 +70,19 @@ export default function Login () {
           <View style={{padding: 3}}>
             <CustomTextInput
               placeholder="Enter username"
+              onChangeText={handleChangeText(setUsername)}
             />
+            <ErrorMessage text={usernameErrorMessage} />
           </View>
           <View style={{padding: 3, marginTop: 10}}>
             <CustomTextInput
               secureTextEntry={true}
               placeholder="Enter password"
+              onChangeText={handleChangeText(setPassword)}
             />
+            <ErrorMessage text={passwordErrorMessage} />
           </View>
+          <ErrorMessage text={errorMessage} style={{marginTop: 10}} />
           <View style={{padding: 3}}>
             <Text style={{textAlign: 'right'}}>Forgot password?</Text>
           </View>
@@ -33,6 +91,7 @@ export default function Login () {
           text="Login"
           buttonStyle={{backgroundColor: '#5A72A0', width: '40%', height: 45, borderRadius: 10}}
           textStyle={{fontSize: 18, color: 'white'}}
+          onPress={onPressLogin}
         />
         <Text>or</Text>
         <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>
