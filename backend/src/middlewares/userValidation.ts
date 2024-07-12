@@ -1,17 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import z from 'zod';
+import { UserSchema } from '../utils/schema';
 
 const userRegistration = (request: Request, _response: Response, next: NextFunction) => {
   
-  // Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character
+  // Minimum of 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character
   const passwordRegex = new RegExp(
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
   );
 
   const userCredentials = z.object({
-    username: z.string({message: 'Username is required.'}).min(2).max(16),
-    email: z.string({message: 'Email is required.'}).email({message: 'Invalid email format.'}),
-    password: z.string({message: 'Password is required.'}).min(6).max(32).regex(passwordRegex)
+    username: UserSchema.username,
+    email: UserSchema.email,
+    password: UserSchema.password.regex(passwordRegex, {message: 'Password must contain atleast 8 characters, one uppercase letter, a number and a special character.'})
   })
 
   try {
@@ -31,8 +32,8 @@ const userRegistration = (request: Request, _response: Response, next: NextFunct
 const userAuthentication = (request: Request, _response: Response, next: NextFunction) => {
 
   const userCredentials = z.object({
-    username: z.string({message: 'Username is required.'}).min(2).max(16),
-    password: z.string({message: 'Password is required.'}).min(6).max(32)
+    username: UserSchema.username,
+    password: UserSchema.password
   })
   
   try {
@@ -42,6 +43,7 @@ const userAuthentication = (request: Request, _response: Response, next: NextFun
 
     // Reattach validated data into body
     request.body = validatedData
+    next()
   } catch (error: unknown) {
     next(error)
   }
