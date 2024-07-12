@@ -1,29 +1,46 @@
-import { test, describe, expect, } from 'vitest'
+import { test, describe, expect, beforeEach, } from 'vitest'
 
 import app from '../src/app'
 import supertest from 'supertest'
-import { faker } from '@faker-js/faker'
+import userHelper from './helpers/user.helper'
 
 const api = supertest(app)
 
-describe('api testing for /api/user', () => {
-  test('registering new user from POST: /api/user/register', async () => {
+const fakeUser = {
+  username: 'aybandotnet',
+  email: 'aybankalbo@gmail.com',
+  password: 'aybanwalangpassword'
+}
 
-    const newUser = {
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      password: faker.internet.password()
-    }
+describe('api testing for /api/user', () => {
+  beforeEach(async () => {
+    console.log('runs')
+    await userHelper.deleteUsersFromDB()
+  })
+
+  test('registering new user from POST: /api/user/register', async () => {
 
     const response = await api
       .post('/api/user/register')
-      .send(newUser)
+      .send(fakeUser)
       .expect(201)
       .expect('Content-Type', /\application\/json/)
 
     expect(response.status).toBe(201)
     expect(response.body).toBeDefined()
-    expect(response.body.username).toBe(newUser.username)
-    expect(response.body.email).toBe(newUser.email)
+    expect(response.body.username).toBe(fakeUser.username)
+    expect(response.body.email).toBe(fakeUser.email)
+  })
+
+  test('authenticating existing user from database POST: /api/user/login', async () => {
+
+    await api.post('/api/user/register').send(fakeUser)
+
+    const response = await api
+      .post('/api/user/login')
+      .send({username: fakeUser.username, password: fakeUser.password})
+      .expect(200)
+    
+    expect(response.status).toBe(200)
   })
 })
