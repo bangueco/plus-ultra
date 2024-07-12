@@ -18,13 +18,13 @@ const registerUser = async (username: string, email: string, password: string) =
 
 const loginUser = async (username: string, password: string) => {
   const credentials = await prisma.user.findFirst({where: {username}})
-
-  // Password validation
-  if (!credentials || !credentials.password) throw new Error('Invalid username or password')
+  
+  // Verify if username exists.
+  if (!credentials) throw new Error('Username does not exists.')
 
   const match = await bcrypt.compare(password, credentials.password)
 
-  if (!match) throw new Error('Invalid username or password')
+  if (!match) throw new Error('Invalid password.')
 
   return jwt.sign({data: credentials.id}, config.secretKey, {expiresIn: 100})
 }
