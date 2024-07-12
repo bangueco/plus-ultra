@@ -1,12 +1,13 @@
 import { Text } from "react-native"
 
 type ErrorMessageType = {
-  text: string
+  text: string,
+  style?: object
 }
 
-const ErrorMessage = ({text}: ErrorMessageType) => {
+const ErrorMessage = ({text, style}: ErrorMessageType) => {
   return (
-    <Text style={{color: 'red'}}>
+    <Text style={[{color: 'red'}, style]}>
       {text}
     </Text>
   )
