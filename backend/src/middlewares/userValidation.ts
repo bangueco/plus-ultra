@@ -1,12 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserInputSchema } from '../utils/validationSchemas';
+import z from 'zod';
 
-const validateUserRegistration = (request: Request, _response: Response, next: NextFunction) => {
+const userRegistration = (request: Request, _response: Response, next: NextFunction) => {
+  
+  // Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character
+  const passwordRegex = new RegExp(
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+  );
+
+  const userCredentials = z.object({
+    username: z.string({message: 'Username is required.'}).min(2).max(16),
+    email: z.string({message: 'Email is required.'}).email({message: 'Invalid email format.'}),
+    password: z.string({message: 'Password is required.'}).min(6).max(32).regex(passwordRegex)
+  })
+
   try {
-    const { username, email, password } = request.body
 
     // Validate input from zod schema
-    const validatedData = UserInputSchema.parse({username, email, password})
+    const validatedData = userCredentials.parse(request.body)
 
     // Reattach validated data into body
     request.body = validatedData
@@ -17,6 +28,6 @@ const validateUserRegistration = (request: Request, _response: Response, next: N
   }
 }
 
-export {
-  validateUserRegistration
+export default {
+  userRegistration
 }
