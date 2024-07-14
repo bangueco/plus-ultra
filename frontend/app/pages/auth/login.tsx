@@ -1,16 +1,20 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { Link } from "@react-navigation/native";
+import { Link, ParamListBase, StackNavigationState, useNavigation } from "@react-navigation/native";
 
 import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
 import ErrorMessage from "@/components/custom/ErrorMessage";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import authService from "@/services/auth.service";
 import { AxiosError } from "axios";
 
+import * as SecureStore from 'expo-secure-store';
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+
 export default function Login () {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const [username, setUsername] = useState<string | undefined>()
   const [password, setPassword] = useState<string | undefined>()
@@ -18,6 +22,10 @@ export default function Login () {
   const [usernameErrorMessage, setUsernameErrorMessage] =  useState<string>('')
   const [passwordErrorMessage, setPasswordErrorMessage] =  useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const saveUserToken = async (token: string) => {
+    await SecureStore.setItemAsync('token', token)
+  }
 
   const clearErrorMessage = () => {
     setUsernameErrorMessage('')
@@ -48,8 +56,10 @@ export default function Login () {
   const onPressLogin = async () => {
     try {
       clearErrorMessage()
-      await authService.login(username, password)
-      return Alert.alert('Registered Succesfully')
+      const user = await authService.login(username, password)
+      saveUserToken(user.token)
+      navigation.navigate('Tabs')
+      return Alert.alert('Login Succesfully')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
     }
