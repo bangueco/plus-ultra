@@ -1,10 +1,14 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, ParamListBase, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import Profile from './profile';
 import Workout from './workout';
 import History from './history';
+
+import * as SecureStore from "expo-secure-store";
+import { useEffect } from 'react';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +25,14 @@ const AppTheme = {
 };
 
 export default function TabsLayout() {
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+
+  useEffect(() => {
+    const user = SecureStore.getItem('token')
+    if (!user) navigation.navigate('Login')
+  }, [])
+
   return (
     <NavigationContainer theme={AppTheme} independent={true}>
       <Tab.Navigator 
