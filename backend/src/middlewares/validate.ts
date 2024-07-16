@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import z from 'zod';
 import { UserSchema } from '../utils/schema';
+import tokenService from '../services/token.service';
 
 const userRegistration = (request: Request, _response: Response, next: NextFunction) => {
   
@@ -49,7 +50,30 @@ const userAuthentication = (request: Request, _response: Response, next: NextFun
   }
 }
 
+const userToken = (request: Request, _response: Response, next: NextFunction) => {
+  const authorizationHeader = request.get('authorization')
+
+  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    throw new Error('Invalid authorization header.')
+  }
+
+  const token = authorizationHeader.replace('Bearer ', '')
+
+  if (!token) {
+    throw new Error('Token not found.')
+  }
+
+  try {
+    tokenService.verifyToken(token)
+    next()
+  } catch (error: unknown) {
+    next(error)
+  }
+
+}
+
 export default {
   userRegistration,
-  userAuthentication
+  userAuthentication,
+  userToken
 }
