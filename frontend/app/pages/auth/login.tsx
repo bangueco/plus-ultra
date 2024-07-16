@@ -69,6 +69,11 @@ export default function Login () {
     setter(text === '' ? undefined : text);
   };
 
+  useEffect(() => {
+    const user = SecureStore.getItem('token')
+    if (user) navigation.replace('Tabs')
+  }, [])
+
   return(
     <View style={styles.container}>
       <View style={styles.loginContainer}>
