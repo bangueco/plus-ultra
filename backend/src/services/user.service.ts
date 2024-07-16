@@ -29,11 +29,7 @@ const loginUser = async (username: string, password: string) => {
   return jwt.sign({data: credentials.id}, config.secretKey, {expiresIn: 100})
 }
 
-// Export as an object
-
-const userService = {
+export default {
   registerUser,
   loginUser
 }
-
-export default userService
