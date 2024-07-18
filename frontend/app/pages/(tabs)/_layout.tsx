@@ -1,10 +1,11 @@
 import { NavigationContainer, ParamListBase, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 import Profile from './profile';
 import Workout from './workout';
 import History from './history';
+import Exercise from './exercise';
 
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from 'react';
@@ -56,6 +57,12 @@ export default function TabsLayout() {
             title: 'History',
             tabBarLabelStyle: {color: 'white', fontSize: 14},
             tabBarIcon: ({}) => <MaterialIcons name="history" size={25} color="white" />,
+          }}
+        />
+        <Tab.Screen name="Exercise" component={Exercise} options={{
+            title: 'Exercise',
+            tabBarLabelStyle: {color: 'white', fontSize: 14},
+            tabBarIcon: ({}) => <Ionicons name="barbell" size={25} color="white" />,
           }}
         />
       </Tab.Navigator>
