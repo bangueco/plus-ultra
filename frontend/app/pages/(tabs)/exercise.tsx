@@ -53,6 +53,22 @@ const Exercise = () => {
           <SearchInput />
         </View>
       </View>
+      <View>
+        <SectionList
+          style={{height: '100%'}}
+          sections={sectionData(exercises)}
+          renderItem={({item}) => (
+            <View key={item.id} style={[{padding: 20}, (item.id % 2 !== 0) ? style.oddColor : {backgroundColor: 'transparent'}]}>
+              <Text style={{fontSize: 17, textAlign: 'center', color: 'white'}}>{item.name}</Text>
+            </View>
+          )}
+          renderSectionHeader={({section: {title}}) => (
+            <View>
+              <Text style={{fontSize: 30, color: 'white', padding: 10, backgroundColor: '#42506A'}}>{title.toUpperCase()}</Text>
+            </View>
+          )}
+        />
+      </View>
     </View>
   )
 }
@@ -67,6 +83,9 @@ const style = StyleSheet.create({
   },
   muscleGroup: {
     backgroundColor: 'gray'
+  },
+  oddColor: {
+    backgroundColor: '#526D82'
   }
 })
 
