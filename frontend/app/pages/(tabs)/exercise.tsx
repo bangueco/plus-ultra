@@ -1,5 +1,5 @@
 import SearchInput from "@/components/custom/SearchInput"
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
 import { exercisesDatabase } from "@/database"
 import { useEffect, useState } from "react"
@@ -25,6 +25,20 @@ const Exercise = () => {
     })
     .catch(error => console.error(error))
   }, [])
+
+  const sectionData = (exercises: Array<ExerciseInterface>) => {
+    let sections: Array<{title: string, data: Array<{id: number, name: string}>}> = []
+
+    exercises.map(exercise => {
+      if (sections.some(e => e.title === exercise.muscle_group)) {
+        sections[sections.findIndex(e => e.title === exercise.muscle_group)].data.push({id: exercise.id, name: exercise.name})
+      } else {
+        sections.push({title: exercise.muscle_group, data: [{id: exercise.id, name: exercise.name}]})
+      }
+    })
+
+    return sections
+  }
 
   return (
     <View style={style.container}>
