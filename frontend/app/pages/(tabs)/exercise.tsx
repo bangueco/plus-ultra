@@ -1,5 +1,5 @@
 import SearchInput from "@/components/custom/SearchInput"
-import { SectionList, StyleSheet, Text, View } from "react-native"
+import { Alert, Modal, Pressable, SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
 import { exercisesDatabase } from "@/database"
 import { useEffect, useState } from "react"
@@ -16,6 +16,7 @@ interface ExerciseInterface {
 
 const Exercise = () => {
 
+  const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Array<ExerciseInterface>>([])
 
   useEffect(() => {
@@ -47,11 +48,34 @@ const Exercise = () => {
       </View>
       <View style={{gap: 10, padding: 10, marginBottom: 60}}>
         <View style={{alignSelf: 'flex-start'}}>
-          <CustomPressable text="+ Add New Exercise" buttonStyle={{backgroundColor: 'transparent'}} textStyle={{fontSize: 15, color: 'white'}} />
+          <CustomPressable 
+            text="+ Add New Exercise" 
+            buttonStyle={{backgroundColor: 'transparent'}} 
+            textStyle={{fontSize: 15, color: 'white'}}
+            onPress={() => setVisibleModal(!visibleModal)}
+          />
         </View>
         <View style={{flex: 1}}>
           <SearchInput />
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={visibleModal}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setVisibleModal(!visibleModal);
+          }}>
+          <View style={{height: '100%', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={style.modalStyle}>
+              <Text style={{textAlign: 'center', fontSize: 20, padding: 10}}>Add new exercise</Text>
+              <Pressable
+                onPress={() => setVisibleModal(!visibleModal)}>
+                <Text>X</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
       </View>
       <SectionList
         sections={sectionData(exercises)}
@@ -84,6 +108,12 @@ const style = StyleSheet.create({
   },
   oddColor: {
     backgroundColor: '#526D82'
+  },
+  modalStyle: {
+    backgroundColor: 'red',
+    width: '70%',
+    height: '40%',
+    borderRadius: 20
   }
 })
 
