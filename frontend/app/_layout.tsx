@@ -5,20 +5,9 @@ import Welcome from './pages';
 import Login from './pages/auth/login';
 import Register from './pages/auth/register';
 import TabsLayout from './pages/(tabs)/_layout';
+import { AppTheme } from '@/constants/theme';
 
 const Stack = createNativeStackNavigator()
-
-const AppTheme = {
-  dark: false,
-  colors: {
-    primary: '#204079',
-    background: '#204079',
-    card: '#42506A',
-    text: '#FFFFFF',
-    border: '#86BBD8',
-    notification: '#42506A',
-  },
-};
 
 export default function RootLayout() {
 

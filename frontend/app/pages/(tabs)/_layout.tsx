@@ -10,20 +10,9 @@ import Exercise from './exercise';
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from 'react';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
+import { AppTheme } from '@/constants/theme';
 
 const Tab = createBottomTabNavigator();
-
-const AppTheme = {
-  dark: false,
-  colors: {
-    primary: '#204079',
-    background: '#204079',
-    card: '#42506A',
-    text: '#FFFFFF',
-    border: '#86BBD8',
-    notification: '#42506A',
-  },
-};
 
 export default function TabsLayout() {
 
