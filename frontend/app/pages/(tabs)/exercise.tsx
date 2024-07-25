@@ -3,6 +3,10 @@ import { Alert, Modal, Pressable, SectionList, StyleSheet, Text, View } from "re
 import CustomPressable from "@/components/custom/CustomPressable"
 import { exercisesDatabase } from "@/database"
 import { useEffect, useState } from "react"
+import { AppTheme } from "@/constants/theme"
+import CustomTextInput from "@/components/custom/CustomTextInput"
+import { equipment, muscle_group } from "@/constants/exercise"
+import RNPickerSelect from 'react-native-picker-select';
 
 interface ExerciseInterface {
   id: number
@@ -59,20 +63,57 @@ const Exercise = () => {
           <SearchInput />
         </View>
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={visibleModal}
           onRequestClose={() => {
             Alert.alert('Modal has been closed.');
             setVisibleModal(!visibleModal);
           }}>
-          <View style={{height: '100%', justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(52, 52, 52, 0.7)'}}>
             <View style={style.modalStyle}>
-              <Text style={{textAlign: 'center', fontSize: 20, padding: 10}}>Add new exercise</Text>
-              <Pressable
-                onPress={() => setVisibleModal(!visibleModal)}>
-                <Text>X</Text>
-              </Pressable>
+              <Text style={{textAlign: 'center', fontSize: 20, padding: 10, color: 'white'}}>Add new exercise</Text>
+              <View>
+                <View style={{padding: 10}}>
+                  <CustomTextInput
+                    placeholder="Enter exercise name"
+                  />
+                </View>
+                <View style={{padding: 10, marginTop: 3}}>
+                  <RNPickerSelect
+                    placeholder={{label: 'Select equipment', value: null}}
+                    onValueChange={(value) => console.log(value)}
+                    items={equipment}
+                    style={pickerSelectStyles}
+                  />
+                </View>
+                <View style={{padding: 10, marginTop: 3}}>
+                  <CustomTextInput
+                    placeholder="Enter target muscles"
+                  />
+                </View>
+                <View style={{padding: 10, marginTop: 3}}>
+                  <RNPickerSelect
+                    placeholder={{label: 'Select muscle group', value: null}}
+                    onValueChange={(value) => console.log(value)}
+                    items={muscle_group}
+                    style={pickerSelectStyles}
+                  />
+                </View>
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center', padding: 10, flexDirection: 'row', gap: 10}}>
+                <CustomPressable
+                  text="Add"
+                  buttonStyle={{backgroundColor: 'green', padding: 10, borderRadius: 5, flex: 1}}
+                  textStyle={{fontSize: 15, color: 'white'}}
+                />
+                <CustomPressable
+                  text="Cancel"
+                  buttonStyle={{backgroundColor: 'red', padding: 10, borderRadius: 5, flex: 1}}
+                  textStyle={{fontSize: 15, color: 'white'}}
+                  onPress={() => setVisibleModal(!visibleModal)}
+                />
+              </View>
             </View>
           </View>
         </Modal>
@@ -110,11 +151,37 @@ const style = StyleSheet.create({
     backgroundColor: '#526D82'
   },
   modalStyle: {
-    backgroundColor: 'red',
+    backgroundColor: AppTheme.colors.notification,
     width: '70%',
-    height: '40%',
-    borderRadius: 20
+    borderRadius: 15,
+  },
+  selectStyle: {
+    borderWidth: 2,
+    borderColor: 'gray'
   }
 })
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderBottomWidth: 2,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'white',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 8,
+    color: 'white',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});
 
 export default Exercise
