@@ -15,10 +15,10 @@ class ExerciseDatabase extends Database {
           CREATE TABLE IF NOT EXISTS exercise (
           id INTEGER PRIMARY KEY NOT NULL,
           name VARCHAR(255) NOT NULL, 
-          description VARCHAR(255) NOT NULL, 
+          description VARCHAR(255), 
           image_link VARCHAR(255), 
           equipment VARCHAR(255) NOT NULL, 
-          target_muscles VARCHAR(255) NOT NULL,
+          target_muscles VARCHAR(255),
           muscle_group VARCHAR(255) NOT NULL
         );
   
