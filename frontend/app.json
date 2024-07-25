@@ -32,6 +32,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c15ed0fc-4654-407c-9670-ddbfdb1db6c3"
+      }
+    },
+    "owner": "bangueco"
   }
 }
