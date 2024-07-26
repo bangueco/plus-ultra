@@ -7,11 +7,11 @@ const equipment = [
 ]
 
 const muscle_group = [
-  {label: "Chest", value: 'chest'},
-  {label: "Back", value: 'back'},
-  {label: "Legs", value: 'legs'},
-  {label: "Arms", value: 'arms'},
-  {label: "Core", value: 'core'},
+  {label: "Chest", value: 'Chest'},
+  {label: "Back", value: 'Back'},
+  {label: "Legs", value: 'Legs'},
+  {label: "Arms", value: 'Arms'},
+  {label: "Core", value: 'Core'},
 ]
 
 export {
