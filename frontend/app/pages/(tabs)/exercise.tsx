@@ -23,6 +23,11 @@ const Exercise = () => {
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Array<ExerciseInterface>>([])
 
+  const [exerciseName, setExerciseName] = useState<String>()
+  const [equipmentName, setEquipmentName] = useState<String | null>()
+  const [targetMuscles, setTargetMuscles] = useState<String>()
+  const [muscleGroup, setMuscleGroup] = useState<String | null>()
+
   useEffect(() => {
     exercisesDatabase.db.getAllAsync<ExerciseInterface>('SELECT * FROM exercise;')
     .then(data => {
@@ -43,6 +48,19 @@ const Exercise = () => {
     })
 
     return sections
+  }
+
+  const onPressNewExercise = async () => {
+    try {
+      const insertExercise = await exercisesDatabase.db.runAsync(`INSERT INTO exercise (name, equipment, target_muscles, muscle_group) VALUES ('${exerciseName}', '${equipmentName}', '${targetMuscles}', '${muscleGroup}');`)
+      const getInsertedExercise = await exercisesDatabase.db.getFirstAsync<ExerciseInterface>(`SELECT * FROM exercise WHERE id=${insertExercise.lastInsertRowId};`)
+      if (getInsertedExercise) {
+        const updatedExerciseState: Array<ExerciseInterface> = [...exercises, getInsertedExercise]
+        return setExercises(updatedExerciseState)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -77,12 +95,13 @@ const Exercise = () => {
                 <View style={{padding: 10}}>
                   <CustomTextInput
                     placeholder="Enter exercise name"
+                    onChangeText={(e) => setExerciseName(e)}
                   />
                 </View>
                 <View style={{padding: 10, marginTop: 3}}>
                   <RNPickerSelect
                     placeholder={{label: 'Select equipment', value: null}}
-                    onValueChange={(value) => console.log(value)}
+                    onValueChange={(value) => setEquipmentName(value)}
                     items={equipment}
                     style={pickerSelectStyles}
                   />
@@ -90,12 +109,13 @@ const Exercise = () => {
                 <View style={{padding: 10, marginTop: 3}}>
                   <CustomTextInput
                     placeholder="Enter target muscles"
+                    onChangeText={(e) => setTargetMuscles(e)}
                   />
                 </View>
                 <View style={{padding: 10, marginTop: 3}}>
                   <RNPickerSelect
                     placeholder={{label: 'Select muscle group', value: null}}
-                    onValueChange={(value) => console.log(value)}
+                    onValueChange={(value) => setMuscleGroup(value)}
                     items={muscle_group}
                     style={pickerSelectStyles}
                   />
@@ -106,6 +126,7 @@ const Exercise = () => {
                   text="Add"
                   buttonStyle={{backgroundColor: 'green', padding: 10, borderRadius: 5, flex: 1}}
                   textStyle={{fontSize: 15, color: 'white'}}
+                  onPress={onPressNewExercise}
                 />
                 <CustomPressable
                   text="Cancel"
@@ -119,6 +140,7 @@ const Exercise = () => {
         </Modal>
       </View>
       <SectionList
+        extraData={exercises}
         sections={sectionData(exercises)}
         renderItem={({item, index}) => (
           <View key={item.id} style={[{padding: 20}, (index % 2 !== 0) ? style.oddColor : {backgroundColor: 'transparent'}]}>
