@@ -1,0 +1,19 @@
+{
+  "name": "plus-ultra",
+  "version": "1.0.0",
+  "description": "A gym workout tracker, logger and equipment scanner.",
+  "private": "true",
+  "scripts": {
+    "init": "cd ./frontend && npm install && cd ../backend && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bangueco/plus-ultra.git"
+  },
+  "author": "bangueco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bangueco/plus-ultra/issues"
+  },
+  "homepage": "https://github.com/bangueco/plus-ultra#readme"
+}
