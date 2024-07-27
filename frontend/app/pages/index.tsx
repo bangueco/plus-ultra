@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import CustomPressable from "@/components/custom/CustomPressable";
-import { Link, ParamListBase, useNavigation } from "@react-navigation/native";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { useEffect } from "react";
 import { exercisesDatabase } from "@/database";
