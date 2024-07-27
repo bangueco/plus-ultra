@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "plus-ultra",
+    "name": "Plus Ultra",
     "slug": "plus-ultra",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.plusultra.plusultra"
     },
     "web": {
       "bundler": "metro",
@@ -28,7 +29,13 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-dev-launcher",
+        {
+          "launchMode": "most-recent"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
