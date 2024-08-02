@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client"
+import prisma from '../utils/prismaClient'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import config from "../utils/config"
-
-const prisma = new PrismaClient()
 
 const registerUser = async (username: string, email: string, password: string) => {
   const newUser = await prisma.user.create({
