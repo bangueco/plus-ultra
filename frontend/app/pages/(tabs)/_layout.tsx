@@ -6,6 +6,7 @@ import Profile from './profile';
 import Workout from './workout';
 import History from './history';
 import Exercise from './exercise';
+import Scan from './scan';
 
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from 'react';
@@ -40,6 +41,12 @@ export default function TabsLayout() {
             title: 'Start Workout',
             tabBarLabelStyle: {color: 'white', fontSize: 14},
             tabBarIcon: ({}) => <AntDesign name="plus" size={25} color="white" />,
+          }}
+        />
+        <Tab.Screen name="Scan" component={Scan} options={{
+            title: 'Scanner',
+            tabBarLabelStyle: {color: 'white', fontSize: 14},
+            tabBarIcon: ({}) => <AntDesign name="scan1" size={25} color="white" />,
           }}
         />
         <Tab.Screen name="History" component={History} options={{
