@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { Link, useTheme } from "@react-navigation/native";
+import { ParamListBase, useNavigation, useTheme } from "@react-navigation/native";
 
 import authService from "@/services/auth.service";
 
@@ -10,8 +10,10 @@ import CustomPressable from "@/components/custom/CustomPressable";
 
 import { AxiosError } from "axios";
 import ErrorMessage from "@/components/custom/ErrorMessage";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 export default function Register () {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { colors } = useTheme();
 
   const [username, setUsername] = useState<string | undefined>(undefined)
@@ -131,7 +133,7 @@ export default function Register () {
         </View>
         <View>
           <Text style={{color: colors.text}}>
-            Already have account yet? <Link style={{color: 'skyblue', textDecorationLine: 'underline'}} to={{ screen: 'Login'}}>Login</Link> here
+            Already have account yet? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Login')}>Login</Text> here
           </Text>
         </View>
       </View>
