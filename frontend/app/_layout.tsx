@@ -6,13 +6,15 @@ import Login from './pages/auth/login';
 import Register from './pages/auth/register';
 import TabsLayout from './pages/(tabs)/_layout';
 import { AppTheme } from '@/constants/theme';
+import { RootNativeStackParamList } from '@/types/navigation';
+import { rootNavigationRef } from '@/hooks/useNavigationRef';
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator<RootNativeStackParamList>()
 
 export default function RootLayout() {
 
   return (
-    <NavigationContainer theme={AppTheme} independent={true}>
+    <NavigationContainer theme={AppTheme} independent={true} ref={rootNavigationRef}>
       <Stack.Navigator>
         <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false}} />
         <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
