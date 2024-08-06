@@ -8,6 +8,7 @@ const config = {
   host: process.env.HOST || '',
   port: process.env.PORT || 3000,
   secretKey: process.env.SECRET_KEY || '',
+  serpApiKey: process.env.SERP_API_KEY || ''
 }
 
 export default config
