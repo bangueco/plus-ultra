@@ -8,7 +8,10 @@ const config = {
   host: process.env.HOST || '',
   port: process.env.PORT || 3000,
   secretKey: process.env.SECRET_KEY || '',
-  serpApiKey: process.env.SERP_API_KEY || ''
+  serpApiKey: process.env.SERP_API_KEY || '',
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || '',
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET
 }
 
 export default config
