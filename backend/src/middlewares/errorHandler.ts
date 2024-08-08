@@ -51,6 +51,8 @@ const errorHandler = (error: unknown, _request: Request, response: Response, nex
     return response.status(400).json(errorMessage)
   } else if (error instanceof Error) {
     return response.status(400).json({error: error.message})
+  } else if (error) {
+    return response.status(400).json(error)
   }
 
   return next()
