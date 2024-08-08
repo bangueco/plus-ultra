@@ -1,3 +1,6 @@
+import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary"
+import cloudinary from "../utils/cloudinary"
+
 type LensApiResult = {
   visual_matches: Array<{title: string, position: number}>
 }
@@ -7,6 +10,16 @@ type EquipmentCountProps = {
   count: number
 }
 
+type Image = {
+  fieldname: string,
+  originalname: string,
+  encoding: string,
+  mimetype: string,
+  buffer: Buffer
+  size: number
+}
+
+// Identify equipments based on the fetched results from Google Lens
 const identifyEquipment = (response: LensApiResult) => {
 
   const equipments = [
@@ -32,6 +45,23 @@ const identifyEquipment = (response: LensApiResult) => {
   return equipmentCount.reduce((max, current) => (max.count > current.count) ? max : current, equipmentCount[0])
 }
 
-export default {
-  identifyEquipment
+// Upload and process the image to third party storage
+// The image that will be upload here will be use for SerpApi Google Lens
+const uploadImageEquipment = async (image: Image) => {
+  const uploadResult = await new Promise<UploadApiResponse | UploadApiErrorResponse>((resolve, reject) => {
+    cloudinary.uploader.upload_stream((error, uploadResult) => {
+        if (error) {
+          reject(error)
+        } else if (uploadResult) {
+          return resolve(uploadResult);
+        }
+    }).end(image.buffer);
+  });
+
+  return uploadResult
+};
+
+export {
+  identifyEquipment,
+  uploadImageEquipment
 }
