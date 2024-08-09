@@ -9,12 +9,11 @@ const api = supertest(app)
 const fakeUser = {
   username: 'aybandotnet',
   email: 'aybankalbo@gmail.com',
-  password: 'aybanwalangpassword'
+  password: '@Aybanwalangpassword123'
 }
 
 describe('api testing for /api/user', () => {
   beforeEach(async () => {
-    console.log('runs')
     await userHelper.deleteUsersFromDB()
   })
 

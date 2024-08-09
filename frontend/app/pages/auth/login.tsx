@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { Link, ParamListBase, StackNavigationState, useNavigation } from "@react-navigation/native";
+import { Link, ParamListBase, useNavigation, useTheme } from "@react-navigation/native";
 
 import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
@@ -14,6 +14,7 @@ import * as SecureStore from 'expo-secure-store';
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 export default function Login () {
+  const { colors } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const [username, setUsername] = useState<string | undefined>()
@@ -58,7 +59,7 @@ export default function Login () {
       clearErrorMessage()
       const user = await authService.login(username, password)
       saveUserToken(user.token)
-      navigation.navigate('Tabs')
+      navigation.replace('Tabs')
       return Alert.alert('Login Succesfully')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
@@ -95,9 +96,8 @@ export default function Login () {
               placeholder="Enter password"
               onChangeText={handleChangeText(setPassword)}
             />
-            <ErrorMessage text={passwordErrorMessage} />
+            <ErrorMessage text={passwordErrorMessage || errorMessage} />
           </View>
-          <ErrorMessage text={errorMessage} style={{marginTop: 10}} />
           <View style={{padding: 3}}>
             <Text style={{textAlign: 'right'}}>Forgot password?</Text>
           </View>
@@ -126,8 +126,8 @@ export default function Login () {
           />
         </View>
         <View>
-          <Text style={{color: 'white'}}>
-            Don't have account yet? <Link style={{color: 'skyblue', textDecorationLine: 'underline'}} to={{ screen: 'Register'}}>Register</Link> here
+          <Text style={{color: colors.text}}>
+            Don't have account yet? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Register')}>Login</Text> here
           </Text>
         </View>
       </View>
