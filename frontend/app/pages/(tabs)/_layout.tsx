@@ -31,36 +31,38 @@ export default function TabsLayout() {
       <Tab.Navigator 
         screenOptions={{
           headerShown: false, 
-          tabBarStyle: {backgroundColor: 'transparent', borderTopWidth: 0, padding: 5, marginBottom: 10, elevation: 0},
+          tabBarStyle: {backgroundColor: 'transparent', borderTopWidth: 1, padding: 2, elevation: 0},
+          tabBarActiveTintColor: AppTheme.colors.border,
+          tabBarInactiveTintColor: 'gray',
         }}>
         <Tab.Screen name="Profile" component={Profile} options={{
             title: 'Profile',
-            tabBarLabelStyle: {color: 'white', fontSize: 14},
-            tabBarIcon: ({}) => <AntDesign name="user" size={25} color="white" />,
+            tabBarLabelStyle: {fontSize: 12},
+            tabBarIcon: ({color}) => <AntDesign name="user" size={30} color={color} />,
           }}
         />
         <Tab.Screen name="Workout" component={Workout} options={{
             title: 'Start Workout',
-            tabBarLabelStyle: {color: 'white', fontSize: 14},
-            tabBarIcon: ({}) => <AntDesign name="plus" size={25} color="white" />,
+            tabBarLabelStyle: {fontSize: 12},
+            tabBarIcon: ({color}) => <AntDesign name="plus" size={30} color={color} />,
           }}
         />
         <Tab.Screen name="Scan" component={Scan} options={{
             title: 'Scanner',
-            tabBarLabelStyle: {color: 'white', fontSize: 14},
-            tabBarIcon: ({}) => <AntDesign name="scan1" size={25} color="white" />,
+            tabBarLabelStyle: {fontSize: 12},
+            tabBarIcon: ({color}) => <AntDesign name="scan1" size={30} color={color} />,
           }}
         />
         <Tab.Screen name="History" component={History} options={{
             title: 'History',
-            tabBarLabelStyle: {color: 'white', fontSize: 14},
-            tabBarIcon: ({}) => <MaterialIcons name="history" size={25} color="white" />,
+            tabBarLabelStyle: {fontSize: 12},
+            tabBarIcon: ({color}) => <MaterialIcons name="history" size={30} color={color} />,
           }}
         />
         <Tab.Screen name="Exercise" component={Exercise} options={{
             title: 'Exercise',
-            tabBarLabelStyle: {color: 'white', fontSize: 14},
-            tabBarIcon: ({}) => <Ionicons name="barbell" size={25} color="white" />,
+            tabBarLabelStyle: {fontSize: 12},
+            tabBarIcon: ({color}) => <Ionicons name="barbell" size={30} color={color} />,
           }}
         />
       </Tab.Navigator>
