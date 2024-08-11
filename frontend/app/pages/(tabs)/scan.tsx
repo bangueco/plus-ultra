@@ -1,12 +1,14 @@
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, AntDesign} from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
+import axios, { AxiosError } from 'axios';
 
 export default function Scan() {
   const camera = useRef<CameraView>(null)
   
+  const [loading, setLoading] = useState<Boolean>(false)
   const [photo, setPhoto] = useState<CameraCapturedPicture | null>(null)
   const [cameraReady, setCameraReady] = useState<boolean>(false)
   const [permission, requestPermission] = useCameraPermissions()
@@ -28,6 +30,46 @@ export default function Scan() {
 
   const removeImage = () => {
     setPhoto(null)
+  }
+
+  const uploadImage = async () => {
+    if (photo) {
+      const formData = new FormData
+      // Attach image to form
+      formData.append('image', {
+        uri: photo.uri,
+        type: 'image/jpeg',
+        name: 'photo.jpg',
+      } as any); // TODO: Create typechecking here instead of any, in-order to avoid any stupid things that will happen.
+      // Remove photo from state
+      setPhoto(null)
+      // Enable loading indicator
+      setLoading(!loading)
+
+      // Upload image to api
+      try {
+        const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/equipment/identify`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+
+        if (response.status !== 200) {
+          Alert.alert(response.data.message)
+        }
+
+        if (response.data.equipment === 'none') {
+          Alert.alert('Error: this equipment cannot be identified.')
+        }
+
+      } catch (error) {
+        if (error instanceof AxiosError) console.error(error.response?.data.error)
+        } finally {
+          setLoading(false)
+        }
+    } else {
+      Alert.alert('Photo not found.')
+    }
   }
 
   if (!permission) {
@@ -53,10 +95,17 @@ export default function Scan() {
     );
   }
 
-  return (
-    <View style={styles.container}>
-      {
-        (photo === null) ? (
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size={'large'}/>
+      </View>
+    )
+  }
+  
+  if (!photo) {
+    return (
+      <View style={styles.container}>
         <CameraView style={styles.camera} facing={'back'} onCameraReady={toggleCameraReady} ref={camera} zoom={1}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity disabled={!cameraReady} style={styles.button} onPress={capture}>
@@ -64,19 +113,21 @@ export default function Scan() {
             </TouchableOpacity>
           </View>
         </CameraView>
-        )
-        : (
-          <View style={{position: 'relative'}}>
-            <Image style={{height: '100%', width: '100%'}} resizeMethod='resize' source={photo} />
-            <View style={{position: 'absolute', bottom: 50, width: '100%', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row'}}>
-              <AntDesign name="check" size={40} color="white" />
-              <Entypo name='cross' size={50} color='white' onPress={removeImage} />
-            </View>
+      </View>
+    )
+  } else {
+    return (
+      <View style={styles.container}>
+        <View style={{position: 'relative'}}>
+          <Image style={{height: '100%', width: '100%'}} resizeMethod='resize' source={photo} />
+          <View style={{position: 'absolute', bottom: 50, width: '100%', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row'}}>
+            <AntDesign name="check" size={40} color="white" onPress={uploadImage} />
+            <Entypo name='cross' size={50} color='white' onPress={removeImage} />
           </View>
-        )
-      }
-    </View>
-  );
+        </View>
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
