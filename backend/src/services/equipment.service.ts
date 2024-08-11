@@ -31,18 +31,32 @@ const identifyEquipment = (response: LensApiResult) => {
   let equipmentCount: Array<EquipmentCountProps> = []
   
   equipments.forEach(equipment => {
+
+    // Regular Expression that exactly matches the equipment
+    const regex = new RegExp(`\\b${equipment}\\b`, 'i');
     
     equipmentCount.push({equipment_name: equipment, count: 0})
 
     response.visual_matches.forEach(result => {
-      if (result.title.toLowerCase().includes(equipment)) {
+      if (regex.test(result.title)) {
         const index = equipmentCount.findIndex(item => item.equipment_name === equipment)
         equipmentCount[index].count += 1
       }
     })
   })
 
-  return equipmentCount.reduce((max, current) => (max.count > current.count) ? max : current, equipmentCount[0])
+  // Check if all counts have value
+  const checkEmptyCount = equipmentCount.every((equipment) => equipment.count === 0)
+
+  if (checkEmptyCount) {
+    return {
+      equipment_name: 'none',
+      count: 0
+    }
+  } else {
+    return equipmentCount.reduce((max, current) => (max.count > current.count) ? max : current, equipmentCount[0])
+  }
+
 }
 
 // Upload and process the image to third party storage
