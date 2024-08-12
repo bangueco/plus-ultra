@@ -11,13 +11,15 @@ import Scan from './scan';
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from 'react';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
-import { AppTheme } from '@/constants/theme';
 import { TabsParamList } from '@/types/navigation';
 import { tabNavigationRef } from '@/hooks/useNavigationRef';
+import useSystemTheme from '@/hooks/useSystemTheme';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 export default function TabsLayout() {
+
+  const systemTheme = useSystemTheme()
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
 
@@ -27,12 +29,12 @@ export default function TabsLayout() {
   }, [])
 
   return (
-    <NavigationContainer theme={AppTheme} independent={true} ref={tabNavigationRef}>
+    <NavigationContainer theme={systemTheme} independent={true} ref={tabNavigationRef}>
       <Tab.Navigator 
         screenOptions={{
           headerShown: false, 
-          tabBarStyle: {backgroundColor: 'transparent', borderTopWidth: 1, padding: 2, elevation: 0},
-          tabBarActiveTintColor: AppTheme.colors.border,
+          tabBarStyle: {backgroundColor: 'transparent', borderTopWidth: 0, shadowColor: 'red', shadowOffset: {width: -420, height: 100}, shadowRadius: 20, shadowOpacity: 0.3, padding: 2, elevation: 0},
+          tabBarActiveTintColor: systemTheme.colors.primary,
           tabBarInactiveTintColor: 'gray',
         }}>
         <Tab.Screen name="Profile" component={Profile} options={{
