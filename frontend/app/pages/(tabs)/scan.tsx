@@ -1,15 +1,16 @@
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
-import { ActivityIndicator, Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Button, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, AntDesign} from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import axios, { AxiosError } from 'axios';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Scan() {
   const camera = useRef<CameraView>(null)
   
   const [loading, setLoading] = useState<Boolean>(false)
-  const [photo, setPhoto] = useState<CameraCapturedPicture | null>(null)
+  const [photo, setPhoto] = useState<CameraCapturedPicture | ImagePicker.ImagePickerAsset | null>(null)
   const [cameraReady, setCameraReady] = useState<boolean>(false)
   const [permission, requestPermission] = useCameraPermissions()
 
@@ -26,6 +27,24 @@ export default function Scan() {
         console.error(error)
       }
     }
+  }
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setPhoto(null);
+    }
+
+    if (result && result.assets) {
+      setPhoto(result.assets[0])
+    }
+
   }
 
   const removeImage = () => {
@@ -61,6 +80,8 @@ export default function Scan() {
         if (response.data.equipment === 'none') {
           Alert.alert('Error: this equipment cannot be identified.')
         }
+
+        Alert.alert(`Equipment: ${response.data.equipment}`)
 
       } catch (error) {
         if (error instanceof AxiosError) console.error(error.response?.data.error)
@@ -111,6 +132,7 @@ export default function Scan() {
             <TouchableOpacity disabled={!cameraReady} style={styles.button} onPress={capture}>
               <View style={styles.capture}></View>
             </TouchableOpacity>
+            <Pressable onPress={pickImage}><Text>Upload Image</Text></Pressable>
           </View>
         </CameraView>
       </View>
@@ -119,10 +141,10 @@ export default function Scan() {
     return (
       <View style={styles.container}>
         <View style={{position: 'relative'}}>
-          <Image style={{height: '100%', width: '100%'}} resizeMethod='resize' source={photo} />
+          <Image style={{height: '100%', width: '100%'}} resizeMethod='resize' source={{uri: photo.uri}} />
           <View style={{position: 'absolute', bottom: 50, width: '100%', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row'}}>
-            <AntDesign name="check" size={40} color="white" onPress={uploadImage} />
-            <Entypo name='cross' size={50} color='white' onPress={removeImage} />
+            <AntDesign name="check" size={40} color="red" onPress={uploadImage} />
+            <Entypo name='cross' size={50} color='red' onPress={removeImage} />
           </View>
         </View>
       </View>
@@ -141,13 +163,15 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   camera: {
+    position: 'relative',
     flex: 1
   },
   buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
+    position: 'absolute',
+    bottom: 30,
+    width: '100%',
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   button: {
     flex: 1,
