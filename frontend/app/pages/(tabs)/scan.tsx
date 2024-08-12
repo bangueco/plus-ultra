@@ -5,13 +5,17 @@ import { Entypo, AntDesign} from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import axios, { AxiosError } from 'axios';
 import * as ImagePicker from 'expo-image-picker';
+import useSystemTheme from '@/hooks/useSystemTheme';
 
 export default function Scan() {
   const camera = useRef<CameraView>(null)
   
+  const systemTheme = useSystemTheme()
+
+  const [cameraActive, setCameraActive] = useState<Boolean>(false)
   const [loading, setLoading] = useState<Boolean>(false)
   const [photo, setPhoto] = useState<CameraCapturedPicture | ImagePicker.ImagePickerAsset | null>(null)
-  const [cameraReady, setCameraReady] = useState<boolean>(false)
+  const [cameraReady, setCameraReady] = useState<Boolean>(false)
   const [permission, requestPermission] = useCameraPermissions()
 
   const toggleCameraReady = () => {
@@ -93,9 +97,12 @@ export default function Scan() {
     }
   }
 
-  if (!permission) {
-    // Camera permissions are still loading.
-    return <View />;
+  if (loading || !permission) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size={'large'}/>
+      </View>
+    )
   }
 
   if (!permission.granted && permission.canAskAgain) {
@@ -116,15 +123,62 @@ export default function Scan() {
     );
   }
 
-  if (loading) {
+  if (photo) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size={'large'}/>
+      <View style={styles.photoContainer}>
+        <View style={{alignItems: 'center', flexDirection: 'column', gap: 30, width: '100%'}}>
+          <Image style={{height: 350, width: 350}} resizeMethod='resize' source={{uri: photo.uri}} />
+          <View style={{flexDirection: 'row', gap: 20}}>
+            <Pressable style={{flexDirection: 'row', alignItems: 'center', backgroundColor: systemTheme.colors.primary, padding: 5, borderRadius: 10}} onPress={uploadImage}>
+              <AntDesign name="check" size={30} color="white" />
+              <Text style={{fontSize: 20, color: 'white'}}>Send Photo</Text>
+            </Pressable>
+            <Pressable style={{flexDirection: 'row', alignItems: 'center', backgroundColor: systemTheme.colors.primary, padding: 5, borderRadius: 10}} onPress={removeImage}>
+              <Entypo name='cross' size={30} color='red' />
+              <Text style={{fontSize: 20, color: 'white'}}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
       </View>
     )
   }
+
+  // Check if camera mode is active
+  if (cameraActive) {
+    return (
+      <View style={[styles.cameraContainer, {backgroundColor: 'black'}]}>
+        <Pressable onPress={() => setCameraActive(!cameraActive)}>
+          <Text style={{color: systemTheme.colors.primary, paddingLeft: 10, fontSize: 15}}>Back</Text>
+        </Pressable>
+        <CameraView style={styles.camera} facing={'back'} onCameraReady={toggleCameraReady} ref={camera} zoom={1}>
+        </CameraView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity disabled={!cameraReady} style={styles.button} onPress={capture}>
+            <View style={styles.capture}></View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={{color: systemTheme.colors.text, fontSize: 30}}>Identify Gym Equipments</Text>
+      <View style={{flexDirection: 'row', gap: 20}}>
+        <Pressable style={{backgroundColor: systemTheme.colors.primary, padding: 25, borderRadius: 20}} onPress={() => setCameraActive(!cameraActive)}>
+          <Entypo name="camera" size={44} color={systemTheme.colors.text} />
+        </Pressable>
+        <Pressable style={{backgroundColor: systemTheme.colors.primary, padding: 25, borderRadius: 20}} onPress={pickImage}>
+          <Entypo name="image" size={44} color={systemTheme.colors.text} />
+        </Pressable>
+      </View>
+      <View>
+        <Text style={{color: systemTheme.colors.text}}>Note: Make sure the image is not blurry.</Text>
+      </View>
+    </View>
+  )
   
-  if (!photo) {
+  /* if (!photo) {
     return (
       <View style={styles.container}>
         <CameraView style={styles.camera} facing={'back'} onCameraReady={toggleCameraReady} ref={camera} zoom={1}>
@@ -149,13 +203,15 @@ export default function Scan() {
         </View>
       </View>
     )
-  }
+  } */
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20
   },
   message: {
     textAlign: 'center',
@@ -163,18 +219,16 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   camera: {
-    position: 'relative',
-    flex: 1
+    height: 500
   },
   buttonContainer: {
-    position: 'absolute',
-    bottom: 30,
-    width: '100%',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    padding: 10
   },
   button: {
-    flex: 1,
     alignSelf: 'flex-end',
     alignItems: 'center',
   },
@@ -184,4 +238,14 @@ const styles = StyleSheet.create({
     padding: 35,
     borderColor: 'white'
   },
+  photoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  cameraContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    gap: 20
+  }
 });
