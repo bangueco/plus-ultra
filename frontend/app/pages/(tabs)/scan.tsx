@@ -1,11 +1,13 @@
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
-import { ActivityIndicator, Alert, Button, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Button, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, AntDesign} from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import useSystemTheme from '@/hooks/useSystemTheme';
+import { getExercisesFromEquipment } from '@/services/equipment.service';
+import { EquipmentExercises } from '@/types/equipment';
 
 export default function Scan() {
   const camera = useRef<CameraView>(null)
@@ -13,6 +15,7 @@ export default function Scan() {
   const systemTheme = useSystemTheme()
 
   const [cameraActive, setCameraActive] = useState<Boolean>(false)
+  const [equipmentExercises, setEquipmentExercises] = useState<EquipmentExercises | null>(null)
   const [loading, setLoading] = useState<Boolean>(false)
   const [photo, setPhoto] = useState<CameraCapturedPicture | ImagePicker.ImagePickerAsset | null>(null)
   const [cameraReady, setCameraReady] = useState<Boolean>(false)
@@ -71,21 +74,21 @@ export default function Scan() {
 
       // Upload image to api
       try {
-        const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/equipment/identify`, formData, {
+        const response: AxiosResponse<{equipment: string}> = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/equipment/identify`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
 
         if (response.status !== 200) {
-          Alert.alert(response.data.message)
-        }
-
-        if (response.data.equipment === 'none') {
+          Alert.alert(`Error: ${response.status}`)
+        } else if (response.data.equipment === 'none') {
           Alert.alert('Error: this equipment cannot be identified.')
+        } else {
+          const equipmentExercises = await getExercisesFromEquipment(response.data.equipment)
+          setEquipmentExercises(equipmentExercises)
         }
 
-        Alert.alert(`Equipment: ${response.data.equipment}`)
 
       } catch (error) {
         if (error instanceof AxiosError) console.error(error.response?.data.error)
@@ -121,6 +124,18 @@ export default function Scan() {
         <Button onPress={() => Linking.openSettings()} title="Go to settings" />
       </View>
     );
+  }
+
+  if (equipmentExercises) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text>Equipment: {equipmentExercises.equipment_name}</Text>
+        <FlatList
+          data={equipmentExercises.exercises}
+          renderItem={({item}) => <Text key={item.id}>{item.title}</Text>}
+        />
+      </SafeAreaView>
+    )
   }
 
   if (photo) {
@@ -177,33 +192,6 @@ export default function Scan() {
       </View>
     </View>
   )
-  
-  /* if (!photo) {
-    return (
-      <View style={styles.container}>
-        <CameraView style={styles.camera} facing={'back'} onCameraReady={toggleCameraReady} ref={camera} zoom={1}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity disabled={!cameraReady} style={styles.button} onPress={capture}>
-              <View style={styles.capture}></View>
-            </TouchableOpacity>
-            <Pressable onPress={pickImage}><Text>Upload Image</Text></Pressable>
-          </View>
-        </CameraView>
-      </View>
-    )
-  } else {
-    return (
-      <View style={styles.container}>
-        <View style={{position: 'relative'}}>
-          <Image style={{height: '100%', width: '100%'}} resizeMethod='resize' source={{uri: photo.uri}} />
-          <View style={{position: 'absolute', bottom: 50, width: '100%', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row'}}>
-            <AntDesign name="check" size={40} color="red" onPress={uploadImage} />
-            <Entypo name='cross' size={50} color='red' onPress={removeImage} />
-          </View>
-        </View>
-      </View>
-    )
-  } */
 }
 
 const styles = StyleSheet.create({
