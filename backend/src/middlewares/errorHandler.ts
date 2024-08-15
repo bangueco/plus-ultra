@@ -1,24 +1,25 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError } from "@prisma/client/runtime/library";
 import { ZodError, ZodIssue, ZodIssueCode } from "zod";
+import { ApiError } from "../utils/error";
+import { HttpStatusCode } from "../utils/http";
 
 const handlePrismaError = (error: unknown) => {
   if (error instanceof PrismaClientKnownRequestError && error.meta?.target) {
     switch(error.code) {
       case 'P2002':
         return {
-          error: {
-            path: `${error.meta.target}`, 
-            message: `${error.meta.target} is already taken.`
-          }
+          status: HttpStatusCode.BAD_REQUEST,
+          field: error.meta.target,
+          message: `${error.meta.target} is already taken.`
         }
       default:
-        return {error: {message: 'Unknown prisma error code.'}}
+        return {status: HttpStatusCode.INTERNAL_SERVER_ERROR, message: 'Unknown prisma error code.'}
     }
   } else if (error instanceof PrismaClientUnknownRequestError) {
-    return error.message
+    return {status: HttpStatusCode.INTERNAL_SERVER_ERROR, message: error.message}
   } else {
-    return 'Unknown instance error.'
+    return {status: HttpStatusCode.INTERNAL_SERVER_ERROR, message: "Unknown prisma instance error."}
   }
 }
 
@@ -26,13 +27,11 @@ const handleZodError = (error: ZodError) => {
   const errorsMap = error.issues.map((issue: ZodIssue) => {
     switch (issue.code) {
       case ZodIssueCode.invalid_type:
-        return {error: {path: issue.path[0], message: issue.message}}
       case ZodIssueCode.invalid_string:
-        return {error: {path: issue.path[0], message: issue.message}}
       case ZodIssueCode.too_small:
-        return {error: {path: issue.path[0], message: issue.message}}
+        return {field: issue.path[0], message: issue.message}
       default:
-        return {error: `unspecified zod issue error: ${issue.code}.`}
+        return {message: `unspecified zod issue error: ${issue.code}.`}
     }
   })
 
@@ -41,21 +40,16 @@ const handleZodError = (error: ZodError) => {
 
 const errorHandler = (error: unknown, _request: Request, response: Response, next: NextFunction) => {
   if (error instanceof ZodError) {
-    const errorMessage = handleZodError(error)
-    return response.status(400).json(errorMessage)
-  } else if (error instanceof PrismaClientUnknownRequestError) {
-    const errorMessage = handlePrismaError(error)
-    return response.status(500).json({error: `${errorMessage}`})
-  } else if (error instanceof PrismaClientKnownRequestError) {
-    const errorMessage = handlePrismaError(error)
-    return response.status(400).json(errorMessage)
-  } else if (error instanceof Error) {
-    return response.status(400).json({error: error.message})
-  } else if (error) {
-    return response.status(400).json(error)
+    const zod = handleZodError(error)
+    return response.status(400).json(zod)
+  } else if (error instanceof PrismaClientUnknownRequestError || error instanceof PrismaClientKnownRequestError) {
+    const {status, message} = handlePrismaError(error)
+    return response.status(status).json({message: message})
+  } else if (error instanceof ApiError) {
+    return response.status(error.status).json({message: error.message})
+  } else {
+    return next()
   }
-
-  return next()
 }
 
 export default errorHandler
