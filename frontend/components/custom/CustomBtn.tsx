@@ -1,11 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from "react";
 
 type BtnProps = {
   text: string;
-  buttonStyle?: object;
-  textStyle?: object;
+  buttonStyle?: ViewStyle;
+  textStyle?: TextStyle;
   iconName?: keyof typeof AntDesign.glyphMap;
   iconSize?: number;
   iconColor?: string;

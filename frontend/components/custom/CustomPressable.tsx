@@ -1,10 +1,10 @@
 import { useState } from "react"
-import { Pressable, StyleSheet, Text, PressableProps } from "react-native"
+import { Pressable, StyleSheet, Text, PressableProps, ViewStyle, TextStyle } from "react-native"
 
 type CustomPressableProps = PressableProps & {
   text: string,
-  buttonStyle?: object,
-  textStyle?: object
+  buttonStyle?: ViewStyle,
+  textStyle?: TextStyle
 }
 
 const CustomPressable = ({ text, buttonStyle, textStyle, ...props }: CustomPressableProps) => {
