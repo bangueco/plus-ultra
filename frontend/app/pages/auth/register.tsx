@@ -34,21 +34,22 @@ export default function Register () {
   }
 
   const handleErrorMessage = (error: unknown) => {
+    // Array of objects of zod error
     if (error instanceof AxiosError && Array.isArray(error.response?.data)) {
       error.response.data.map(data => {
-        if (data.error.path === 'username') {
-          setUsernameErrorMessage(data.error.message)
-        } else if (data.error.path === 'email') {
-          setEmailErrorMessage(data.error.message)
-        } else if (data.error.path === 'password') {
-          setPasswordErrorMessage(data.error.message)
+        if (data.field === 'username') {
+          setUsernameErrorMessage(data.message)
+        } else if (data.field === 'email') {
+          setEmailErrorMessage(data.message)
+        } else if (data.field === 'password') {
+          setPasswordErrorMessage(data.message)
         }
       })
     } else if (error instanceof AxiosError && error.response?.data) {
-      if (error.response.data.error.path === 'username') {
-        setUsernameErrorMessage(error.response.data.error.message)
-      } else if (error.response.data.error.path === 'email') {
-        setEmailErrorMessage(error.response.data.error.message)
+      if (error.response.data.field === 'username') {
+        setUsernameErrorMessage(error.response.data.message)
+      } else if (error.response.data.field === 'email') {
+        setEmailErrorMessage(error.response.data.message)
       }
     }
   }
@@ -71,7 +72,7 @@ export default function Register () {
   return(
     <View style={styles.container}>
       <View style={[styles.registerContainer, {backgroundColor: colors.card}]}>
-        <Text style={{fontWeight: '800', fontSize: 23, color: colors.text}}>Create New Account</Text>
+        <Text style={{fontWeight: '800', fontSize: 23, color: colors.text, padding: 10}}>Create New Account</Text>
         <View style={
           {
             width: '100%', 
@@ -110,11 +111,11 @@ export default function Register () {
         </View>
         <CustomPressable
           text="Sign Up"
-          buttonStyle={{backgroundColor: '#5A72A0', width: '40%', height: 45, borderRadius: 10}}
+          buttonStyle={{backgroundColor: colors.primary, width: '40%', height: 45, borderRadius: 10}}
           textStyle={{fontSize: 18, color: 'white'}}
           onPress={onPressRegister}
         />
-        <Text>or</Text>
+        <Text style={{color: colors.text}}>or</Text>
         <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>
           <CustomBtn
             iconName="facebook-square"
@@ -131,9 +132,9 @@ export default function Register () {
             textStyle={{fontSize: 14, color: 'white'}}
           />
         </View>
-        <View>
+        <View style={{paddingBottom: 10}}>
           <Text style={{color: colors.text}}>
-            Already have account yet? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Login')}>Login</Text> here
+            Already have account? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Login')}>Login</Text> here
           </Text>
         </View>
       </View>
@@ -153,8 +154,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
-    borderRadius: 30,
+    borderRadius: 10,
     width: '85%',
-    padding: 10
+    padding: 5
   },
 })

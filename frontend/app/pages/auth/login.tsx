@@ -35,21 +35,22 @@ export default function Login () {
   }
 
   const handleErrorMessage = (error: unknown) => {
+    // Array of objects of zod error
     if (error instanceof AxiosError && Array.isArray(error.response?.data)) {
       error.response.data.map(data => {
-        if (data.error.path === 'username') {
-          setUsernameErrorMessage(data.error.message)
-        } else if (data.error.path === 'password') {
-          setPasswordErrorMessage(data.error.message)
+        if (data.field === 'username') {
+          setUsernameErrorMessage(data.message)
+        } else if (data.field === 'password') {
+          setPasswordErrorMessage(data.message)
         }
       })
     } else if (error instanceof AxiosError && error.response?.data) {
-      if (error.response.data.error.path === 'username') {
-        setUsernameErrorMessage(error.response.data.error.message)
-      } else if (error.response.data.error.path === 'password') {
-        setPasswordErrorMessage(error.response.data.error.message)
+      if (error.response.data.field === 'username') {
+        setUsernameErrorMessage(error.response.data.message)
+      } else if (error.response.data.field === 'password') {
+        setPasswordErrorMessage(error.response.data.message)
       } else {
-        setErrorMessage(error.response.data.error)
+        setErrorMessage(error.response.data.message)
       }
     }
   }
@@ -77,8 +78,8 @@ export default function Login () {
 
   return(
     <View style={styles.container}>
-      <View style={styles.loginContainer}>
-        <Text style={{fontWeight: '800',fontSize: 30, color: 'white'}}>Login</Text>
+      <View style={[styles.loginContainer, {backgroundColor: colors.card}]}>
+        <Text style={{fontWeight: '800',fontSize: 30, color: colors.text}}>Login</Text>
         <View style={
           {
             width: '100%', 
@@ -99,16 +100,16 @@ export default function Login () {
             <ErrorMessage text={passwordErrorMessage || errorMessage} />
           </View>
           <View style={{padding: 3}}>
-            <Text style={{textAlign: 'right'}}>Forgot password?</Text>
+            <Text style={{textAlign: 'right', color: colors.text}}>Forgot password?</Text>
           </View>
         </View>
         <CustomPressable
           text="Login"
-          buttonStyle={{backgroundColor: '#5A72A0', width: '40%', height: 45, borderRadius: 10}}
+          buttonStyle={{backgroundColor: colors.primary, width: '40%', height: 45, borderRadius: 10}}
           textStyle={{fontSize: 18, color: 'white'}}
           onPress={onPressLogin}
         />
-        <Text>or</Text>
+        <Text style={{color: colors.text}}>or</Text>
         <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>
           <CustomBtn
             iconName="facebook-square"
@@ -125,9 +126,9 @@ export default function Login () {
             textStyle={{fontSize: 14, color: 'white'}}
           />
         </View>
-        <View>
+        <View style={{paddingBottom: 10}}>
           <Text style={{color: colors.text}}>
-            Don't have account yet? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Register')}>Login</Text> here
+            Don't have account yet? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Register')}>Register</Text> here
           </Text>
         </View>
       </View>
@@ -146,9 +147,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#42506A',
     gap: 10,
-    borderRadius: 30,
+    borderRadius: 10,
     width: '85%',
     padding: 10
   },
