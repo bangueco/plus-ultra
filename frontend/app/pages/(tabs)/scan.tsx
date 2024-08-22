@@ -89,7 +89,6 @@ export default function Scan() {
           setEquipmentExercises(equipmentExercises)
         }
 
-
       } catch (error) {
         if (error instanceof AxiosError) console.error(error.response?.data.error)
         } finally {
