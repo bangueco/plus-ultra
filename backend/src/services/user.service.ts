@@ -1,33 +1,24 @@
-import prisma from '../utils/prismaClient'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import config from "../utils/config"
+import prisma from '../utils/lib/prismaClient'
 
-const registerUser = async (username: string, email: string, password: string) => {
-  const newUser = await prisma.user.create({
-    data: {
-      username: username,
-      email: email,
-      password: bcrypt.hashSync(password, 10)
-    }
-  })
-  return newUser
+const findById = async (id: number) => {
+  return await prisma.user.findUnique({where: {id}})
 }
 
-const loginUser = async (username: string, password: string) => {
-  const credentials = await prisma.user.findFirst({where: {username}})
-  
-  // Verify if username exists.
-  if (!credentials) throw new Error('Username does not exists.')
+const findByUsername = async (username: string) => {
+  return await prisma.user.findUnique({where: {username}})
+}
 
-  const match = await bcrypt.compare(password, credentials.password)
+const findByEmail = async (email: string) => {
+  return await prisma.user.findUnique({where: {email}})
+}
 
-  if (!match) throw new Error('Invalid password.')
-
-  return jwt.sign({data: credentials.id}, config.secretKey, {expiresIn: 100})
+const createUser = async (username: string, email: string, password: string) => {
+  return await prisma.user.create({data: {username, email, password}})
 }
 
 export default {
-  registerUser,
-  loginUser
+  findById,
+  findByUsername,
+  findByEmail,
+  createUser
 }

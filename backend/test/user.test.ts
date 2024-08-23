@@ -17,10 +17,10 @@ describe('api testing for /api/user', () => {
     await userHelper.deleteUsersFromDB()
   })
 
-  test('registering new user from POST: /api/user/register', async () => {
+  test('registering new user from POST: /api/auth/register', async () => {
 
     const response = await api
-      .post('/api/user/register')
+      .post('/api/auth/register')
       .send(fakeUser)
       .expect(201)
       .expect('Content-Type', /\application\/json/)
@@ -31,12 +31,12 @@ describe('api testing for /api/user', () => {
     expect(response.body.email).toBe(fakeUser.email)
   })
 
-  test('authenticating existing user from database POST: /api/user/login', async () => {
+  test('authenticating existing user from database POST: /api/auth/login', async () => {
 
-    await api.post('/api/user/register').send(fakeUser)
+    await api.post('/api/auth/register').send(fakeUser)
 
     const response = await api
-      .post('/api/user/login')
+      .post('/api/auth/login')
       .send({username: fakeUser.username, password: fakeUser.password})
       .expect(200)
     

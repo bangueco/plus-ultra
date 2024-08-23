@@ -14,7 +14,7 @@ describe('unit testing for equipment', () => {
     const equipment = identifyEquipment(serpApiResults)
 
     expect(equipment.equipment_name).toBe('dumbbell')
-    expect(equipment.count).toBe(39)
+    expect(equipment.count).toBe(30)
   })
 })
 

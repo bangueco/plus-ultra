@@ -6,8 +6,10 @@ import { Modal, Pressable, StyleSheet, Text, View } from "react-native"
 import * as SecureStore from "expo-secure-store";
 import { rootNavigationRef } from "@/hooks/useNavigationRef"
 import { StackActions } from "@react-navigation/native"
+import useSystemTheme from "@/hooks/useSystemTheme"
 
 const Profile = () => {
+  const systemTheme = useSystemTheme()
   const [visibleProfile, setVisibleProfile] = useState<boolean>(false)
 
   const toggleProfileVisibility = () => {
@@ -16,7 +18,7 @@ const Profile = () => {
 
   const logoutUser = async () => {
     setVisibleProfile(!visibleProfile)
-    await SecureStore.deleteItemAsync('token')
+    await SecureStore.deleteItemAsync('user')
     if (rootNavigationRef.isReady()) {
       rootNavigationRef.dispatch(StackActions.replace('Login'))
     }
@@ -27,8 +29,8 @@ const Profile = () => {
       <View style={{marginTop: '15%', padding: 5}}>
         <View style={{display: 'flex', flexDirection: 'row', padding: 5, gap: 10}}>
           <View style={{alignItems: 'center'}}>
-            <Text style={{padding: 3, fontSize: 13, color: 'white'}}>Profile</Text>
-            <FontAwesome name="user-circle" size={45} color="white" onPress={toggleProfileVisibility} />
+            <Text style={{padding: 3, fontSize: 13, color: systemTheme.colors.primary, fontWeight: 'bold'}}>Profile</Text>
+            <FontAwesome name="user-circle" size={45} color={systemTheme.colors.primary} onPress={toggleProfileVisibility} />
             <Modal
               visible={visibleProfile}
               animationType="fade"
@@ -54,12 +56,13 @@ const Profile = () => {
           </View>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
-          <Text style={{color: 'white', fontSize: 16}}>Your Personal Record</Text>
+          <Text style={{color: systemTheme.colors.primary, fontSize: 16}}>Your Personal Record</Text>
           <CustomBtn
             buttonStyle={{backgroundColor: 'none', gap: 5}}
             iconName="plus"
             iconSize={20}
-            textStyle={{fontSize: 16, color: 'white', flex: 0}}
+            iconColor={systemTheme.colors.primary}
+            textStyle={{fontSize: 16, color: systemTheme.colors.primary, flex: 0}}
             text="Add Workout"
           />
         </View>

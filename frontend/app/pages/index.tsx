@@ -4,21 +4,26 @@ import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { useEffect } from "react";
 import { exercisesDatabase } from "@/database";
+import useSystemTheme from "@/hooks/useSystemTheme";
+import * as SecureStore from 'expo-secure-store';
 
 const Welcome = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const {colors} = useSystemTheme()
 
   // Initialize database here
 
   useEffect(() => {
+    const user = SecureStore.getItem('user')
+    if (user) navigation.replace('Tabs')
     exercisesDatabase.seed()
   }, [])
 
   return (
     <View style={style.container}>
       <View style={{gap: 5, alignItems: 'center'}}>
-        <CustomPressable text="Get Started" textStyle={{fontSize: 30}} buttonStyle={{width: '40%'}} />
-        <Text style={{color: 'white'}}>
+        <CustomPressable onPress={() => navigation.replace('Register')} text="Get Started" textStyle={{fontSize: 20}} buttonStyle={{padding: 10, borderRadius: 5, backgroundColor: colors.primary}} />
+        <Text style={{color: colors.text}}>
           Already have account? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Login')}>Login</Text> here.
         </Text>
       </View>

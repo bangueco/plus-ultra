@@ -1,7 +1,6 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { Link, ParamListBase, useNavigation, useTheme } from "@react-navigation/native";
+import { ParamListBase, useNavigation, useTheme } from "@react-navigation/native";
 
-import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
@@ -10,8 +9,18 @@ import { useState, useEffect } from "react";
 import authService from "@/services/auth.service";
 import { AxiosError } from "axios";
 
+import { TextInput } from 'react-native-paper';
+
 import * as SecureStore from 'expo-secure-store';
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+
+type UserInfo = {
+  id: number,
+  username: string,
+  email: string,
+  accessToken: string,
+  refreshToken: string
+}
 
 export default function Login () {
   const { colors } = useTheme();
@@ -24,8 +33,8 @@ export default function Login () {
   const [passwordErrorMessage, setPasswordErrorMessage] =  useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
 
-  const saveUserToken = async (token: string) => {
-    await SecureStore.setItemAsync('token', token)
+  const saveUserInfo = async (id: number, email: string, username: string, accessToken: string, refreshToken: string) => {
+    return await SecureStore.setItemAsync('user', JSON.stringify({id, username, email, accessToken, refreshToken}))
   }
 
   const clearErrorMessage = () => {
@@ -35,21 +44,22 @@ export default function Login () {
   }
 
   const handleErrorMessage = (error: unknown) => {
+    // Array of objects of zod error
     if (error instanceof AxiosError && Array.isArray(error.response?.data)) {
       error.response.data.map(data => {
-        if (data.error.path === 'username') {
-          setUsernameErrorMessage(data.error.message)
-        } else if (data.error.path === 'password') {
-          setPasswordErrorMessage(data.error.message)
+        if (data.field === 'username') {
+          setUsernameErrorMessage(data.message)
+        } else if (data.field === 'password') {
+          setPasswordErrorMessage(data.message)
         }
       })
     } else if (error instanceof AxiosError && error.response?.data) {
-      if (error.response.data.error.path === 'username') {
-        setUsernameErrorMessage(error.response.data.error.message)
-      } else if (error.response.data.error.path === 'password') {
-        setPasswordErrorMessage(error.response.data.error.message)
+      if (error.response.data.field === 'username') {
+        setUsernameErrorMessage(error.response.data.message)
+      } else if (error.response.data.field === 'password') {
+        setPasswordErrorMessage(error.response.data.message)
       } else {
-        setErrorMessage(error.response.data.error)
+        setErrorMessage(error.response.data.message)
       }
     }
   }
@@ -57,8 +67,8 @@ export default function Login () {
   const onPressLogin = async () => {
     try {
       clearErrorMessage()
-      const user = await authService.login(username, password)
-      saveUserToken(user.token)
+      const user: UserInfo = await authService.login(username, password)
+      await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken)
       navigation.replace('Tabs')
       return Alert.alert('Login Succesfully')
     } catch (error: unknown) {
@@ -71,44 +81,48 @@ export default function Login () {
   };
 
   useEffect(() => {
-    const user = SecureStore.getItem('token')
+    const user = SecureStore.getItem('user')
     if (user) navigation.replace('Tabs')
   }, [])
 
   return(
     <View style={styles.container}>
       <View style={styles.loginContainer}>
-        <Text style={{fontWeight: '800',fontSize: 30, color: 'white'}}>Login</Text>
+        <Text style={{fontWeight: '800',fontSize: 30, color: colors.text}}>Login</Text>
         <View style={
           {
             width: '100%', 
             padding: 10}}>
           <View style={{padding: 3}}>
-            <CustomTextInput
-              placeholder="Enter username"
+            <TextInput
+              mode="outlined"
+              label="Username"
+              left={<TextInput.Icon icon="account" />}
               onChangeText={handleChangeText(setUsername)}
             />
-            <ErrorMessage text={usernameErrorMessage} />
-          </View>
-          <View style={{padding: 3, marginTop: 10}}>
-            <CustomTextInput
-              secureTextEntry={true}
-              placeholder="Enter password"
-              onChangeText={handleChangeText(setPassword)}
-            />
-            <ErrorMessage text={passwordErrorMessage || errorMessage} />
+            {usernameErrorMessage && <ErrorMessage style={{marginTop: 3}} text={usernameErrorMessage} />}
           </View>
           <View style={{padding: 3}}>
-            <Text style={{textAlign: 'right'}}>Forgot password?</Text>
+            <TextInput
+              mode="outlined"
+              label="Password"
+              secureTextEntry={true}
+              left={<TextInput.Icon icon="lock" />}
+              onChangeText={handleChangeText(setPassword)}
+            />
+            {(passwordErrorMessage || errorMessage) && <ErrorMessage style={{marginTop: 3}} text={passwordErrorMessage || errorMessage} />}
+          </View>
+          <View style={{padding: 3, marginTop: 20}}>
+            <Text style={{textAlign: 'right', color: colors.text}}>Forgot password?</Text>
           </View>
         </View>
         <CustomPressable
           text="Login"
-          buttonStyle={{backgroundColor: '#5A72A0', width: '40%', height: 45, borderRadius: 10}}
+          buttonStyle={{backgroundColor: colors.primary, width: '40%', height: 45, borderRadius: 10}}
           textStyle={{fontSize: 18, color: 'white'}}
           onPress={onPressLogin}
         />
-        <Text>or</Text>
+        <Text style={{color: colors.text}}>or</Text>
         <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>
           <CustomBtn
             iconName="facebook-square"
@@ -125,9 +139,9 @@ export default function Login () {
             textStyle={{fontSize: 14, color: 'white'}}
           />
         </View>
-        <View>
+        <View style={{paddingBottom: 10}}>
           <Text style={{color: colors.text}}>
-            Don't have account yet? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Register')}>Login</Text> here
+            Don't have account yet? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Register')}>Register</Text> here
           </Text>
         </View>
       </View>
@@ -146,9 +160,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#42506A',
     gap: 10,
-    borderRadius: 30,
+    borderRadius: 10,
     width: '85%',
     padding: 10
   },

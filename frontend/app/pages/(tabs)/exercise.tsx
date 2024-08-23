@@ -3,10 +3,10 @@ import { Alert, Modal, Pressable, SectionList, StyleSheet, Text, View } from "re
 import CustomPressable from "@/components/custom/CustomPressable"
 import { exercisesDatabase } from "@/database"
 import { useEffect, useState } from "react"
-import { AppTheme } from "@/constants/theme"
 import CustomTextInput from "@/components/custom/CustomTextInput"
 import { equipment, muscle_group } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
+import useSystemTheme from "@/hooks/useSystemTheme"
 
 interface ExerciseInterface {
   id: number
@@ -19,6 +19,7 @@ interface ExerciseInterface {
 }
 
 const Exercise = () => {
+  const systemTheme = useSystemTheme()
 
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Array<ExerciseInterface>>([])
@@ -66,14 +67,14 @@ const Exercise = () => {
   return (
     <View style={style.container}>
       <View style={{marginTop: '15%', padding: 5, marginBottom: 20}}>
-        <Text style={{color: 'white', fontSize: 35, textAlign: 'center'}}>Exercises</Text>
+        <Text style={{color: systemTheme.colors.text, fontSize: 35, textAlign: 'center'}}>Exercises</Text>
       </View>
       <View style={{gap: 10, padding: 10, marginBottom: 60}}>
         <View style={{alignSelf: 'flex-start'}}>
           <CustomPressable 
             text="+ Add New Exercise" 
             buttonStyle={{backgroundColor: 'transparent'}} 
-            textStyle={{fontSize: 15, color: 'white'}}
+            textStyle={{fontSize: 15, color: systemTheme.colors.primary}}
             onPress={() => setVisibleModal(!visibleModal)}
           />
         </View>
@@ -89,7 +90,7 @@ const Exercise = () => {
             setVisibleModal(!visibleModal);
           }}>
           <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(52, 52, 52, 0.7)'}}>
-            <View style={style.modalStyle}>
+            <View style={[style.modalStyle, {backgroundColor: systemTheme.colors.background}]}>
               <Text style={{textAlign: 'center', fontSize: 20, padding: 10, color: 'white'}}>Add new exercise</Text>
               <View>
                 <View style={{padding: 10}}>
@@ -142,14 +143,14 @@ const Exercise = () => {
       <SectionList
         extraData={exercises}
         sections={sectionData(exercises)}
-        renderItem={({item, index}) => (
-          <View key={item.id} style={[{padding: 20}, (index % 2 !== 0) ? style.oddColor : {backgroundColor: 'transparent'}]}>
-            <Text style={{fontSize: 17, textAlign: 'center', color: 'white'}}>{item.name}</Text>
+        renderItem={({item}) => (
+          <View key={item.id} style={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border}}>
+            <Text style={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}}>{item.name}</Text>
           </View>
         )}
         renderSectionHeader={({section: {title}}) => (
-          <View>
-            <Text style={{fontSize: 30, color: 'white', padding: 15, backgroundColor: '#42506A'}}>{title.toUpperCase()}</Text>
+          <View style={{padding: 5, marginTop: 30}}>
+            <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
           </View>
         )}
         stickySectionHeadersEnabled={false}
@@ -173,7 +174,6 @@ const style = StyleSheet.create({
     backgroundColor: '#526D82'
   },
   modalStyle: {
-    backgroundColor: AppTheme.colors.notification,
     width: '70%',
     borderRadius: 15,
   },
