@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError } from "@prisma/client/runtime/library";
 import { ZodError, ZodIssue, ZodIssueCode } from "zod";
-import { ApiError } from "../utils/error";
+import { ApiError, ValidationError } from "../utils/error";
 import { HttpStatusCode } from "../utils/http";
 
 const handlePrismaError = (error: unknown) => {
@@ -47,9 +47,10 @@ const errorHandler = (error: unknown, _request: Request, response: Response, nex
     return response.status(status).json({message: message})
   } else if (error instanceof ApiError) {
     return response.status(error.status).json({message: error.message})
-  } else {
-    return next()
+  } else if (error instanceof ValidationError) {
+    return response.status(error.status).json({field: error.field, message: error.message})
   }
+  return next()
 }
 
 export default errorHandler
