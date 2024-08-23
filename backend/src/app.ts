@@ -11,7 +11,7 @@ app.use(express.json())
 app.use(cors())
 
 // Routes
-app.use('/api/user', authRouter)
+app.use('/api/auth', authRouter)
 app.use('/api/equipment', equipmentRouter)
 
 // Middlewares
