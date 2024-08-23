@@ -18,7 +18,7 @@ const Profile = () => {
 
   const logoutUser = async () => {
     setVisibleProfile(!visibleProfile)
-    await SecureStore.deleteItemAsync('token')
+    await SecureStore.deleteItemAsync('user')
     if (rootNavigationRef.isReady()) {
       rootNavigationRef.dispatch(StackActions.replace('Login'))
     }

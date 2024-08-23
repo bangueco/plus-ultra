@@ -24,8 +24,8 @@ export default function TabsLayout() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
 
   useEffect(() => {
-    const user = SecureStore.getItem('token')
-    if (!user) navigation.navigate('Login')
+    const user = SecureStore.getItem('user')
+    if (!user) navigation.replace('Login')
   }, [])
 
   return (
