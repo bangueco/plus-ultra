@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError } from "@prisma/client/runtime/library";
 import { ZodError, ZodIssue, ZodIssueCode } from "zod";
 import { ApiError, ValidationError } from "../utils/error";
@@ -38,7 +38,7 @@ const handleZodError = (error: ZodError) => {
   return errorsMap
 }
 
-const errorHandler = (error: unknown, _request: Request, response: Response) => {
+const errorHandler = (error: unknown, _request: Request, response: Response, next: NextFunction) => {
   if (error instanceof ZodError) {
     const zod = handleZodError(error)
     return response.status(400).json(zod)
@@ -49,9 +49,9 @@ const errorHandler = (error: unknown, _request: Request, response: Response) => 
     return response.status(error.status).json({message: error.message})
   } else if (error instanceof ValidationError) {
     return response.status(error.status).json({field: error.field, message: error.message})
-  } else {
-    return response.status(500).json({message: 'An unexpected error occured.'})
   }
+
+  return next(error)
 }
 
 export default errorHandler
