@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import z from 'zod';
 import { UserSchema } from '../utils/schema';
-import tokenService from '../services/token.service';
 import { ApiError } from '../utils/error';
 import { HttpStatusCode } from '../utils/http';
 
@@ -53,25 +52,23 @@ const userAuthentication = (request: Request, _response: Response, next: NextFun
 }
 
 const userToken = (request: Request, _response: Response, next: NextFunction) => {
-  const authorizationHeader = request.get('authorization')
-
-  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-    throw new ApiError(HttpStatusCode.BAD_REQUEST, 'Invalid authorization header.')
-  }
-
-  const token = authorizationHeader.replace('Bearer ', '')
-
-  if (!token) {
-    throw new ApiError(HttpStatusCode.NOT_FOUND, 'Token not found.')
-  }
-
   try {
-    tokenService.verifyToken(token)
+    const authorizationHeader = request.get('authorization')
+  
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+      throw new ApiError(HttpStatusCode.BAD_REQUEST, 'Invalid authorization header.')
+    }
+  
+    const token = authorizationHeader.replace('Bearer ', '')
+  
+    if (!token) {
+      throw new ApiError(HttpStatusCode.NOT_FOUND, 'Token not found.')
+    }
+
     next()
   } catch (error: unknown) {
     next(error)
   }
-
 }
 
 export default {
