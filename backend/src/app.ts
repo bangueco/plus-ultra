@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 
-import userRouter from './routes/user.routes'
+import authRouter from './routes/auth.routes'
 import errorHandler from './middlewares/errorHandler'
 import equipmentRouter from './routes/equipment.routes'
 
@@ -11,7 +11,7 @@ app.use(express.json())
 app.use(cors())
 
 // Routes
-app.use('/api/user', userRouter)
+app.use('/api/user', authRouter)
 app.use('/api/equipment', equipmentRouter)
 
 // Middlewares
