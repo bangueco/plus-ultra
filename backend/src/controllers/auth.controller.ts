@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import userService from "../services/user.service"
 import { HttpStatusCode } from "../utils/http"
 import { ValidationError } from "../utils/error"
-import { verifyPassword } from "../utils/lib/hashing"
+import { hashPassword, verifyPassword } from "../utils/lib/hashing"
 import { generateAccessToken, generateRefreshToken } from "../utils/lib/token"
 
 const register = async (request: Request, response: Response, next: NextFunction) => {
@@ -15,8 +15,9 @@ const register = async (request: Request, response: Response, next: NextFunction
     if (isUsernameExist) throw new ValidationError(HttpStatusCode.BAD_REQUEST, 'username', 'Username is already taken.')
     if (isEmailExist) throw new ValidationError(HttpStatusCode.BAD_REQUEST, 'email', 'Email is already taken.')
     
+    const hashedPassword = await hashPassword(password)
 
-    const user = await userService.createUser(username, email, password)
+    const user = await userService.createUser(username, email, hashedPassword)
     return response.status(HttpStatusCode.CREATED).json(user)
   } catch (error) {
     return next(error)
