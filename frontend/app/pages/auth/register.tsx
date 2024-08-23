@@ -4,13 +4,13 @@ import { ParamListBase, useNavigation, useTheme } from "@react-navigation/native
 
 import authService from "@/services/auth.service";
 
-import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
 import { AxiosError } from "axios";
 import ErrorMessage from "@/components/custom/ErrorMessage";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { TextInput } from "react-native-paper";
 
 export default function Register () {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -46,6 +46,7 @@ export default function Register () {
         }
       })
     } else if (error instanceof AxiosError && error.response?.data) {
+      console.log(error.response.data.message)
       if (error.response.data.field === 'username') {
         setUsernameErrorMessage(error.response.data.message)
       } else if (error.response.data.field === 'email') {
@@ -71,42 +72,50 @@ export default function Register () {
 
   return(
     <View style={styles.container}>
-      <View style={[styles.registerContainer, {backgroundColor: colors.card}]}>
+      <View style={styles.registerContainer}>
         <Text style={{fontWeight: '800', fontSize: 23, color: colors.text, padding: 10}}>Create New Account</Text>
         <View style={
           {
             width: '100%', 
             padding: 10}
           }>
-          <View style={{padding: 3, marginTop: 10}}>
-            <CustomTextInput
-              placeholder="Enter username"
+          <View style={{padding: 3}}>
+            <TextInput
+              mode="outlined"
+              label="Username"
+              left={<TextInput.Icon icon="account" />}
               onChangeText={handleChangeText(setUsername)}
             />
-            <ErrorMessage text={usernameErrorMessage} />
+            {usernameErrorMessage && <ErrorMessage text={usernameErrorMessage} />}
           </View>
-          <View style={{padding: 3, marginTop: 10}}>
-            <CustomTextInput
-              placeholder="Enter email"
+          <View style={{padding: 3}}>
+            <TextInput
+              mode="outlined"
+              label="Email"
+              left={<TextInput.Icon icon="email" />}
               onChangeText={handleChangeText(setEmail)}
             />
-            <ErrorMessage text={emailErrorMessage} />
+            {emailErrorMessage && <ErrorMessage text={emailErrorMessage} />}
           </View>
-          <View style={{padding: 3, marginTop: 10}}>
-            <CustomTextInput
+          <View style={{padding: 3}}>
+            <TextInput
+              mode="outlined"
+              label="Password"
               secureTextEntry={true}
-              placeholder="Enter password"
-              onChangeText={handleChangeText(setConfirmPassword)}
-            />
-            <ErrorMessage text={passwordErrorMessage} />
-          </View>
-          <View style={{padding: 3, marginTop: 10}}>
-            <CustomTextInput
-              secureTextEntry={true}
-              placeholder="Confirm password"
+              left={<TextInput.Icon icon="lock" />}
               onChangeText={handleChangeText(setPassword)}
             />
-            <ErrorMessage text={confirmPasswordErrorMessage} />
+            {passwordErrorMessage && <ErrorMessage text={passwordErrorMessage} />}
+          </View>
+          <View style={{padding: 3}}>
+            <TextInput
+              mode="outlined"
+              label="Confirm Password"
+              secureTextEntry={true}
+              left={<TextInput.Icon icon="lock" />}
+              onChangeText={handleChangeText(setConfirmPassword)}
+            />
+            {confirmPasswordErrorMessage && <ErrorMessage text={confirmPasswordErrorMessage} />}
           </View>
         </View>
         <CustomPressable
