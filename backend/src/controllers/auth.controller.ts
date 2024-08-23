@@ -50,11 +50,7 @@ const login = async (request: Request, response: Response, next: NextFunction) =
   }
 }
 
-// Export as an object
-
-const userController = {
+export default {
   register,
   login
 }
-
-export default userController
