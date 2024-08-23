@@ -1,7 +1,6 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { Link, ParamListBase, useNavigation, useTheme } from "@react-navigation/native";
+import { ParamListBase, useNavigation, useTheme } from "@react-navigation/native";
 
-import CustomTextInput from "@/components/custom/CustomTextInput";
 import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
@@ -10,8 +9,18 @@ import { useState, useEffect } from "react";
 import authService from "@/services/auth.service";
 import { AxiosError } from "axios";
 
+import { TextInput } from 'react-native-paper';
+
 import * as SecureStore from 'expo-secure-store';
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+
+type UserInfo = {
+  id: number,
+  username: string,
+  email: string,
+  accessToken: string,
+  refreshToken: string
+}
 
 export default function Login () {
   const { colors } = useTheme();
@@ -24,8 +33,8 @@ export default function Login () {
   const [passwordErrorMessage, setPasswordErrorMessage] =  useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
 
-  const saveUserToken = async (token: string) => {
-    await SecureStore.setItemAsync('token', token)
+  const saveUserInfo = async (id: number, email: string, username: string, accessToken: string, refreshToken: string) => {
+    return await SecureStore.setItemAsync('user', JSON.stringify({id, username, email, accessToken, refreshToken}))
   }
 
   const clearErrorMessage = () => {
@@ -58,8 +67,8 @@ export default function Login () {
   const onPressLogin = async () => {
     try {
       clearErrorMessage()
-      const user = await authService.login(username, password)
-      saveUserToken(user.token)
+      const user: UserInfo = await authService.login(username, password)
+      await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken)
       navigation.replace('Tabs')
       return Alert.alert('Login Succesfully')
     } catch (error: unknown) {
@@ -72,34 +81,38 @@ export default function Login () {
   };
 
   useEffect(() => {
-    const user = SecureStore.getItem('token')
+    const user = SecureStore.getItem('user')
     if (user) navigation.replace('Tabs')
   }, [])
 
   return(
     <View style={styles.container}>
-      <View style={[styles.loginContainer, {backgroundColor: colors.card}]}>
+      <View style={styles.loginContainer}>
         <Text style={{fontWeight: '800',fontSize: 30, color: colors.text}}>Login</Text>
         <View style={
           {
             width: '100%', 
             padding: 10}}>
           <View style={{padding: 3}}>
-            <CustomTextInput
-              placeholder="Enter username"
+            <TextInput
+              mode="outlined"
+              label="Username"
+              left={<TextInput.Icon icon="account" />}
               onChangeText={handleChangeText(setUsername)}
             />
-            <ErrorMessage text={usernameErrorMessage} />
-          </View>
-          <View style={{padding: 3, marginTop: 10}}>
-            <CustomTextInput
-              secureTextEntry={true}
-              placeholder="Enter password"
-              onChangeText={handleChangeText(setPassword)}
-            />
-            <ErrorMessage text={passwordErrorMessage || errorMessage} />
+            {usernameErrorMessage && <ErrorMessage style={{marginTop: 3}} text={usernameErrorMessage} />}
           </View>
           <View style={{padding: 3}}>
+            <TextInput
+              mode="outlined"
+              label="Password"
+              secureTextEntry={true}
+              left={<TextInput.Icon icon="lock" />}
+              onChangeText={handleChangeText(setPassword)}
+            />
+            {(passwordErrorMessage || errorMessage) && <ErrorMessage style={{marginTop: 3}} text={passwordErrorMessage || errorMessage} />}
+          </View>
+          <View style={{padding: 3, marginTop: 20}}>
             <Text style={{textAlign: 'right', color: colors.text}}>Forgot password?</Text>
           </View>
         </View>
