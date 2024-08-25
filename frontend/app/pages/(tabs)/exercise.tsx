@@ -7,13 +7,13 @@ import CustomTextInput from "@/components/custom/CustomTextInput"
 import { equipment, muscle_group } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import useSystemTheme from "@/hooks/useSystemTheme"
-import { Dialog, Portal } from "react-native-paper"
+import { Button, Dialog, Portal } from "react-native-paper"
 import {ExerciseInfo} from "@/types/exercise";
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
 
-  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{id: number, name: string}>()
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{name: string, instructions: string, tutorialLink: string}>()
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
   const [visible, setVisible] = useState<boolean>(false)
@@ -57,9 +57,22 @@ const Exercise = () => {
     }
   }
 
-  const onPressSelectExercise = async (e: {id: number, name: string}) => {
+  const onPressSelectExercise = async (id: number) => {
     setVisible(true)
-    return setCurrentSelectedExercise({...currentSelectedExercise, id: e.id, name: e.name})
+    const getExercise = await exercisesDatabase.db.getFirstAsync<{
+      name: string, 
+      instructions: string, 
+      tutorialLink: string}
+    >(`SELECT name, instructions, tutorialLink FROM exercise WHERE id='${id}'`)
+
+    if (getExercise) {
+      return setCurrentSelectedExercise({
+        ...currentSelectedExercise, 
+        name: getExercise.name, 
+        instructions: getExercise.instructions, 
+        tutorialLink: getExercise.tutorialLink
+      })
+    }
   }
 
   // console.log(currentSelectedExercise)
@@ -136,10 +149,14 @@ const Exercise = () => {
       </View>
       <Portal>
         <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-          <Dialog.Title>{currentSelectedExercise?.name}</Dialog.Title>
+          <Dialog.Title style={{textAlign: 'center'}}>{currentSelectedExercise?.name}</Dialog.Title>
           <Dialog.Content>
-            <Text>Exercise</Text>
+            <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
           </Dialog.Content>
+          <Dialog.Actions>
+            <Button>Add exercise</Button>
+            <Button onPress={() => setVisible(false)}>Exit</Button>
+          </Dialog.Actions>
         </Dialog>
       </Portal>
       <SectionList
@@ -151,7 +168,7 @@ const Exercise = () => {
             text={item.name} 
             textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
             buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
-            onPress={() => onPressSelectExercise(item)}
+            onPress={() => onPressSelectExercise(item.id)}
           />
         )}
         renderSectionHeader={({section: {title}}) => (
