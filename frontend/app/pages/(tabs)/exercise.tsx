@@ -1,5 +1,5 @@
 import SearchInput from "@/components/custom/SearchInput"
-import { Alert, GestureResponderEvent, Modal, Pressable, SectionList, StyleSheet, Text, View } from "react-native"
+import { Alert, Modal, SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
 import { exercisesDatabase } from "@/database"
 import { useEffect, useState } from "react"
@@ -8,46 +8,36 @@ import { equipment, muscle_group } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { Dialog, Portal } from "react-native-paper"
-
-interface ExerciseInterface {
-  id: number
-  name: string
-  description: string
-  equipment: string
-  image_link: string
-  target_muscles: string
-  muscle_group: string
-}
+import {ExerciseInfo} from "@/types/exercise";
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
 
   const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{id: number, name: string}>()
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
-  const [exercises, setExercises] = useState<Array<ExerciseInterface>>([])
+  const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
   const [visible, setVisible] = useState<boolean>(false)
 
   const [exerciseName, setExerciseName] = useState<String>()
   const [equipmentName, setEquipmentName] = useState<String | null>()
-  const [targetMuscles, setTargetMuscles] = useState<String>()
-  const [muscleGroup, setMuscleGroup] = useState<String | null>()
+  const [muscleGroup, setMuscleGroup] = useState<String>()
 
   useEffect(() => {
-    exercisesDatabase.db.getAllAsync<ExerciseInterface>('SELECT * FROM exercise;')
+    exercisesDatabase.db.getAllAsync<ExerciseInfo>('SELECT * FROM exercise;')
     .then(data => {
       setExercises(data)
     })
     .catch(error => console.error(error))
   }, [])
 
-  const sectionData = (exercises: Array<ExerciseInterface>) => {
+  const sectionData = (exercises: Array<ExerciseInfo>) => {
     let sections: Array<{title: string, data: Array<{id: number, name: string}>}> = []
 
     exercises.map(exercise => {
-      if (sections.some(e => e.title === exercise.muscle_group)) {
-        sections[sections.findIndex(e => e.title === exercise.muscle_group)].data.push({id: exercise.id, name: exercise.name})
+      if (sections.some(e => e.title === exercise.muscleGroup)) {
+        sections[sections.findIndex(e => e.title === exercise.muscleGroup)].data.push({id: exercise.id, name: exercise.name})
       } else {
-        sections.push({title: exercise.muscle_group, data: [{id: exercise.id, name: exercise.name}]})
+        sections.push({title: exercise.muscleGroup, data: [{id: exercise.id, name: exercise.name}]})
       }
     })
 
@@ -56,10 +46,10 @@ const Exercise = () => {
 
   const onPressNewExercise = async () => {
     try {
-      const insertExercise = await exercisesDatabase.db.runAsync(`INSERT INTO exercise (name, equipment, target_muscles, muscle_group) VALUES ('${exerciseName}', '${equipmentName}', '${targetMuscles}', '${muscleGroup}');`)
-      const getInsertedExercise = await exercisesDatabase.db.getFirstAsync<ExerciseInterface>(`SELECT * FROM exercise WHERE id=${insertExercise.lastInsertRowId};`)
+      const insertExercise = await exercisesDatabase.db.runAsync(`INSERT INTO exercise (name, equipment, muscleGroup) VALUES ('${exerciseName}', '${equipmentName}', '${muscleGroup}');`)
+      const getInsertedExercise = await exercisesDatabase.db.getFirstAsync<ExerciseInfo>(`SELECT * FROM exercise WHERE id=${insertExercise.lastInsertRowId};`)
       if (getInsertedExercise) {
-        const updatedExerciseState: Array<ExerciseInterface> = [...exercises, getInsertedExercise]
+        const updatedExerciseState: Array<ExerciseInfo> = [...exercises, getInsertedExercise]
         return setExercises(updatedExerciseState)
       }
     } catch (error) {
@@ -72,7 +62,7 @@ const Exercise = () => {
     return setCurrentSelectedExercise({...currentSelectedExercise, id: e.id, name: e.name})
   }
 
-  console.log(currentSelectedExercise)
+  // console.log(currentSelectedExercise)
 
   return (
     <View style={style.container}>
@@ -118,13 +108,7 @@ const Exercise = () => {
                   />
                 </View>
                 <View style={{padding: 10, marginTop: 3}}>
-                  <CustomTextInput
-                    placeholder="Enter target muscles"
-                    onChangeText={(e) => setTargetMuscles(e)}
-                  />
-                </View>
-                <View style={{padding: 10, marginTop: 3}}>
-                  <RNPickerSelect
+                <RNPickerSelect
                     placeholder={{label: 'Select muscle group', value: null}}
                     onValueChange={(value) => setMuscleGroup(value)}
                     items={muscle_group}
