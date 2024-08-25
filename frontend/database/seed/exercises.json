@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Flat Barbell Bench Press",
+    "equipment": "Barbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform the flat barbell bench press, start by setting the barbell on a rack at chest height and lying back on a flat bench with your feet flat on the floor and a natural arch in your lower back. Grip the barbell slightly wider than shoulder-width, un-rack it, and position it above your chest with arms extended. Lower the barbell slowly to your chest, then press it back up to the starting position. Breathe in as you lower the bar and exhale as you press up. Aim for 8-12 reps and 3-4 sets. Use a spotter for heavy weights, maintain good form throughout, and remember to warm up before starting and stretch afterward.",
+    "tutorialLink": "@/assets/exercises/incline_barbell_bench.gif"
+  },
+  {
+    "name": "Incline Barbell Bench Press",
+    "equipment": "Barbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform the incline barbell bench press, set an adjustable bench to a 30-45 degree incline, lie back on the bench, grip the barbell with your hands slightly wider than shoulder-width, lower the barbell to your upper chest, and then press it back up to the starting position.",
+    "tutorialLink": "@/assets/exercises/incline_barbell_bench.gif"
+  },
+  {
+    "name": "Decline Barbell Bench Press",
+    "equipment": "Barbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform the decline barbell bench press, lie on a decline bench with your feet secured, grip the barbell slightly wider than shoulder-width, lower the barbell to your chest, and then press it back up to the starting position.",
+    "tutorialLink": "@/assets/exercises/decline_barbell_bench.gif"
+  },
+  {
+    "name": "Incline Dumbbell Bench Press",
+    "equipment": "Dumbbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform an incline dumbbell bench press, lie back on an inclined bench with dumbbells in hand, press the weights up above your chest, and then lower them slowly until your elbows are at a 90-degree angle before pressing them back up.",
+    "tutorialLink": "@/assets/exercises/decline_barbell_bench.gif"
+  },
+  {
+    "name": "Flat Dumbbell Bench Press",
+    "equipment": "Dumbbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform a flat dumbbell bench press, lie back on a flat bench with a dumbbell in each hand, press the weights up above your chest, and then lower them slowly until your elbows are at a 90-degree angle before pressing them back up.",
+    "tutorialLink": "@/assets/exercises/incline_dumbbell_bench.gif"
+  },
+  {
+    "name": "Dumbbell Flyes",
+    "equipment": "Dumbbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform dumbbell flyes, lie back on a flat bench with a dumbbell in each hand, extend your arms straight up above your chest, and then slowly lower the weights out to the sides with a slight bend in your elbows until you feel a stretch in your chest, before bringing the dumbbells back together.",
+    "tutorialLink": "@/assets/exercises/dumbbell_fly_bench.gif"
+  }
+]
