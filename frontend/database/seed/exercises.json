@@ -1,16 +1,16 @@
 [
   {
     "name": "Flat Barbell Bench Press",
-    "equipment": "Barbell",
+    "equipment": "barbell",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": false,
     "instructions": "To perform the flat barbell bench press, start by setting the barbell on a rack at chest height and lying back on a flat bench with your feet flat on the floor and a natural arch in your lower back. Grip the barbell slightly wider than shoulder-width, un-rack it, and position it above your chest with arms extended. Lower the barbell slowly to your chest, then press it back up to the starting position. Breathe in as you lower the bar and exhale as you press up. Aim for 8-12 reps and 3-4 sets. Use a spotter for heavy weights, maintain good form throughout, and remember to warm up before starting and stretch afterward.",
-    "tutorialLink": "@/assets/exercises/incline_barbell_bench.gif"
+    "tutorialLink": "CjHIKDQ4RQo"
   },
   {
     "name": "Incline Barbell Bench Press",
-    "equipment": "Barbell",
+    "equipment": "barbell",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": false,
@@ -19,7 +19,7 @@
   },
   {
     "name": "Decline Barbell Bench Press",
-    "equipment": "Barbell",
+    "equipment": "barbell",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": false,
@@ -28,7 +28,7 @@
   },
   {
     "name": "Incline Dumbbell Bench Press",
-    "equipment": "Dumbbell",
+    "equipment": "dumbbell",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": false,
@@ -37,7 +37,7 @@
   },
   {
     "name": "Flat Dumbbell Bench Press",
-    "equipment": "Dumbbell",
+    "equipment": "dumbbell",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": false,
@@ -46,11 +46,47 @@
   },
   {
     "name": "Dumbbell Flyes",
-    "equipment": "Dumbbell",
+    "equipment": "dumbbell",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": false,
     "instructions": "To perform dumbbell flyes, lie back on a flat bench with a dumbbell in each hand, extend your arms straight up above your chest, and then slowly lower the weights out to the sides with a slight bend in your elbows until you feel a stretch in your chest, before bringing the dumbbells back together.",
     "tutorialLink": "@/assets/exercises/dumbbell_fly_bench.gif"
+  },
+  {
+    "name": "Deadlift",
+    "equipment": "barbell",
+    "muscleGroup": "Back",
+    "difficulty": "Advanced",
+    "custom": false,
+    "instructions": "To perform the barbell deadlift, stand with your feet hip-width apart and the barbell over your mid-foot. Bend at the hips and knees to grip the barbell with your hands slightly wider than shoulder-width apart. Keeping your back flat and chest up, drive through your heels to lift the barbell, extending your hips and knees. Once you reach a standing position, lower the barbell back to the ground with control. Breathe in as you lower the bar and exhale as you lift. Aim for 6-10 reps and 3-4 sets. Use proper form to avoid injury and consider using a belt for added support.",
+    "tutorialLink": "@/assets/exercises/barbell_deadlift.gif"
+  },
+  {
+    "name": "Bent-Over Barbell Row",
+    "equipment": "barbell",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform the bent-over barbell row, stand with your feet shoulder-width apart and bend at the hips and knees, keeping your back straight and chest up. Grip the barbell with your hands slightly wider than shoulder-width apart. Pull the barbell towards your lower rib cage, squeezing your shoulder blades together at the top of the movement. Lower the barbell back down with control. Breathe in as you lower the bar and exhale as you pull up. Aim for 8-12 reps and 3-4 sets. Ensure proper form to avoid lower back strain.",
+    "tutorialLink": "@/assets/exercises/bent_over_barbell_row.gif"
+  },
+  {
+    "name": "Barbell T-Bar Row",
+    "equipment": "barbell",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform the barbell T-bar row, place one end of a barbell in a corner or use a T-bar row machine if available. Stand over the barbell with your feet shoulder-width apart and grip the bar with both hands. Bend at the hips and knees, keeping your back flat. Row the barbell towards your chest, squeezing your shoulder blades together at the top of the movement. Lower the barbell back to the starting position with control. Breathe in as you lower the bar and exhale as you row up. Aim for 8-12 reps and 3-4 sets. Use proper form to avoid injury and engage your back muscles effectively.",
+    "tutorialLink": "@/assets/exercises/barbell_t_bar_row.gif"
+  },
+  {
+    "name": "Barbell Shrugs",
+    "equipment": "barbell",
+    "muscleGroup": "Back",
+    "difficulty": "Beginner",
+    "custom": false,
+    "instructions": "To perform barbell shrugs, stand with your feet shoulder-width apart and hold the barbell with an overhand grip at thigh level. Keeping your arms straight, lift your shoulders towards your ears as high as possible, squeezing your traps at the top. Lower your shoulders back down slowly. Breathe in as you lower and exhale as you shrug up. Aim for 10-15 reps and 3-4 sets. Ensure good posture and avoid using heavy weights that could compromise form.",
+    "tutorialLink": "@/assets/exercises/barbell_shrugs.gif"
   }
 ]
