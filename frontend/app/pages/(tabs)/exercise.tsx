@@ -1,5 +1,5 @@
 import SearchInput from "@/components/custom/SearchInput"
-import { Alert, Modal, Pressable, SectionList, StyleSheet, Text, View } from "react-native"
+import { Alert, GestureResponderEvent, Modal, Pressable, SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
 import { exercisesDatabase } from "@/database"
 import { useEffect, useState } from "react"
@@ -7,6 +7,7 @@ import CustomTextInput from "@/components/custom/CustomTextInput"
 import { equipment, muscle_group } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import useSystemTheme from "@/hooks/useSystemTheme"
+import { Dialog, Portal } from "react-native-paper"
 
 interface ExerciseInterface {
   id: number
@@ -21,8 +22,10 @@ interface ExerciseInterface {
 const Exercise = () => {
   const systemTheme = useSystemTheme()
 
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{id: number, name: string}>()
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Array<ExerciseInterface>>([])
+  const [visible, setVisible] = useState<boolean>(false)
 
   const [exerciseName, setExerciseName] = useState<String>()
   const [equipmentName, setEquipmentName] = useState<String | null>()
@@ -63,6 +66,13 @@ const Exercise = () => {
       console.error(error)
     }
   }
+
+  const onPressSelectExercise = async (e: {id: number, name: string}) => {
+    setVisible(true)
+    return setCurrentSelectedExercise({...currentSelectedExercise, id: e.id, name: e.name})
+  }
+
+  console.log(currentSelectedExercise)
 
   return (
     <View style={style.container}>
@@ -140,13 +150,25 @@ const Exercise = () => {
           </View>
         </Modal>
       </View>
+      <Portal>
+        <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+          <Dialog.Title>{currentSelectedExercise?.name}</Dialog.Title>
+          <Dialog.Content>
+            <Text>Exercise</Text>
+          </Dialog.Content>
+        </Dialog>
+      </Portal>
       <SectionList
         extraData={exercises}
         sections={sectionData(exercises)}
         renderItem={({item}) => (
-          <View key={item.id} style={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border}}>
-            <Text style={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}}>{item.name}</Text>
-          </View>
+          <CustomPressable 
+            key={item.id} 
+            text={item.name} 
+            textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+            buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
+            onPress={() => onPressSelectExercise(item)}
+          />
         )}
         renderSectionHeader={({section: {title}}) => (
           <View style={{padding: 5, marginTop: 30}}>
