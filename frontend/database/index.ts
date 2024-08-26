@@ -35,8 +35,50 @@ class ExerciseDatabase extends Database {
   }
 }
 
+class TemplatesDatabase extends Database {
+  constructor(database_name: string) {
+    super(database_name)
+  }
+
+  async seed() {
+    try {
+      await this.db.execAsync(`
+        DROP TABLE IF EXISTS templates;
+        DROP TABLE IF EXISTS template_items;
+        CREATE TABLE IF NOT EXISTS templates (
+          template_id INTEGER PRIMARY KEY NOT NULL,
+          template_name VARHCAR(255) NOT NULL,
+          custom VARCHAR NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS template_items(
+          item_id INTEGER PRIMARY KEY NOT NULL,
+          item_name VARCHAR(255) NOT NULL,
+          muscleGroup VARCHAR(255) NOT NULL,
+          template_id INTEGER NOT NULL,
+          FOREIGN KEY (template_id) REFERENCES templates(template_id)
+        );
+
+        INSERT INTO templates(template_name, custom) VALUES ('Push Day', 'false');
+        INSERT INTO templates(template_name, custom) VALUES ('Pull Day', 'false');
+        INSERT INTO templates(template_name, custom) VALUES ('Leg Day', 'false');
+
+        INSERT INTO template_items(item_name, muscleGroup, template_id)
+        VALUES 
+          ('Incline Dumbbell Bench Press', 'Chest', 1),
+          ('Flat Dumbbell Bench Press', 'Chest', 1),
+          ('Dumbbell Flyes', 'Chest', 1)
+      `)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
+
 const exercisesDatabase = new ExerciseDatabase('exercises')
+const templatesDatabase = new TemplatesDatabase('templates')
 
 export {
-  exercisesDatabase
+  exercisesDatabase,
+  templatesDatabase
 }
