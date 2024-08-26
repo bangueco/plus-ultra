@@ -3,7 +3,7 @@ import CustomPressable from "@/components/custom/CustomPressable";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { useEffect } from "react";
-import { exercisesDatabase } from "@/database";
+import { exercisesDatabase, templatesDatabase } from "@/database";
 import useSystemTheme from "@/hooks/useSystemTheme";
 import * as SecureStore from 'expo-secure-store';
 
@@ -15,6 +15,7 @@ const Welcome = () => {
 
   useEffect(() => {
     const setup = async () => {
+      await templatesDatabase.seed()
       return await exercisesDatabase.seed()
     }
     const user = SecureStore.getItem('user')
