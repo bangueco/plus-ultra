@@ -9,6 +9,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { Button, Dialog, Portal } from "react-native-paper"
 import {ExerciseInfo} from "@/types/exercise";
+import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
@@ -29,20 +30,6 @@ const Exercise = () => {
     })
     .catch(error => console.error(error))
   }, [])
-
-  const sectionData = (exercises: Array<ExerciseInfo>) => {
-    let sections: Array<{title: string, data: Array<{id: number, name: string}>}> = []
-
-    exercises.map(exercise => {
-      if (sections.some(e => e.title === exercise.muscleGroup)) {
-        sections[sections.findIndex(e => e.title === exercise.muscleGroup)].data.push({id: exercise.id, name: exercise.name})
-      } else {
-        sections.push({title: exercise.muscleGroup, data: [{id: exercise.id, name: exercise.name}]})
-      }
-    })
-
-    return sections
-  }
 
   const onPressNewExercise = async () => {
     try {
@@ -161,7 +148,7 @@ const Exercise = () => {
       </Portal>
       <SectionList
         extraData={exercises}
-        sections={sectionData(exercises)}
+        sections={sortByMuscleGroup(exercises)}
         renderItem={({item}) => (
           <CustomPressable 
             key={item.id} 
