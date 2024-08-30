@@ -1,17 +1,25 @@
 import CustomPressable from "@/components/custom/CustomPressable"
 import { exercisesDatabase, templatesDatabase } from "@/database"
 import useSystemTheme from "@/hooks/useSystemTheme"
-import { TemplateItem, TemplatesType } from "@/types/templates"
+import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
-import { Button, Dialog, Portal } from "react-native-paper"
+import { Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
+import { Button, Checkbox, Dialog, Portal, TextInput } from "react-native-paper"
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { ExerciseInfo } from "@/types/exercise"
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 
 
 const Workout = () => {
   const systemTheme = useSystemTheme()
 
+  const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
+  const [selectedExercises, setSelectedExercises] = useState<Array<{exercise_id: number, item_name: string}>>([])
+
+  const [newTemplateVisible, setNewTemplateVisible] = useState<boolean>(false)
+  const [newTemplate, setNewTemplate] = useState<NewTemplateItem>({template_name: '', exercises: []})
+  const [exerciseListVisible, setExerciseListVisible] = useState<boolean>(false)
   const [templateVisible, setTemplateVisible] = useState<boolean>(false)
   const [guideVisible, setGuideVisible] = useState<boolean>(false)
   const [workoutTemplates, setWorkoutTemplates] = useState<Array<TemplatesType>>([])
@@ -36,6 +44,25 @@ const Workout = () => {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const onPressAddExercise = () => {
+    setExerciseListVisible(false)
+    setNewTemplate({...newTemplate, exercises: [...newTemplate.exercises, ...selectedExercises]})
+    return setSelectedExercises([])
+  }
+
+  const onPressDeleteExercise = (id: number) => {
+    const filter = newTemplate.exercises.filter((exercise, index) => index !== id)
+    return setNewTemplate({...newTemplate, exercises: filter})
+  }
+
+  const onPressSelectExercise = (id: number, name: string) => {
+    if (selectedExercises.some(exercise => exercise.exercise_id === id)) {
+      const filter = selectedExercises.filter(exercise => exercise.exercise_id !== id)
+      return setSelectedExercises(filter)
+    }
+    return setSelectedExercises([...selectedExercises, {exercise_id: id, item_name: name}])
   }
 
   const onPressShowGuide = async (id: number) => {
@@ -69,14 +96,27 @@ const Workout = () => {
     setGuideVisible(false)
   }
 
+  const handleTemplateName = (e: string) => {
+    setNewTemplate({...newTemplate, template_name: e})
+  }
+
   useEffect(() => {
     fetchTemplates().then(() => console.log('Fetched successfully'))
+  }, [])
+
+  useEffect(() => {
+    exercisesDatabase.db.getAllAsync<ExerciseInfo>('SELECT * FROM exercise;')
+    .then(data => {
+      setExercises(data)
+    })
+    .catch(error => console.error(error))
   }, [])
 
   return (
     <View style={styles.container}>
       <View style={{marginTop: '15%', padding: 5}}>
         <Portal>
+          {/* Show dialog for viewing templates */}
           <Dialog visible={templateVisible} onDismiss={() => setTemplateVisible(false)}>
             <Dialog.Title style={{textAlign: 'center'}}>Workout</Dialog.Title>
             <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
@@ -115,8 +155,7 @@ const Workout = () => {
               <Button onPress={() => setTemplateVisible(false)}>Start Workout</Button>
             </Dialog.Actions>
           </Dialog>
-        </Portal>
-        <Portal>
+          {/* Show pop up dialog for viewing exercise guides */}
           <Dialog visible={guideVisible} onDismiss={handleGuideDismiss}>
             <Dialog.Title style={{textAlign: 'center'}}>{currentGuide?.name}</Dialog.Title>
             <Dialog.Content>
@@ -126,6 +165,77 @@ const Workout = () => {
               <Button onPress={handleGuideDismiss}>OK</Button>
             </Dialog.Actions>
           </Dialog>
+          {/* Show pop up dialog for creating new template */}
+          <Dialog visible={newTemplateVisible}>
+            <Dialog.Title style={{textAlign: 'center'}}>Add new template</Dialog.Title>
+            <Dialog.Content style={{gap: 10}}>
+              <TextInput label="Template Name" style={{backgroundColor: 'transparent'}} onChangeText={handleTemplateName} />
+              <Button icon="plus" mode="outlined" onPress={() => setExerciseListVisible(true)}>Add new exercises</Button>
+              <ScrollView>
+                {
+                  newTemplate.exercises && newTemplate.exercises.map((exercise, index) => (
+                      <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+                        <Text style={{fontSize: 15, color: systemTheme.colors.text}}>
+                          {exercise.item_name}
+                        </Text>
+                        <MaterialIcons
+                            onPress={() => onPressDeleteExercise(index)}
+                            name="delete"
+                            size={20}
+                            color="red"
+                        />
+                      </View>
+                    ))
+                }
+              </ScrollView>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                disabled={newTemplate.exercises.length === 0}
+              >
+                Create
+              </Button>
+              <Button onPress={() => {setNewTemplateVisible(false); setNewTemplate({...newTemplate, template_name: '', exercises: []})}}>Cancel</Button>
+            </Dialog.Actions>
+          </Dialog>
+          {/* Show pop up dialog list of exercises that need to be selected */}
+          <Dialog visible={exerciseListVisible}>
+            <Dialog.Title style={{textAlign: 'center'}}>Exercises</Dialog.Title>
+            <Dialog.Content style={{height: 350}}>
+              <SectionList
+                extraData={exercises}
+                sections={sortByMuscleGroup(exercises)}
+                renderItem={({item}) => (
+                  <View key={item.id} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}>
+                    <CustomPressable 
+                      key={item.id} 
+                      text={item.name} 
+                      textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+                      buttonStyle={{backgroundColor: 'transparent'}}
+                      onPress={() => onPressSelectExercise(item.id, item.name)}
+                    />
+                    <Checkbox status={selectedExercises.some(exercise => exercise.exercise_id === item.id) ? "checked" : "unchecked"} />
+                  </View>
+                )}
+                renderSectionHeader={({section: {title}}) => (
+                  <View style={{padding: 5, marginTop: 30}}>
+                    <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
+                  </View>
+                )}
+                stickySectionHeadersEnabled={false}
+              />
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                  onPress={onPressAddExercise}
+                  disabled={selectedExercises.length === 0}
+              >
+                Add
+              </Button>
+              <Button onPress={() => { setSelectedExercises([]); setExerciseListVisible(false)}}>Cancel</Button>
+            </Dialog.Actions>
+          </Dialog>
+          {/* End of dialog */}
         </Portal>
         <View>
           <Text style={{color: systemTheme.colors.text, fontSize: 20}}>Start Workout</Text>
@@ -144,6 +254,7 @@ const Workout = () => {
             <View style={styles.templates}>
               <CustomPressable
                 text="+"
+                onPress={() => setNewTemplateVisible(true)}
                 buttonStyle={{
                   backgroundColor: 'transparent', 
                   borderColor: systemTheme.colors.border, 
