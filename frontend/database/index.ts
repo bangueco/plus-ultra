@@ -47,7 +47,7 @@ class TemplatesDatabase extends Database {
         DROP TABLE IF EXISTS template_items;
         CREATE TABLE IF NOT EXISTS templates (
           template_id INTEGER PRIMARY KEY NOT NULL,
-          template_name VARHCAR(255) NOT NULL,
+          template_name VARCHAR(255) NOT NULL,
           custom VARCHAR NOT NULL
         );
 
@@ -69,8 +69,8 @@ class TemplatesDatabase extends Database {
 
         INSERT INTO template_items(item_name, muscleGroup, sets, reps, template_id, exercise_id)
         VALUES 
-          ('Incline Dumbbell Bench Press', 'Chest', 3, 12, 1, 2),
-          ('Flat Dumbbell Bench Press', 'Chest', 3, 12, 1, 1),
+          ('Incline Dumbbell Bench Press', 'Chest', 3, 12, 1, 4),
+          ('Flat Dumbbell Bench Press', 'Chest', 3, 12, 1, 5),
           ('Dumbbell Flyes', 'Chest', 3, 12, 1, 6),
           ('Shoulder Press', 'Shoulders', 3, 12, 1, 14),
           ('Lateral Raise', 'Shoulders', 3, 12, 1, 15);
