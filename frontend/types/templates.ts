@@ -13,3 +13,11 @@ export type TemplateItem = {
   template_id: number,
   exercise_id: number,
 }
+
+export type NewTemplateItem = {
+  template_name: string, 
+  exercises: Array<{
+    exercise_id: number
+    item_name: string,
+  }>
+}
