@@ -46,6 +46,14 @@ const Workout = () => {
     }
   }
 
+  const onPressCreateTemplate = async () => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
   const onPressAddExercise = () => {
     setExerciseListVisible(false)
     setNewTemplate({...newTemplate, exercises: [...newTemplate.exercises, ...selectedExercises]})
@@ -192,6 +200,7 @@ const Workout = () => {
             <Dialog.Actions>
               <Button
                 disabled={newTemplate.exercises.length === 0}
+                onPress={onPressCreateTemplate}
               >
                 Create
               </Button>
@@ -275,6 +284,8 @@ const Workout = () => {
             <View style={styles.templates}>
               {
                 workoutTemplates && workoutTemplates.map((template) => (
+                  template.custom === 'false'
+                  ?
                   <CustomPressable
                     onPress={() => onPressSelectTemplate(template.template_id)}
                     key={template.template_id}
@@ -293,6 +304,7 @@ const Workout = () => {
                       color: systemTheme.colors.text
                     }}
                   />
+                  : null
                 ))
               }
             </View>
