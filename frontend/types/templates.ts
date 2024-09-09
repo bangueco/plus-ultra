@@ -24,5 +24,6 @@ export type NewTemplateItem = {
   exercises: Array<{
     exercise_id: number
     item_name: string,
+    muscleGroup: string
   }>
 }

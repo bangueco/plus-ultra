@@ -3,7 +3,7 @@ import { exercisesDatabase, templatesDatabase } from "@/database"
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
-import { Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
+import { Alert, Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
 import { Button, Checkbox, Dialog, Portal, TextInput } from "react-native-paper"
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { ExerciseInfo } from "@/types/exercise"
@@ -15,7 +15,7 @@ const Workout = () => {
   const systemTheme = useSystemTheme()
 
   const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
-  const [selectedExercises, setSelectedExercises] = useState<Array<{exercise_id: number, item_name: string}>>([])
+  const [selectedExercises, setSelectedExercises] = useState<Array<{exercise_id: number, item_name: string, muscleGroup: string}>>([])
 
   const [newTemplateVisible, setNewTemplateVisible] = useState<boolean>(false)
   const [newTemplate, setNewTemplate] = useState<NewTemplateItem>({template_name: '', exercises: []})
@@ -53,9 +53,26 @@ const Workout = () => {
 
   const onPressCreateTemplate = async () => {
     try {
-      
+      const insertTemplate = await templatesDatabase.db.runAsync(`
+        INSERT INTO templates(template_name, custom) VALUES ('${newTemplate.template_name}', 'true');
+      `)
+
+      newTemplate.exercises.map(async (item) => {
+        return await templatesDatabase.db.execAsync(`
+          INSERT INTO template_items(item_name, muscleGroup, template_id, exercise_id)
+          VALUES ('${item.item_name}', '${item.muscleGroup}', '${insertTemplate.lastInsertRowId}', '${item.exercise_id}')
+        `)
+      })
+
+      await fetchTemplates()
+
+      Alert.alert('Created new template success!')
+
+      setNewTemplate({...newTemplate, template_name: '', exercises: []})
+
+      return setNewTemplateVisible(false)
     } catch (error) {
-      
+      console.error(error)
     }
   }
 
@@ -70,12 +87,15 @@ const Workout = () => {
     return setNewTemplate({...newTemplate, exercises: filter})
   }
 
-  const onPressSelectExercise = (id: number, name: string) => {
+  const onPressSelectExercise = async (id: number, name: string) => {
     if (selectedExercises.some(exercise => exercise.exercise_id === id)) {
       const filter = selectedExercises.filter(exercise => exercise.exercise_id !== id)
       return setSelectedExercises(filter)
     }
-    return setSelectedExercises([...selectedExercises, {exercise_id: id, item_name: name}])
+    const exerciseMuscleGroup = await exercisesDatabase.db.getFirstAsync<{muscleGroup: string}>(`SELECT muscleGroup FROM exercise WHERE id=${id}`)
+    if (exerciseMuscleGroup) {
+      return setSelectedExercises([...selectedExercises, {exercise_id: id, item_name: name, muscleGroup: exerciseMuscleGroup.muscleGroup}])
+    }
   }
 
   const onPressShowGuide = async (id: number) => {
@@ -133,7 +153,7 @@ const Workout = () => {
           <Dialog visible={templateVisible} onDismiss={onDismissTemplate}>
             <Dialog.Title style={{textAlign: 'center'}}>Workout</Dialog.Title>
             <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
-              <ScrollView style={{marginBottom: 10, marginTop: 10}}>
+              <ScrollView style={{marginBottom: 10, marginTop: 10, maxHeight: 400}}>
                 {
                   currentTemplate && currentTemplate.map(item => (
                     <View
@@ -184,7 +204,9 @@ const Workout = () => {
             <Dialog.Content style={{gap: 10}}>
               <TextInput label="Template Name" style={{backgroundColor: 'transparent'}} onChangeText={handleTemplateName} />
               <Button icon="plus" mode="outlined" onPress={() => setExerciseListVisible(true)}>Add new exercises</Button>
-              <ScrollView>
+              <ScrollView
+                style={{height: 200}}
+              >
                 {
                   newTemplate.exercises && newTemplate.exercises.map((exercise, index) => (
                       <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
@@ -266,22 +288,50 @@ const Workout = () => {
           <View style={{gap: 5}}>
             <Text style={{color: systemTheme.colors.text, fontSize: 20}}>My templates</Text>
             <View style={styles.templates}>
-              <CustomPressable
-                text="+"
-                onPress={() => setNewTemplateVisible(true)}
-                buttonStyle={{
-                  backgroundColor: 'transparent', 
-                  borderColor: systemTheme.colors.border, 
-                  borderWidth: 1,
-                  borderRadius: 5,
-                  width: 110,
-                  height: 100,
-                }}
-                textStyle={{
-                  fontSize: 50,
-                  color: systemTheme.colors.text
-                }}
-              />
+              <View
+                style={styles.templates}
+              >
+                <CustomPressable
+                  text="+"
+                  onPress={() => setNewTemplateVisible(true)}
+                  buttonStyle={{
+                    backgroundColor: 'transparent', 
+                    borderColor: systemTheme.colors.border, 
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    width: 110,
+                    height: 100,
+                  }}
+                  textStyle={{
+                    fontSize: 50,
+                    color: systemTheme.colors.text
+                  }}
+                />
+                {
+                  workoutTemplates && workoutTemplates.map((template) => (
+                    template.custom === 'true'
+                    ?
+                    <CustomPressable
+                      onPress={() => onPressSelectTemplate(template.template_id)}
+                      key={template.template_id}
+                      text={template.template_name}
+                      buttonStyle={{
+                        backgroundColor: 'transparent', 
+                        borderColor: systemTheme.colors.border, 
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        width: 110,
+                        height: 100,
+                      }}
+                      textStyle={{
+                        fontSize: 14,
+                        color: systemTheme.colors.text
+                      }}
+                    />
+                    : null
+                  ))
+                }
+              </View>
             </View>
           </View>
           <View style={{gap: 5}}>
@@ -302,7 +352,6 @@ const Workout = () => {
                       borderRadius: 5,
                       width: 110,
                       height: 100,
-                      flex: 1
                     }}
                     textStyle={{
                       fontSize: 14,
@@ -327,12 +376,12 @@ const styles = StyleSheet.create({
   },
   templateContainer: {
     marginTop: 20,
-    gap: 5
+    gap: 5,
   },
   templates: {
     flexDirection: 'row', 
-    gap: 10, 
-    flexWrap: 'wrap'
+    gap: 15, 
+    flexWrap: 'wrap',
   },
   templateItem: {
     padding: 10,
