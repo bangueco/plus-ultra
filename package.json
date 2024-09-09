@@ -4,7 +4,8 @@
   "description": "A gym workout tracker, logger and equipment scanner.",
   "private": "true",
   "scripts": {
-    "init": "cd ./frontend && npm install && cd ../backend && npm install"
+    "install:pnpm": "npm install -g pnpm",
+    "init": "npm run install:pnpm && cd ./frontend && pnpm install && cd ../backend && pnpm install"
   },
   "repository": {
     "type": "git",
