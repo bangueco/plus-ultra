@@ -8,10 +8,15 @@ export type TemplateItem = {
   item_id: number,
   item_name: string,
   muscleGroup: string,
-  sets: number,
+  template_id: number ,
+  exercise_id: number ,
+}
+
+export type ExerciseSets = {
+  id: number,
   reps: number,
-  template_id: number,
-  exercise_id: number,
+  weight: number,
+  item_id: number,
 }
 
 export type NewTemplateItem = {
