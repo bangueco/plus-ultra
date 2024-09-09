@@ -46,6 +46,11 @@ const Workout = () => {
     }
   }
 
+  const onDismissTemplate = () => {
+    setTemplateVisible(false)
+    setCurrentTemplate([])
+  }
+
   const onPressCreateTemplate = async () => {
     try {
       
@@ -125,7 +130,7 @@ const Workout = () => {
       <View style={{marginTop: '15%', padding: 5}}>
         <Portal>
           {/* Show dialog for viewing templates */}
-          <Dialog visible={templateVisible} onDismiss={() => setTemplateVisible(false)}>
+          <Dialog visible={templateVisible} onDismiss={onDismissTemplate}>
             <Dialog.Title style={{textAlign: 'center'}}>Workout</Dialog.Title>
             <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
               <ScrollView style={{marginBottom: 10, marginTop: 10}}>
@@ -145,7 +150,7 @@ const Workout = () => {
                           }}
                         numberOfLines={1}
                         >
-                          {item.sets}x{item.reps} {item.item_name}
+                          {item.item_name}
                         </Text>
                         <Text style={{color: systemTheme.colors.primary}}>{item.muscleGroup}</Text>
                       </View>
