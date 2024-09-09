@@ -60,7 +60,8 @@ export default function Register () {
       clearErrorMessage()
       if (password !== confirmPassword) return setConfirmPasswordErrorMessage('Passwords must be identical to each other.')
       await authService.register(username, email, password)
-      return Alert.alert('Registered Succesfully')
+      navigation.replace('Login')
+      return Alert.alert('Registered Successfully')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
     }

@@ -1,4 +1,3 @@
-import SearchInput from "@/components/custom/SearchInput"
 import { Alert, Modal, SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
 import { exercisesDatabase } from "@/database"
@@ -7,13 +6,14 @@ import CustomTextInput from "@/components/custom/CustomTextInput"
 import { equipment, muscle_group } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import useSystemTheme from "@/hooks/useSystemTheme"
-import { Button, Dialog, Portal } from "react-native-paper"
+import { Button, Dialog, Portal, Searchbar } from "react-native-paper"
 import {ExerciseInfo} from "@/types/exercise";
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
 
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{name: string, instructions: string, tutorialLink: string}>()
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
@@ -78,9 +78,11 @@ const Exercise = () => {
             onPress={() => setVisibleModal(!visibleModal)}
           />
         </View>
-        <View style={{flex: 1}}>
-          <SearchInput />
-        </View>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={(e) => setSearchQuery(e)}
+          value={searchQuery}
+        />
         <Modal
           animationType="fade"
           transparent={true}

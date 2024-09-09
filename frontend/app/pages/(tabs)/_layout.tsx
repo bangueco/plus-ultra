@@ -14,6 +14,7 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 import { TabsParamList } from '@/types/navigation';
 import { tabNavigationRef } from '@/hooks/useNavigationRef';
 import useSystemTheme from '@/hooks/useSystemTheme';
+import { PaperProvider } from 'react-native-paper';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -29,45 +30,47 @@ export default function TabsLayout() {
   }, [])
 
   return (
-    <NavigationContainer theme={systemTheme} independent={true} ref={tabNavigationRef}>
-      <Tab.Navigator 
-        screenOptions={{
-          headerShown: false, 
-          tabBarStyle: {backgroundColor: 'transparent', borderTopWidth: 0, shadowColor: 'red', shadowOffset: {width: -420, height: 100}, shadowRadius: 20, shadowOpacity: 0.3, padding: 2, elevation: 0},
-          tabBarActiveTintColor: systemTheme.colors.primary,
-          tabBarInactiveTintColor: 'gray',
-        }}>
-        <Tab.Screen name="Profile" component={Profile} options={{
-            title: 'Profile',
-            tabBarLabelStyle: {fontSize: 12},
-            tabBarIcon: ({color}) => <AntDesign name="user" size={30} color={color} />,
-          }}
-        />
-        <Tab.Screen name="Workout" component={Workout} options={{
-            title: 'Start Workout',
-            tabBarLabelStyle: {fontSize: 12},
-            tabBarIcon: ({color}) => <AntDesign name="plus" size={30} color={color} />,
-          }}
-        />
-        <Tab.Screen name="Scan" component={Scan} options={{
-            title: 'Scanner',
-            tabBarLabelStyle: {fontSize: 12},
-            tabBarIcon: ({color}) => <AntDesign name="scan1" size={30} color={color} />,
-          }}
-        />
-        <Tab.Screen name="History" component={History} options={{
-            title: 'History',
-            tabBarLabelStyle: {fontSize: 12},
-            tabBarIcon: ({color}) => <MaterialIcons name="history" size={30} color={color} />,
-          }}
-        />
-        <Tab.Screen name="Exercise" component={Exercise} options={{
-            title: 'Exercise',
-            tabBarLabelStyle: {fontSize: 12},
-            tabBarIcon: ({color}) => <Ionicons name="barbell" size={30} color={color} />,
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <PaperProvider theme={systemTheme}>
+      <NavigationContainer theme={systemTheme} independent={true} ref={tabNavigationRef}>
+        <Tab.Navigator 
+          screenOptions={{
+            headerShown: false, 
+            tabBarStyle: {backgroundColor: 'transparent', borderTopWidth: 0, shadowColor: 'red', shadowOffset: {width: -420, height: 100}, shadowRadius: 20, shadowOpacity: 0.3, padding: 2, elevation: 0},
+            tabBarActiveTintColor: systemTheme.colors.primary,
+            tabBarInactiveTintColor: 'gray',
+          }}>
+          <Tab.Screen name="Profile" component={Profile} options={{
+              title: 'Profile',
+              tabBarLabelStyle: {fontSize: 10},
+              tabBarIcon: ({color}) => <AntDesign name="user" size={30} color={color} />,
+            }}
+          />
+          <Tab.Screen name="Workout" component={Workout} options={{
+              title: 'Start Workout',
+              tabBarLabelStyle: {fontSize: 10},
+              tabBarIcon: ({color}) => <AntDesign name="plus" size={30} color={color} />,
+            }}
+          />
+          <Tab.Screen name="Scan" component={Scan} options={{
+              title: 'Scanner',
+              tabBarLabelStyle: {fontSize: 10},
+              tabBarIcon: ({color}) => <AntDesign name="scan1" size={30} color={color} />,
+            }}
+          />
+          <Tab.Screen name="History" component={History} options={{
+              title: 'History',
+              tabBarLabelStyle: {fontSize: 10},
+              tabBarIcon: ({color}) => <MaterialIcons name="history" size={30} color={color} />,
+            }}
+          />
+          <Tab.Screen name="Exercise" component={Exercise} options={{
+              title: 'Exercise',
+              tabBarLabelStyle: {fontSize: 10},
+              tabBarIcon: ({color}) => <Ionicons name="barbell" size={30} color={color} />,
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
