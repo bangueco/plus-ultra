@@ -284,9 +284,9 @@ const Workout = () => {
             text="Start an empty workout"
           />
         </View>
-        <View style={styles.templateContainer}>
-          <View style={{gap: 5}}>
-            <Text style={{color: systemTheme.colors.text, fontSize: 20}}>My templates</Text>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.templateContainer}>
+          <View style={{gap: 5, flexGrow: 1}}>
+            <Text style={{color: systemTheme.colors.text, fontSize: 20}}># My templates</Text>
             <View style={styles.templates}>
               <View
                 style={styles.templates}
@@ -334,8 +334,8 @@ const Workout = () => {
               </View>
             </View>
           </View>
-          <View style={{gap: 5}}>
-            <Text style={{color: systemTheme.colors.text, fontSize: 20}}>Example templates</Text>
+          <View style={{gap: 5, flexGrow: 1}}>
+            <Text style={{color: systemTheme.colors.text, fontSize: 20}}># Example templates</Text>
             <View style={styles.templates}>
               {
                 workoutTemplates && workoutTemplates.map((template) => (
@@ -363,7 +363,7 @@ const Workout = () => {
               }
             </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
     </View>
   )
@@ -375,8 +375,10 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   templateContainer: {
-    marginTop: 20,
-    gap: 5,
+    paddingTop: 20,
+    gap: 15,
+    flexGrow: 1,
+    paddingBottom: 125
   },
   templates: {
     flexDirection: 'row', 
