@@ -5,7 +5,9 @@
   "private": "true",
   "scripts": {
     "install:pnpm": "npm install -g pnpm",
-    "init": "npm run install:pnpm && cd ./frontend && pnpm install && cd ../backend && pnpm install"
+    "setup:frontend": "cd ./frontend && pnpm install",
+    "setup:backend": "cd ../backend && pnpm install",
+    "init": "npm run install:pnpm && npm run setup:frontend && npm run setup:backend"
   },
   "repository": {
     "type": "git",
