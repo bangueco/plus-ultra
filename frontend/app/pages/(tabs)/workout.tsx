@@ -24,6 +24,7 @@ const Workout = () => {
   const [guideVisible, setGuideVisible] = useState<boolean>(false)
   const [workoutTemplates, setWorkoutTemplates] = useState<Array<TemplatesType>>([])
   const [currentTemplate, setCurrentTemplate] = useState<Array<TemplateItem>>([])
+  const [currentTemplateCustom, setCurrentTemplateCustom] = useState<boolean>(true)
   const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string}>()
 
   const fetchTemplates = async () => {
@@ -39,6 +40,8 @@ const Workout = () => {
   const onPressSelectTemplate = async (id: number) => {
     try {
       setTemplateVisible(true)
+      const template = await templatesDatabase.db.getFirstAsync<{custom: string}>(`SELECT custom FROM templates WHERE template_id=${id}`)
+      template?.custom === 'true' ? setCurrentTemplateCustom(true) : setCurrentTemplateCustom(false)
       const item = await templatesDatabase.db.getAllAsync<TemplateItem>(`SELECT * FROM template_items WHERE template_id=${id}`)
       setCurrentTemplate(item)
     } catch (error) {
@@ -71,6 +74,26 @@ const Workout = () => {
       setNewTemplate({...newTemplate, template_name: '', exercises: []})
 
       return setNewTemplateVisible(false)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onPressDeleteTemplate = async (id: number) => {
+    try {
+      await templatesDatabase.db.runAsync(`
+        DELETE FROM templates WHERE template_id=${id}
+      `)
+
+      await templatesDatabase.db.runAsync(`
+        DELETE FROM template_items WHERE template_id=${id}
+      `)
+
+      onDismissTemplate()
+
+      await fetchTemplates()
+
+      return Alert.alert('Deleted successfully!')
     } catch (error) {
       console.error(error)
     }
@@ -186,6 +209,11 @@ const Workout = () => {
             </Dialog.ScrollArea>
             <Dialog.Actions>
               <Button onPress={() => setTemplateVisible(false)}>Start Workout</Button>
+              {
+                currentTemplateCustom
+                ? <Button onPress={() => onPressDeleteTemplate(currentTemplate[0].template_id)}>Delete Template</Button>
+                : null
+              }
             </Dialog.Actions>
           </Dialog>
           {/* Show pop up dialog for viewing exercise guides */}
@@ -226,7 +254,7 @@ const Workout = () => {
             </Dialog.Content>
             <Dialog.Actions>
               <Button
-                disabled={newTemplate.exercises.length === 0}
+                disabled={newTemplate.exercises.length === 0 || newTemplate.template_name.length === 0}
                 onPress={onPressCreateTemplate}
               >
                 Create
