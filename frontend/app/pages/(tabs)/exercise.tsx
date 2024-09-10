@@ -37,6 +37,7 @@ const Exercise = () => {
       const getInsertedExercise = await exercisesDatabase.db.getFirstAsync<ExerciseInfo>(`SELECT * FROM exercise WHERE id=${insertExercise.lastInsertRowId};`)
       if (getInsertedExercise) {
         const updatedExerciseState: Array<ExerciseInfo> = [...exercises, getInsertedExercise]
+        setVisibleModal(false)
         return setExercises(updatedExerciseState)
       }
     } catch (error) {
