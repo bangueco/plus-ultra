@@ -1,5 +1,4 @@
 import CustomBtn from "@/components/custom/CustomBtn"
-import SearchInput from "@/components/custom/SearchInput"
 import { FontAwesome } from "@expo/vector-icons"
 import { useState } from "react"
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native"
@@ -7,10 +6,13 @@ import * as SecureStore from "expo-secure-store";
 import { rootNavigationRef } from "@/hooks/useNavigationRef"
 import { StackActions } from "@react-navigation/native"
 import useSystemTheme from "@/hooks/useSystemTheme"
+import { Searchbar } from "react-native-paper"
 
 const Profile = () => {
   const systemTheme = useSystemTheme()
   const [visibleProfile, setVisibleProfile] = useState<boolean>(false)
+
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const toggleProfileVisibility = () => {
     setVisibleProfile(!visibleProfile)
@@ -51,8 +53,11 @@ const Profile = () => {
             </Modal>
           </View>
           <View style={{flex: 1, justifyContent: 'center', padding: 5}}>
-            <SearchInput
-            />
+          <Searchbar
+          placeholder="Search"
+          onChangeText={(e) => setSearchQuery(e)}
+          value={searchQuery}
+        />
           </View>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>

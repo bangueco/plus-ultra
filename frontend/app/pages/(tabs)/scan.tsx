@@ -1,6 +1,6 @@
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
-import { ActivityIndicator, Alert, Button, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, AntDesign} from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import useSystemTheme from '@/hooks/useSystemTheme';
 import { getExercisesFromEquipment } from '@/services/equipment.service';
 import { EquipmentExercises } from '@/types/equipment';
+import { Button } from 'react-native-paper';
 
 export default function Scan() {
   const camera = useRef<CameraView>(null)
@@ -110,8 +111,8 @@ export default function Scan() {
   if (!permission.granted && permission.canAskAgain) {
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="Grant permission" />
+        <Text style={{color: systemTheme.colors.text}}>We need your permission to show the camera</Text>
+        <Button mode='contained' onPress={requestPermission}>Grant Permission</Button>
       </View>
     );
   }
@@ -119,8 +120,8 @@ export default function Scan() {
   if (!permission.granted && !permission.canAskAgain) {
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>In-order to use the scanner, you need to manually go to settings and enable the permissions.</Text>
-        <Button onPress={() => Linking.openSettings()} title="Go to settings" />
+        <Text style={{color: systemTheme.colors.text}}>In-order to use the scanner, you need to manually go to settings and enable the permissions.</Text>
+        <Button icon="settings" mode='contained' onPress={() => Linking.openSettings()}>Go to settings</Button>
       </View>
     );
   }
