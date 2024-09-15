@@ -4,8 +4,8 @@
   "main": "index.js",
   "private": "true",
   "scripts": {
-    "tsc": "tsc",
-    "start": "NODE_ENV=production node ./build/index.js",
+    "build": "tsc --build --verbose tsconfig.build.json",
+    "start": "NODE_ENV=production node ./dist/index.js",
     "dev": "NODE_ENV=development npx ts-node-dev ./src/index.ts"
   },
   "keywords": [],
