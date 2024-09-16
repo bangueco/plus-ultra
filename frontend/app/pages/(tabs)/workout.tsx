@@ -9,6 +9,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { ExerciseInfo } from "@/types/exercise"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
+import { StackActions } from "@react-navigation/native"
+import { useRootNavigation } from "@/hooks/useRootNavigation"
 
 
 const Workout = () => {
@@ -140,6 +142,14 @@ const Workout = () => {
     }
   }
 
+  const onPressStartWorkout = () => {
+    setTemplateVisible(false)
+    
+    if (useRootNavigation.isReady()) {
+      return useRootNavigation.dispatch(StackActions.replace('WorkoutSession', {templateId: currentTemplate[0].template_id}))
+    }
+  }
+
   const handleGuideShow = () => {
     // if guide has been clicked, hide the template and show guide.
     setTemplateVisible(false)
@@ -208,7 +218,7 @@ const Workout = () => {
               </ScrollView>
             </Dialog.ScrollArea>
             <Dialog.Actions>
-              <Button onPress={() => setTemplateVisible(false)}>Start Workout</Button>
+              <Button onPress={onPressStartWorkout}>Start Workout</Button>
               {
                 currentTemplateCustom
                 ? <Button onPress={() => onPressDeleteTemplate(currentTemplate[0].template_id)}>Delete Template</Button>
