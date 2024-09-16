@@ -12,9 +12,9 @@ import * as SecureStore from "expo-secure-store";
 import { useEffect } from 'react';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { TabsParamList } from '@/types/navigation';
-import { tabNavigationRef } from '@/hooks/useNavigationRef';
 import useSystemTheme from '@/hooks/useSystemTheme';
 import { PaperProvider } from 'react-native-paper';
+import { useTabNavigation } from '@/hooks/useTabsNavigation';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -31,7 +31,7 @@ export default function TabsLayout() {
 
   return (
     <PaperProvider theme={systemTheme}>
-      <NavigationContainer theme={systemTheme} independent={true} ref={tabNavigationRef}>
+      <NavigationContainer theme={systemTheme} independent={true} ref={useTabNavigation}>
         <Tab.Navigator 
           screenOptions={{
             headerShown: false, 
