@@ -7,7 +7,7 @@
 
 - [Introduction](#introduction)
 - [Features](#features)
-- [Installation](#installation)
+- [Development Setup](#development-setup)
 - [Usage](#usage)
 - [Screenshots](#screenshots)
 - [Technologies Used](#technologies-used)
@@ -21,18 +21,24 @@
 
 ## Features
 
-- Workout Tracker
-- Workout Logger
-- Equipment Scanner
+- Authentication
+- Workout Tracker/Logger
+- Equipment Identifier via Camera or Image Gallery
+- Estimated calories burned per workout session
+- Customizable workout splits
+- Adding new exercises
+- See other users Personal Record
 
-## Installation
+## Development Setup
 
 ### Prerequisites
 
+- [React Native and Expo](https://reactnative.dev/docs/environment-setup)
 - [Node.js](https://nodejs.org/)
-- [npm](https://www.npmjs.com/)
-- [React Native](https://reactnative.dev/docs/environment-setup)
-- [Prisma](https://www.prisma.io/)
+- [pnpm](https://pnpm.io/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://github.com/docker/compose)
+- [PostgreSQL](https://www.postgresql.org/)
 
 ### Steps
 
@@ -40,21 +46,49 @@
     ```bash
     git clone https://github.com/bangueco/plus-ultra.git
     ```
-2. Navigate to the frontend project directory:
+2. Go to root directory:
     ```bash
-    cd plus-ultra/frontend
+    cd plus-ultra
     ```
-3. Install frontend dependencies:
+3. Install pnpm:
     ```bash
-    npm install
+    npm install -g pnpm
     ```
-4. Navigate to the backend project directory:
+4. Install frontend and backend dependencies:
     ```bash
-    cd ../plus-ultra/backend
+    pnpm init
     ```
-5. Install backend dependencies:
+5. Install docker and docker compose (linux)
     ```bash
-    npm install
+    yay docker && yay docker-compose
+    ```
+6. On root directory, run docker compose to build PostgreSQL image:
+    ```bash
+    docker-compose build
+    ```
+7. On root directory, run this to start postgresql container:
+    ```bash
+    docker-compose up
+    ```
+8. Navigate to backend directory and make a copy of .env and edit according to variables
+    ```bash
+    cd backend && cp .env.example .env
+    ```
+9. Run this to start backend development server
+    ```bash
+    pnpm dev
+    ```
+10. Navigate to frontend directory and make a copy of .env and edit according to variables
+    ```bash
+    cd frontend && cp .env.example .env
+    ```
+11. On frontend .env file, edit it according to your local ip (don't use localhost or 127.0.0.1 as it will not work.)
+    ```env
+    EXPO_PUBLIC_API=http://0.0.0.0:3000/api
+    ```
+12. Start frontend development and scan it with Expo Go
+    ```bash
+    pnpm run start
     ```
 
 ## Usage
