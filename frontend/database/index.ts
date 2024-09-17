@@ -66,7 +66,9 @@ class TemplatesDatabase extends Database {
           reps INTEGER NOT NULL,
           weight INTEGER NOT NULL,
           item_id INTEGER NOT NULL,
-          FOREIGN KEY (item_id) REFERENCES template_items(item_id)
+          template_id INTEGER NOT NULL,
+          FOREIGN KEY (item_id) REFERENCES template_items(item_id),
+          FOREIGN KEY (template_id) REFERENCES templates(template_id)
         );
 
         INSERT INTO templates(template_name, custom) VALUES ('Push Day', 'false');
@@ -74,30 +76,30 @@ class TemplatesDatabase extends Database {
         INSERT INTO templates(template_name, custom) VALUES ('Leg Day', 'false');
 
         INSERT INTO template_items(item_name, muscleGroup, template_id, exercise_id)
-        VALUES 
+        VALUES
           ('Incline Dumbbell Bench Press', 'Chest', 1, 4),
           ('Flat Dumbbell Bench Press', 'Chest', 1, 5),
           ('Dumbbell Flyes', 'Chest', 1, 6),
           ('Shoulder Press', 'Shoulders', 1, 14),
           ('Lateral Raise', 'Shoulders', 1, 15);
 
-        INSERT INTO exercise_sets(reps, weight, item_id)
+        INSERT INTO exercise_sets(reps, weight, item_id, template_id)
         VALUES
-          (12, 10, 1),
-          (8, 15, 1),
-          (6, 20, 1),
-          (12, 10, 2),
-          (8, 15, 2),
-          (6, 20, 2),
-          (12, 10, 3),
-          (8, 15, 3),
-          (6, 20, 3),
-          (12, 10, 4),
-          (8, 15, 4),
-          (6, 20, 4),
-          (12, 10, 5),
-          (8, 15, 5),
-          (6, 20, 5);
+          (12, 10, 1, 1),
+          (8, 15, 1, 1),
+          (6, 20, 1, 1),
+          (12, 10, 2, 1),
+          (8, 15, 2, 1),
+          (6, 20, 2, 1),
+          (12, 10, 3, 1),
+          (8, 15, 3, 1),
+          (6, 20, 3, 1),
+          (12, 10, 4, 1),
+          (8, 15, 4, 1),
+          (6, 20, 4, 1),
+          (12, 10, 5, 1),
+          (8, 15, 5, 1),
+          (6, 20, 5, 1);
       `)
     } catch (error) {
       console.error(error)
