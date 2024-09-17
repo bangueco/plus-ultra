@@ -13,6 +13,7 @@ export default function WorkoutSession({route}: RootProps) {
 
   const systemTheme = useSystemTheme()
 
+  const [time, setTime] = useState(0);
   const [workoutStarted, setWorkoutStarted] = useState<boolean>(false)
   const [cancelWorkoutVisible, setCancelWorkoutVisible] = useState<boolean>(false)
   const [templateName, setTemplateName] = useState<string>('')
@@ -65,6 +66,26 @@ export default function WorkoutSession({route}: RootProps) {
     }
   }, [])
 
+  useEffect(() => {
+    console.log(time)
+    let intervalId: NodeJS.Timeout;
+    if (workoutStarted) {
+      intervalId = setInterval(() => {
+        setTime(prevTime => prevTime + 1);
+      }, 1000);
+    } 
+    return () => clearInterval(intervalId);
+  }, [workoutStarted, time]);
+
+  // Hours calculation
+  const hours = Math.floor(time / 3600);
+
+  // Minutes calculation
+  const minutes = Math.floor((time % 3600) / 60);
+
+  // Seconds calculation
+  const seconds = time % 60;
+
   return (
     <View style={styles.container}>
       <Portal>
@@ -98,7 +119,10 @@ export default function WorkoutSession({route}: RootProps) {
             />
           }
         </View>
-        <Text style={{fontSize: 18, color: systemTheme.colors.text}}>00:00</Text>
+        <Text style={{fontSize: 18, color: systemTheme.colors.text}}>
+          {hours}:{minutes.toString().padStart(2, "0")}:
+          {seconds.toString().padStart(2, "0")}:
+        </Text>
         <View>
           <Button
             disabled={!workoutStarted}
