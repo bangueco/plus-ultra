@@ -18,6 +18,7 @@ export type ExerciseSets = {
   reps: number,
   weight: number,
   item_id: number,
+  template_id: number
 }
 
 export type NewTemplateItem = {
