@@ -139,7 +139,7 @@ export default function WorkoutSession({route}: RootProps) {
         <ScrollView contentContainerStyle={styles.exercisesContainer} showsVerticalScrollIndicator={false}>
           {
             templateExercises && templateExercises.map((exercise, index) => (
-              <View key={exercise.exercise_id}>
+              <View key={index}>
                 <Text style={{color: systemTheme.colors.primary, fontSize: 15}}>{index + 1}. {exercise.item_name}</Text>
                 <DataTable style={{paddingBottom: 30}}>
                   <DataTable.Header>
