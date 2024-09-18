@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import { StyleSheet } from "react-native";
 import { Button, Dialog, IconButton, Portal } from 'react-native-paper';
-import { DataTable, Checkbox } from 'react-native-paper';
+import { DataTable } from 'react-native-paper';
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 
 export default function WorkoutSession({route}: RootProps) {
@@ -37,6 +37,22 @@ export default function WorkoutSession({route}: RootProps) {
     }
   }
 
+  const onPressAddSet = async (template_id: number, item_id: number) => {
+    const newSet = await templatesDatabase.db.runAsync(`
+      INSERT INTO exercise_sets(reps, weight, item_id, template_id)
+
+      VALUES (0, 0, ${item_id}, ${template_id});
+    `)
+
+    return setExercisesSets([...exercisesSets, {
+      id: newSet.lastInsertRowId,
+      item_id,
+      template_id,
+      reps: 0,
+      weight: 0
+    }])
+  }
+
   const onChangeWeight = async (id: number, value: string) => {
     return await templatesDatabase.db.runAsync(`UPDATE exercise_sets SET weight = ${value} WHERE id=${id}`)
   }
@@ -44,8 +60,6 @@ export default function WorkoutSession({route}: RootProps) {
   const onChangeReps = async (id: number, value: string) => {
     return await templatesDatabase.db.runAsync(`UPDATE exercise_sets SET reps = ${value} WHERE id=${id}`)
   }
-
-  console.log(route.params)
 
   useEffect(() => {
     const nameOfTemplate = templatesDatabase.db.getFirstSync<{template_name: string}>(`SELECT template_name 
@@ -68,7 +82,6 @@ export default function WorkoutSession({route}: RootProps) {
   }, [])
 
   useEffect(() => {
-    console.log(time)
     let intervalId: NodeJS.Timeout;
     if (workoutStarted) {
       intervalId = setInterval(() => {
@@ -188,7 +201,7 @@ export default function WorkoutSession({route}: RootProps) {
                     ))
                   }
                 </DataTable>
-                <Button mode="contained">
+                <Button disabled={!workoutStarted} mode="contained" onPress={() => onPressAddSet(exercise.template_id, exercise.item_id)}>
                   Add set
                 </Button>
               </View>
