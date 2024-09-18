@@ -155,7 +155,9 @@ export default function WorkoutSession({route}: RootProps) {
                         <DataTable.Cell>
                           <TextInput
                             keyboardType="numeric"
-                            style={{borderWidth: 1, width: '50%'}}
+                            style={{borderBottomWidth: 1, width: '50%', color: systemTheme.colors.text,
+                              textAlign: 'center', borderColor: systemTheme.colors.primary
+                            }}
                             defaultValue={set.weight.toString()}
                             onChangeText={(e) => onChangeWeight(set.id, e)}
                           />
@@ -163,7 +165,9 @@ export default function WorkoutSession({route}: RootProps) {
                         <DataTable.Cell>
                           <TextInput
                             keyboardType="numeric"
-                            style={{borderWidth: 1, width: '50%'}}
+                            style={{borderBottomWidth: 1, width: '50%', color: systemTheme.colors.text,
+                              textAlign: 'center', borderColor: systemTheme.colors.primary
+                            }}
                             defaultValue={set.reps.toString()}
                             onChangeText={(e) => onChangeReps(set.id, e)}
                           />
