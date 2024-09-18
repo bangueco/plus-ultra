@@ -8,6 +8,7 @@ import { ScrollView, Text, TextInput, View } from "react-native";
 import { StyleSheet } from "react-native";
 import { Button, Dialog, IconButton, Portal } from 'react-native-paper';
 import { DataTable, Checkbox } from 'react-native-paper';
+import BouncyCheckbox from 'react-native-bouncy-checkbox'
 
 export default function WorkoutSession({route}: RootProps) {
 
@@ -160,6 +161,8 @@ export default function WorkoutSession({route}: RootProps) {
                             }}
                             defaultValue={set.weight.toString()}
                             onChangeText={(e) => onChangeWeight(set.id, e)}
+                            editable={workoutStarted}
+                            selectTextOnFocus={workoutStarted}
                           />
                         </DataTable.Cell>
                         <DataTable.Cell>
@@ -170,12 +173,15 @@ export default function WorkoutSession({route}: RootProps) {
                             }}
                             defaultValue={set.reps.toString()}
                             onChangeText={(e) => onChangeReps(set.id, e)}
+                            editable={workoutStarted}
+                            selectTextOnFocus={workoutStarted}
                           />
                         </DataTable.Cell>
                         <DataTable.Cell>
-                          <Checkbox
-                            status="unchecked"
-                            uncheckedColor="red"
+                          <BouncyCheckbox
+                            size={20}
+                            fillColor={systemTheme.colors.primary}
+                            disabled={!workoutStarted}
                           />
                         </DataTable.Cell>
                       </DataTable.Row>
