@@ -9,6 +9,7 @@ import { StyleSheet } from "react-native";
 import { Button, Dialog, IconButton, Portal } from 'react-native-paper';
 import { DataTable } from 'react-native-paper';
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
+import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
 
 export default function WorkoutSession({route}: RootProps) {
 
@@ -51,6 +52,12 @@ export default function WorkoutSession({route}: RootProps) {
       reps: 0,
       weight: 0
     }])
+  }
+
+  const onPressDeleteSet = async (id: number) => {
+    await templatesDatabase.db.runAsync(`DELETE FROM exercise_sets WHERE id=${id}`)
+
+    return setExercisesSets(exercisesSets.filter(set => set.id !== id))
   }
 
   const onChangeWeight = async (id: number, value: string) => {
@@ -162,44 +169,62 @@ export default function WorkoutSession({route}: RootProps) {
                     <DataTable.Title>Reps</DataTable.Title>
                     <DataTable.Title>Status</DataTable.Title>
                   </DataTable.Header>
-                  {
-                    exercisesSets && exercisesSets.filter(set => set.item_id === exercise.item_id).map((set, index) => (
-                      <DataTable.Row key={set.id}>
-                        <DataTable.Cell>{index + 1}</DataTable.Cell>
-                        <DataTable.Cell>
-                          <TextInput
-                            keyboardType="numeric"
-                            style={{borderBottomWidth: 1, width: '50%', color: systemTheme.colors.text,
-                              textAlign: 'center', borderColor: systemTheme.colors.primary
-                            }}
-                            defaultValue={set.weight.toString()}
-                            onChangeText={(e) => onChangeWeight(set.id, e)}
-                            editable={workoutStarted}
-                            selectTextOnFocus={workoutStarted}
-                          />
-                        </DataTable.Cell>
-                        <DataTable.Cell>
-                          <TextInput
-                            keyboardType="numeric"
-                            style={{borderBottomWidth: 1, width: '50%', color: systemTheme.colors.text,
-                              textAlign: 'center', borderColor: systemTheme.colors.primary
-                            }}
-                            defaultValue={set.reps.toString()}
-                            onChangeText={(e) => onChangeReps(set.id, e)}
-                            editable={workoutStarted}
-                            selectTextOnFocus={workoutStarted}
-                          />
-                        </DataTable.Cell>
-                        <DataTable.Cell>
-                          <BouncyCheckbox
-                            size={20}
-                            fillColor={systemTheme.colors.primary}
-                            disabled={!workoutStarted}
-                          />
-                        </DataTable.Cell>
-                      </DataTable.Row>
-                    ))
-                  }
+                  <GestureHandlerRootView>
+                    {
+                      exercisesSets && exercisesSets.filter(set => set.item_id === exercise.item_id).map((set, index) => (
+                        <Swipeable
+                          key={set.id}
+                          renderRightActions={() => (
+                            <View>
+                              <IconButton
+                                mode="contained"
+                                icon="trash-can"
+                                onPress={() => onPressDeleteSet(set.id)}
+                                size={15}
+                                iconColor="red"
+                              />
+                            </View>
+                          )}
+                          enabled={workoutStarted}
+                        >
+                          <DataTable.Row key={set.id}>
+                            <DataTable.Cell>{index + 1}</DataTable.Cell>
+                            <DataTable.Cell>
+                              <TextInput
+                                keyboardType="numeric"
+                                style={{borderBottomWidth: 1, width: '50%', color: systemTheme.colors.text,
+                                  textAlign: 'center', borderColor: systemTheme.colors.primary
+                                }}
+                                defaultValue={set.weight.toString()}
+                                onChangeText={(e) => onChangeWeight(set.id, e)}
+                                editable={workoutStarted}
+                                selectTextOnFocus={workoutStarted}
+                              />
+                            </DataTable.Cell>
+                            <DataTable.Cell>
+                              <TextInput
+                                keyboardType="numeric"
+                                style={{borderBottomWidth: 1, width: '50%', color: systemTheme.colors.text,
+                                  textAlign: 'center', borderColor: systemTheme.colors.primary
+                                }}
+                                defaultValue={set.reps.toString()}
+                                onChangeText={(e) => onChangeReps(set.id, e)}
+                                editable={workoutStarted}
+                                selectTextOnFocus={workoutStarted}
+                              />
+                            </DataTable.Cell>
+                            <DataTable.Cell>
+                              <BouncyCheckbox
+                                size={20}
+                                fillColor={systemTheme.colors.primary}
+                                disabled={!workoutStarted}
+                              />
+                            </DataTable.Cell>
+                          </DataTable.Row>
+                        </Swipeable>
+                      ))
+                    }
+                  </GestureHandlerRootView>
                 </DataTable>
                 <Button disabled={!workoutStarted} mode="contained" onPress={() => onPressAddSet(exercise.template_id, exercise.item_id)}>
                   Add set
