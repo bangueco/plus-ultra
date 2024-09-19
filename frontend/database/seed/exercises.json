@@ -169,5 +169,86 @@
     "custom": false,
     "instructions": "To perform the dumbbell hammer curl, stand with your feet shoulder-width apart and hold a dumbbell in each hand with your palms facing each other. Keeping your elbows close to your torso, curl the dumbbells towards your shoulders while keeping your palms facing each other. Slowly lower the dumbbells back to the starting position. Breathe in as you lower the weights and exhale as you curl them up. Aim for 10-15 reps and 3-4 sets. Maintain a stable posture to effectively target the brachialis and brachioradialis muscles.",
     "tutorialLink": "@/assets/exercises/dumbbell_hammer_curl.gif"
+  },
+  {
+    "name": "Tricep Dips",
+    "equipment": "bodyweight",
+    "muscleGroup": "Arms",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform tricep dips, position yourself on parallel bars with your arms fully extended and your body upright. Lower your body by bending your elbows until your upper arms are parallel to the floor. Press back up to the starting position by straightening your arms. Breathe in as you lower your body and exhale as you press up. Aim for 8-12 reps and 3-4 sets. Ensure proper form to avoid shoulder strain and engage your triceps effectively.",
+    "tutorialLink": "@/assets/exercises/tricep_dips.gif"
+  },
+  {
+    "name": "Overhead Tricep Extension",
+    "equipment": "dumbbell",
+    "muscleGroup": "Arms",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform the overhead tricep extension, stand with your feet shoulder-width apart and hold a dumbbell with both hands above your head, arms fully extended. Lower the dumbbell behind your head by bending your elbows, then press it back up to the starting position. Breathe in as you lower the weight and exhale as you press it up. Aim for 10-12 reps and 3-4 sets. Keep your elbows close to your head and avoid arching your back during the movement.",
+    "tutorialLink": "@/assets/exercises/overhead_tricep_extension.gif"
+  },
+  {
+    "name": "Tricep Kickback",
+    "equipment": "dumbbell",
+    "muscleGroup": "Arms",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform the tricep kickback, hold a dumbbell in each hand and bend at the hips with a slight bend in your knees, keeping your back straight. Lift your upper arms so they are parallel to the floor and your elbows are at a 90-degree angle. Extend your arms back, straightening your elbows, then return to the starting position. Breathe in as you bend your elbows and exhale as you extend them. Aim for 10-12 reps and 3-4 sets. Focus on controlled movements to effectively target the triceps.",
+    "tutorialLink": "@/assets/exercises/tricep_kickback.gif"
+  },
+  {
+    "name": "Barbell Squat",
+    "equipment": "barbell",
+    "muscleGroup": "Legs",
+    "difficulty": "Intermediate",
+    "custom": false,
+    "instructions": "To perform the barbell squat, stand with your feet shoulder-width apart and the barbell resting on your upper back. Bend at the hips and knees to lower your body until your thighs are parallel to the floor, then press back up to the starting position. Breathe in as you lower your body and exhale as you press up. Aim for 8-12 reps and 3-4 sets. Maintain proper form to avoid injury and engage your core throughout the movement.",
+    "tutorialLink": "@/assets/exercises/barbell_squat.gif"
+  },
+  {
+    "name": "Leg Press",
+    "equipment": "machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": false,
+    "instructions": "To perform the leg press, sit on the leg press machine with your feet shoulder-width apart on the platform. Lower the platform by bending your knees until your thighs are parallel to the floor, then press back up to the starting position. Breathe in as you lower the platform and exhale as you press up. Aim for 10-15 reps and 3-4 sets. Ensure proper foot placement and avoid locking your knees at the top of the movement.",
+    "tutorialLink": "@/assets/exercises/leg_press.gif"
+  },
+  {
+    "name": "Lunges",
+    "equipment": "bodyweight",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": false,
+    "instructions": "To perform lunges, stand with your feet together and take a step forward with one leg. Lower your body until both knees are bent at a 90-degree angle, then press back up to the starting position. Alternate legs with each rep. Breathe in as you lower your body and exhale as you press up. Aim for 10-12 reps per leg and 3-4 sets. Maintain proper form to avoid knee strain and engage your core throughout the movement.",
+    "tutorialLink": "@/assets/exercises/lunges.gif"
+  },
+  {
+    "name": "Leg Curl",
+    "equipment": "machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": false,
+    "instructions": "To perform the leg curl, lie face down on the leg curl machine with your ankles under the padded lever. Curl your legs up towards your glutes, then lower them back to the starting position. Breathe in as you lower your legs and exhale as you curl them up. Aim for 10-15 reps and 3-4 sets. Focus on controlled movements to effectively target the hamstrings.",
+    "tutorialLink": "@/assets/exercises/leg_curl.gif"
+  },
+  {
+    "name": "Leg Extension",
+    "equipment": "machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": false,
+    "instructions": "To perform the leg extension, sit on the leg extension machine with your ankles under the padded lever. Extend your legs until they are straight, then lower them back to the starting position. Breathe in as you lower your legs and exhale as you extend them. Aim for 10-15 reps and 3-4 sets. Ensure proper form to avoid knee strain and focus on controlled movements.",
+    "tutorialLink": "@/assets/exercises/leg_extension.gif"
+  },
+  {
+    "name": "Calf Raise",
+    "equipment": "bodyweight",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": false,
+    "instructions": "To perform calf raises, stand with your feet shoulder-width apart and your toes on the edge of a step or platform. Raise your heels as high as possible, then lower them back down with control. Breathe in as you lower your heels and exhale as you raise them. Aim for 15-20 reps and 3-4 sets. Focus on controlled movements to effectively target the calf muscles.",
+    "tutorialLink": "@/assets/exercises/calf_raise.gif"
   }
 ]
