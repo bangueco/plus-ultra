@@ -4,7 +4,7 @@ import useSystemTheme from "@/hooks/useSystemTheme"
 import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
 import { Alert, Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
-import { Button, Checkbox, Dialog, Portal, TextInput } from "react-native-paper"
+import { Button, Checkbox, Dialog, IconButton, Portal, TextInput } from "react-native-paper"
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { ExerciseInfo } from "@/types/exercise"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -130,7 +130,6 @@ const Workout = () => {
 
       if (exercise && exercise.instructions) {
         const {name, instructions} = exercise
-        console.log(exercise)
         return setCurrentGuide({name, instructions})
       }
 
@@ -186,20 +185,22 @@ const Workout = () => {
           <Dialog visible={templateVisible} onDismiss={onDismissTemplate}>
             <Dialog.Title style={{textAlign: 'center'}}>Workout</Dialog.Title>
             <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
-              <ScrollView style={{marginBottom: 10, marginTop: 10, maxHeight: 400}}>
+              <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 25, marginTop: 5, maxHeight: 400}}>
                 {
                   currentTemplate && currentTemplate.map(item => (
                     <View
                       style={[styles.templateItem]}
                       key={item.item_id}
                     >
-                      <View>
+                      <View style={{
+                        justifyContent: 'flex-end'
+                      }}>
                         <Text 
                         style={{
                             fontSize: 15, 
                             fontWeight: 'bold', 
                             color: systemTheme.colors.text,
-                            width: 210
+                            width: 200
                           }}
                         numberOfLines={1}
                         >
@@ -208,9 +209,12 @@ const Workout = () => {
                         <Text style={{color: systemTheme.colors.primary}}>{item.muscleGroup}</Text>
                       </View>
                       <View>
-                        <Pressable onPress={() => onPressShowGuide(item.exercise_id)}>
-                          <AntDesign name="question" size={24} color={systemTheme.colors.primary} />
-                        </Pressable>
+                        <IconButton
+                          icon="information"
+                          size={23}
+                          iconColor={systemTheme.colors.primary}
+                          onPress={() => onPressShowGuide(item.exercise_id)}
+                        />
                       </View>
                     </View>
                   ))
@@ -426,8 +430,7 @@ const styles = StyleSheet.create({
   templateItem: {
     padding: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center'
+    gap: 10,
   }
 })
 
