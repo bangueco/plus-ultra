@@ -3,9 +3,8 @@ import { exercisesDatabase, templatesDatabase } from "@/database"
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
-import { Alert, Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
-import { Button, Checkbox, Dialog, IconButton, Portal, TextInput } from "react-native-paper"
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { Alert, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
+import { Button, Checkbox, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
 import { ExerciseInfo } from "@/types/exercise"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
@@ -288,11 +287,17 @@ const Workout = () => {
                     <CustomPressable 
                       key={item.id} 
                       text={item.name} 
-                      textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+                      textStyle={{fontSize: 13, textAlign: 'center', color: systemTheme.colors.text}} 
                       buttonStyle={{backgroundColor: 'transparent'}}
                       onPress={() => onPressSelectExercise(item.id, item.name)}
                     />
-                    <Checkbox status={selectedExercises.some(exercise => exercise.exercise_id === item.id) ? "checked" : "unchecked"} />
+                    <Icon
+                      source={
+                        selectedExercises.some(exercise => exercise.exercise_id === item.id) ? 'check-circle-outline' : 'circle-outline'
+                      }
+                      size={23}
+                      color={systemTheme.colors.primary}
+                    />
                   </View>
                 )}
                 renderSectionHeader={({section: {title}}) => (
