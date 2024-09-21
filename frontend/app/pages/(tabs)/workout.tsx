@@ -4,11 +4,10 @@ import useSystemTheme from "@/hooks/useSystemTheme"
 import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
 import { Alert, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
-import { Button, Checkbox, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
+import { Button, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
 import { ExerciseInfo } from "@/types/exercise"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
-import { StackActions } from "@react-navigation/native"
 import { useRootNavigation } from "@/hooks/useRootNavigation"
 
 
@@ -355,9 +354,7 @@ const Workout = () => {
                   }}
                 />
                 {
-                  workoutTemplates && workoutTemplates.map((template) => (
-                    template.custom === 'true'
-                    ?
+                  workoutTemplates && workoutTemplates.filter((template) => template.custom === 'true').map((template) => (
                     <CustomPressable
                       onPress={() => onPressSelectTemplate(template.template_id)}
                       key={template.template_id}
@@ -375,7 +372,6 @@ const Workout = () => {
                         color: systemTheme.colors.text
                       }}
                     />
-                    : null
                   ))
                 }
               </View>
@@ -385,9 +381,7 @@ const Workout = () => {
             <Text style={{color: systemTheme.colors.text, fontSize: 20}}># Example templates</Text>
             <View style={styles.templates}>
               {
-                workoutTemplates && workoutTemplates.map((template) => (
-                  template.custom === 'false'
-                  ?
+                workoutTemplates && workoutTemplates.filter((template) => template.custom === 'false').map((template) => (
                   <CustomPressable
                     onPress={() => onPressSelectTemplate(template.template_id)}
                     key={template.template_id}
@@ -405,7 +399,6 @@ const Workout = () => {
                       color: systemTheme.colors.text
                     }}
                   />
-                  : null
                 ))
               }
             </View>
