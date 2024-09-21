@@ -16,7 +16,7 @@ class ExerciseDatabase extends Database {
           muscleGroup VARCHAR(255) NOT NULL,
           equipment VARCHAR(255) NOT NULL,
           difficulty VARCHAR(255),
-          custom VARCHAR,
+          custom INTEGER,
           instructions VARCHAR,
           tutorialLink VARCHAR(255)
         );
