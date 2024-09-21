@@ -34,7 +34,7 @@ export default function WorkoutSession({route}: RootProps) {
 
   const onPressGoBack = () => {
     if (useRootNavigation.isReady()) {
-      return useRootNavigation.dispatch(StackActions.replace('Tabs'))
+      return useRootNavigation.goBack()
     }
   }
 

@@ -144,7 +144,7 @@ const Workout = () => {
     setTemplateVisible(false)
     
     if (useRootNavigation.isReady()) {
-      return useRootNavigation.dispatch(StackActions.replace('WorkoutSession', {templateId: currentTemplate[0].template_id}))
+      return useRootNavigation.navigate('WorkoutSession', {templateId: currentTemplate[0].template_id})
     }
   }
 
