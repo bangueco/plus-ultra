@@ -9,6 +9,7 @@ import { ExerciseInfo } from "@/types/exercise"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import { useRootNavigation } from "@/hooks/useRootNavigation"
+import TemplateMenu from "@/components/TemplateMenu"
 
 
 const Workout = () => {
@@ -24,7 +25,6 @@ const Workout = () => {
   const [guideVisible, setGuideVisible] = useState<boolean>(false)
   const [workoutTemplates, setWorkoutTemplates] = useState<Array<TemplatesType>>([])
   const [currentTemplate, setCurrentTemplate] = useState<Array<TemplateItem>>([])
-  const [currentTemplateCustom, setCurrentTemplateCustom] = useState<boolean>(true)
   const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string}>()
 
   const fetchTemplates = async () => {
@@ -40,8 +40,6 @@ const Workout = () => {
   const onPressSelectTemplate = async (id: number) => {
     try {
       setTemplateVisible(true)
-      const template = await templatesDatabase.db.getFirstAsync<{custom: string}>(`SELECT custom FROM templates WHERE template_id=${id}`)
-      template?.custom === 'true' ? setCurrentTemplateCustom(true) : setCurrentTemplateCustom(false)
       const item = await templatesDatabase.db.getAllAsync<TemplateItem>(`SELECT * FROM template_items WHERE template_id=${id}`)
       setCurrentTemplate(item)
     } catch (error) {
@@ -221,11 +219,6 @@ const Workout = () => {
             </Dialog.ScrollArea>
             <Dialog.Actions>
               <Button onPress={onPressStartWorkout}>Start Workout</Button>
-              {
-                currentTemplateCustom
-                ? <Button onPress={() => onPressDeleteTemplate(currentTemplate[0].template_id)}>Delete Template</Button>
-                : null
-              }
             </Dialog.Actions>
           </Dialog>
           {/* Show pop up dialog for viewing exercise guides */}
@@ -319,15 +312,13 @@ const Workout = () => {
           </Dialog>
           {/* End of dialog */}
         </Portal>
-        <View>
-          <Text style={{color: systemTheme.colors.text, fontSize: 20}}>Start Workout</Text>
-        </View>
         <View style={{marginTop: 30, gap: 10, alignItems: 'center'}}>
-          <Text style={{color: systemTheme.colors.primary, fontSize: 17}}>Quick Start</Text>
+          <Text style={{color: systemTheme.colors.text, fontSize: 17}}>Start Workout</Text>
           <CustomPressable
             buttonStyle={{backgroundColor: systemTheme.colors.primary, borderRadius: 5, width: '90%'}}
             textStyle={{fontSize: 20, color: 'white'}}
-            text="Start an empty workout"
+            text="Add new template"
+            onPress={() => setNewTemplateVisible(true)}
           />
         </View>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.templateContainer}>
@@ -337,42 +328,28 @@ const Workout = () => {
               <View
                 style={styles.templates}
               >
-                <CustomPressable
-                  text="+"
-                  onPress={() => setNewTemplateVisible(true)}
-                  buttonStyle={{
-                    backgroundColor: 'transparent', 
-                    borderColor: systemTheme.colors.border, 
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    width: 110,
-                    height: 100,
-                  }}
-                  textStyle={{
-                    fontSize: 50,
-                    color: systemTheme.colors.text
-                  }}
-                />
                 {
-                  workoutTemplates && workoutTemplates.filter((template) => template.custom === 'true').map((template) => (
-                    <CustomPressable
-                      onPress={() => onPressSelectTemplate(template.template_id)}
+                  workoutTemplates && workoutTemplates.filter((template) => template.custom === 'true').length > 0 ? (
+                    workoutTemplates.filter((template) => template.custom === 'true').map((template) => (
+                    <View
                       key={template.template_id}
-                      text={template.template_name}
-                      buttonStyle={{
-                        backgroundColor: 'transparent', 
-                        borderColor: systemTheme.colors.border, 
-                        borderWidth: 1,
-                        borderRadius: 5,
-                        width: 110,
-                        height: 100,
-                      }}
-                      textStyle={{
-                        fontSize: 14,
-                        color: systemTheme.colors.text
-                      }}
-                    />
+                      style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
+                    >
+                      <View
+                        style={{position: 'absolute', top: -15, right: -10}}
+                      >
+                        <TemplateMenu
+                          viewTemplate={() => onPressSelectTemplate(template.template_id)}
+                          editTemplate={() => {}}
+                          deleteTemplate={() => onPressDeleteTemplate(template.template_id)}
+                        />
+                      </View>
+                      <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
+                    </View>
                   ))
+                ) : (
+                    <Text style={{color: systemTheme.colors.text}}>No custom templates</Text>
+                  )
                 }
               </View>
             </View>
@@ -382,23 +359,21 @@ const Workout = () => {
             <View style={styles.templates}>
               {
                 workoutTemplates && workoutTemplates.filter((template) => template.custom === 'false').map((template) => (
-                  <CustomPressable
-                    onPress={() => onPressSelectTemplate(template.template_id)}
+                  <View
                     key={template.template_id}
-                    text={template.template_name}
-                    buttonStyle={{
-                      backgroundColor: 'transparent', 
-                      borderColor: systemTheme.colors.border, 
-                      borderWidth: 1,
-                      borderRadius: 5,
-                      width: 110,
-                      height: 100,
-                    }}
-                    textStyle={{
-                      fontSize: 14,
-                      color: systemTheme.colors.text
-                    }}
-                  />
+                    style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
+                  >
+                    <View
+                      style={{position: 'absolute', top: -15, right: -10}}
+                    >
+                      <TemplateMenu
+                        viewTemplate={() => onPressSelectTemplate(template.template_id)}
+                        editTemplate={() => { Alert.alert('You Cannot edit example templates!') }}
+                        deleteTemplate={() => {Alert.alert('You Cannot delete example templates!')}}
+                      />
+                    </View>
+                    <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
+                  </View>
                 ))
               }
             </View>
@@ -429,6 +404,16 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     gap: 10,
+  },
+  templateContainerStyle: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 110,
+    height: 100,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 
