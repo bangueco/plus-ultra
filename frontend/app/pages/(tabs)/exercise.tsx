@@ -29,11 +29,14 @@ const Exercise = () => {
       setExercises(data)
     })
     .catch(error => console.error(error))
+
+    // uncomment this for debugging purposes only!
+    // exercisesDatabase.seed().then(() => console.log('seeded'))
   }, [])
 
   const onPressNewExercise = async () => {
     try {
-      const insertExercise = await exercisesDatabase.db.runAsync(`INSERT INTO exercise (name, equipment, muscleGroup) VALUES ('${exerciseName}', '${equipmentName}', '${muscleGroup}');`)
+      const insertExercise = await exercisesDatabase.db.runAsync(`INSERT INTO exercise (name, equipment, muscleGroup, custom) VALUES ('${exerciseName}', '${equipmentName}', '${muscleGroup}', '1');`)
       const getInsertedExercise = await exercisesDatabase.db.getFirstAsync<ExerciseInfo>(`SELECT * FROM exercise WHERE id=${insertExercise.lastInsertRowId};`)
       if (getInsertedExercise) {
         const updatedExerciseState: Array<ExerciseInfo> = [...exercises, getInsertedExercise]
@@ -46,14 +49,18 @@ const Exercise = () => {
   }
 
   const onPressSelectExercise = async (id: number) => {
-    setVisible(true)
     const getExercise = await exercisesDatabase.db.getFirstAsync<{
-      name: string, 
-      instructions: string, 
-      tutorialLink: string}
-    >(`SELECT name, instructions, tutorialLink FROM exercise WHERE id='${id}'`)
+      name: string,
+      instructions: string,
+      custom: number,
+      tutorialLink: string
+    }
+    >(`SELECT name, instructions, custom, tutorialLink FROM exercise WHERE id='${id}'`)
+
+    if (getExercise?.custom === 1) return Alert.alert('This exercise is custom, you cannot view it.')
 
     if (getExercise) {
+      setVisible(true)
       return setCurrentSelectedExercise({
         ...currentSelectedExercise, 
         name: getExercise.name, 
@@ -62,8 +69,6 @@ const Exercise = () => {
       })
     }
   }
-
-  // console.log(currentSelectedExercise)
 
   return (
     <View style={style.container}>
@@ -144,8 +149,7 @@ const Exercise = () => {
             <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button>Add exercise</Button>
-            <Button onPress={() => setVisible(false)}>Exit</Button>
+            <Button onPress={() => setVisible(false)}>OK</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
