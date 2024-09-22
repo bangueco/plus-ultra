@@ -3,9 +3,12 @@ import CustomPressable from "@/components/custom/CustomPressable";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { useEffect } from "react";
-import { exercisesDatabase, templatesDatabase } from "@/database";
+// import { exercisesDatabase, templatesDatabase } from "@/database";
 import useSystemTheme from "@/hooks/useSystemTheme";
+import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
+import migrations from '@/drizzle/migrations';
 import * as SecureStore from 'expo-secure-store';
+import { db } from "@/lib/drizzleClient";
 
 const Welcome = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -14,15 +17,33 @@ const Welcome = () => {
   // Initialize database here
 
   useEffect(() => {
-    const setup = async () => {
+    /* const setup = async () => {
       await templatesDatabase.seed()
       return await exercisesDatabase.seed()
-    }
+    } */
     const user = SecureStore.getItem('user')
     if (user) return navigation.replace('Tabs')
 
-    setup()
+    // setup()
   }, [])
+
+  const { success, error } = useMigrations(db, migrations);
+
+  if (error) {
+    return (
+      <View>
+        <Text>Migration error: {error.message}</Text>
+      </View>
+    );
+  }
+
+  if (!success) {
+    return (
+      <View>
+        <Text>Migration is in progress...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={style.container}>
