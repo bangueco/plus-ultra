@@ -2,7 +2,7 @@ import type { Config } from 'drizzle-kit';
 
 export default {
   schema: './db/schema/*',
-  out: './drizzle',
+  out: './db/migrations',
   dialect: 'sqlite',
   driver: 'expo',
 } satisfies Config;
