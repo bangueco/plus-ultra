@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "67542ba9-7ab8-42c6-825f-a9d9c19e59a1",
+  "id": "539f5ab2-6a46-4f7e-9e0a-fadff3d3aced",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Exercise": {
@@ -21,8 +21,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "muscleGroup": {
-          "name": "muscleGroup",
+        "muscle_group": {
+          "name": "muscle_group",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -40,7 +40,8 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": 0
         },
         "instructions": {
           "name": "instructions",
@@ -148,7 +149,8 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": 0
         }
       },
       "indexes": {},

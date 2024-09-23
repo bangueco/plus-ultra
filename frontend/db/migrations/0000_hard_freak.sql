@@ -1,9 +1,9 @@
 CREATE TABLE `Exercise` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
-	`muscleGroup` text NOT NULL,
+	`muscle_group` text NOT NULL,
 	`equipment` text NOT NULL,
-	`custom` integer,
+	`custom` integer DEFAULT 0,
 	`instructions` text
 );
 --> statement-breakpoint
@@ -20,7 +20,7 @@ CREATE TABLE `ExerciseSet` (
 CREATE TABLE `Template` (
 	`template_id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`template_name` text NOT NULL,
-	`custom` integer
+	`custom` integer DEFAULT 0
 );
 --> statement-breakpoint
 CREATE TABLE `TemplateItem` (
