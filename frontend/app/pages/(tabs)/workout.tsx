@@ -1,5 +1,4 @@
 import CustomPressable from "@/components/custom/CustomPressable"
-import { exercisesDatabase, templatesDatabase } from "@/database"
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
@@ -10,6 +9,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import { useRootNavigation } from "@/hooks/useRootNavigation"
 import TemplateMenu from "@/components/TemplateMenu"
+import templateService from "@/services/template.service"
+import templateItemService from "@/services/templateItem.service"
+import exerciseService from "@/services/exercise.service"
 
 
 const Workout = () => {
@@ -29,9 +31,17 @@ const Workout = () => {
 
   const fetchTemplates = async () => {
     try {
-      const templates = await templatesDatabase.db.getAllAsync<TemplatesType>('SELECT * FROM templates;')
-      console.log('Templates fetched successfully')
+      const templates = await templateService.getAllTemplate()
       return setWorkoutTemplates(templates)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchExercises = async () => {
+    try {
+      const listOfExercises = await exerciseService.getAllExercise()
+      return setExercises(listOfExercises)
     } catch (error) {
       console.error(error)
     }
@@ -40,7 +50,7 @@ const Workout = () => {
   const onPressSelectTemplate = async (id: number) => {
     try {
       setTemplateVisible(true)
-      const item = await templatesDatabase.db.getAllAsync<TemplateItem>(`SELECT * FROM template_items WHERE template_id=${id}`)
+      const item = await templateItemService.getAllTemplateItemsById(id)
       setCurrentTemplate(item)
     } catch (error) {
       console.error(error)
@@ -54,16 +64,10 @@ const Workout = () => {
 
   const onPressCreateTemplate = async () => {
     try {
-      const insertTemplate = await templatesDatabase.db.runAsync(`
-        INSERT INTO templates(template_name, custom) VALUES ('${newTemplate.template_name}', 'true');
-      `)
 
-      newTemplate.exercises.map(async (item) => {
-        return await templatesDatabase.db.execAsync(`
-          INSERT INTO template_items(item_name, muscleGroup, template_id, exercise_id)
-          VALUES ('${item.item_name}', '${item.muscleGroup}', '${insertTemplate.lastInsertRowId}', '${item.exercise_id}')
-        `)
-      })
+      const initTemplate = await templateService.createTemplate(newTemplate.template_name)
+
+      await templateItemService.createTemplateItem(initTemplate.lastInsertRowId, ...newTemplate.exercises)
 
       await fetchTemplates()
 
@@ -79,13 +83,9 @@ const Workout = () => {
 
   const onPressDeleteTemplate = async (id: number) => {
     try {
-      await templatesDatabase.db.runAsync(`
-        DELETE FROM templates WHERE template_id=${id}
-      `)
+      await templateService.deleteTemplate(id)
 
-      await templatesDatabase.db.runAsync(`
-        DELETE FROM template_items WHERE template_id=${id}
-      `)
+      await templateItemService.deleteItemsForTemplate(id)
 
       onDismissTemplate()
 
@@ -113,24 +113,23 @@ const Workout = () => {
       const filter = selectedExercises.filter(exercise => exercise.exercise_id !== id)
       return setSelectedExercises(filter)
     }
-    const exerciseMuscleGroup = await exercisesDatabase.db.getFirstAsync<{muscleGroup: string}>(`SELECT muscleGroup FROM exercise WHERE id=${id}`)
-    if (exerciseMuscleGroup) {
-      return setSelectedExercises([...selectedExercises, {exercise_id: id, item_name: name, muscleGroup: exerciseMuscleGroup.muscleGroup}])
+    const exercise = await exerciseService.getExerciseById(id)
+    if (exercise) {
+      return setSelectedExercises([...selectedExercises, {exercise_id: id, item_name: name, muscleGroup: exercise[0].muscle_group}])
     }
   }
 
   const onPressShowGuide = async (id: number) => {
     try {
       handleGuideShow()
-      const exercise = await exercisesDatabase.db.getFirstAsync<ExerciseInfo>(`SELECT * FROM exercise WHERE id=${id}`)
+      const exercise = await exerciseService.getExerciseById(id)
 
-      if (exercise && exercise.instructions) {
-        const {name, instructions} = exercise
-        return setCurrentGuide({name, instructions})
+      if (exercise && exercise[0].instructions) {
+        return setCurrentGuide({name: exercise[0].name, instructions: exercise[0].instructions})
       }
 
-      if (exercise && exercise.name) {
-        return setCurrentGuide({name: exercise.name})
+      if (exercise && exercise[0].name) {
+        return setCurrentGuide({name: exercise[0].name})
       }
     } catch (error) {
       console.error(error)
@@ -162,15 +161,8 @@ const Workout = () => {
   }
 
   useEffect(() => {
-    fetchTemplates().then(() => console.log('Fetched successfully'))
-  }, [])
-
-  useEffect(() => {
-    exercisesDatabase.db.getAllAsync<ExerciseInfo>('SELECT * FROM exercise;')
-    .then(data => {
-      setExercises(data)
-    })
-    .catch(error => console.error(error))
+    fetchTemplates().catch((error) => console.error(error))
+    fetchExercises().catch((error) => console.error(error))
   }, [])
 
   return (
@@ -186,7 +178,7 @@ const Workout = () => {
                   currentTemplate && currentTemplate.map(item => (
                     <View
                       style={[styles.templateItem]}
-                      key={item.item_id}
+                      key={item.template_item_id}
                     >
                       <View style={{
                         justifyContent: 'flex-end'
@@ -200,9 +192,9 @@ const Workout = () => {
                           }}
                         numberOfLines={1}
                         >
-                          {item.item_name}
+                          {item.template_item_name}
                         </Text>
-                        <Text style={{color: systemTheme.colors.primary}}>{item.muscleGroup}</Text>
+                        <Text style={{color: systemTheme.colors.primary}}>{item.muscle_group}</Text>
                       </View>
                       <View>
                         <IconButton
@@ -329,8 +321,8 @@ const Workout = () => {
                 style={styles.templates}
               >
                 {
-                  workoutTemplates && workoutTemplates.filter((template) => template.custom === 'true').length > 0 ? (
-                    workoutTemplates.filter((template) => template.custom === 'true').map((template) => (
+                  workoutTemplates && workoutTemplates.filter((template) => template.custom === 1).length > 0 ? (
+                    workoutTemplates.filter((template) => template.custom === 1).map((template) => (
                     <View
                       key={template.template_id}
                       style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
@@ -358,7 +350,7 @@ const Workout = () => {
             <Text style={{color: systemTheme.colors.text, fontSize: 20}}># Example templates</Text>
             <View style={styles.templates}>
               {
-                workoutTemplates && workoutTemplates.filter((template) => template.custom === 'false').map((template) => (
+                workoutTemplates && workoutTemplates.filter((template) => template.custom === 0).map((template) => (
                   <View
                     key={template.template_id}
                     style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
