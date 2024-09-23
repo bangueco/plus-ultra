@@ -1,16 +1,19 @@
-import { NewTemplateItem } from "@/types/templates";
 import { template, } from "@/db/schema/template";
 import { db } from "@/lib/drizzleClient";
-import { templateItem } from "@/db/schema/templateItems";
 import { eq } from "drizzle-orm";
 
 const getAllTemplate = async () => {
   return await db.select().from(template)
 }
 
+const getTemplateById = async (templateId: number) => {
+  return await db.select().from(template).where(eq(template.template_id, templateId))
+}
+
 const createTemplate = async (templateName: string) => {
   return await db.insert(template).values({
-    template_name: templateName
+    template_name: templateName,
+    custom: 1
   })
 }
 
@@ -26,6 +29,7 @@ const deleteTemplate = async (templateId: number) => {
 
 export default {
   getAllTemplate,
+  getTemplateById,
   createTemplate,
   updateTemplate,
   deleteTemplate
