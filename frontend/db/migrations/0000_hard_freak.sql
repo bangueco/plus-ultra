@@ -3,7 +3,8 @@ CREATE TABLE `Exercise` (
 	`name` text NOT NULL,
 	`muscle_group` text NOT NULL,
 	`equipment` text NOT NULL,
-	`custom` integer DEFAULT 0,
+	`custom` integer DEFAULT 0 NOT NULL,
+	`difficulty` text,
 	`instructions` text
 );
 --> statement-breakpoint

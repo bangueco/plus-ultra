@@ -5,6 +5,7 @@ export const exercise = sqliteTable('Exercise', {
   name: text('name', {mode: "text"}).notNull(),
   muscle_group: text('muscle_group', {mode: "text"}).notNull(),
   equipment: text('equipment', {mode: "text"}).notNull(),
-  custom: integer('custom', {mode: "number"}).default(0),
+  custom: integer('custom', {mode: "number"}).default(0).notNull(),
+  difficulty: text('difficulty', {mode: "text"}),
   instructions: text('instructions', {mode: "text"}),
 })

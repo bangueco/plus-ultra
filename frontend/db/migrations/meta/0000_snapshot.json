@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "539f5ab2-6a46-4f7e-9e0a-fadff3d3aced",
+  "id": "bfc28b00-65ea-46ac-a154-27f400f35b38",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Exercise": {
@@ -39,9 +39,16 @@
           "name": "custom",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": 0
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "instructions": {
           "name": "instructions",

@@ -3,7 +3,7 @@ export type ExerciseInfo = {
     name: string,
     muscle_group: string,
     equipment: string,
-    difficulty?: string,
+    difficulty?: string | null,
     custom: number | null,
     instructions?: string | null,
     tutorialLink?: string
