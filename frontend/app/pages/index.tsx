@@ -5,10 +5,8 @@ import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/n
 import { useEffect } from "react";
 // import { exercisesDatabase, templatesDatabase } from "@/database";
 import useSystemTheme from "@/hooks/useSystemTheme";
-import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
-import migrations from '@/drizzle/migrations';
 import * as SecureStore from 'expo-secure-store';
-import { db } from "@/lib/drizzleClient";
+import { useMigrationHelper } from "@/lib/drizzleClient";
 
 const Welcome = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -27,7 +25,7 @@ const Welcome = () => {
     // setup()
   }, [])
 
-  const { success, error } = useMigrations(db, migrations);
+  const { success, error } = useMigrationHelper();
 
   if (error) {
     return (
