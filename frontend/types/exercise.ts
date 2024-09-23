@@ -1,10 +1,10 @@
 export type ExerciseInfo = {
-    id: number,
+    exercise_id: number,
     name: string,
+    muscle_group: string,
     equipment: string,
-    muscleGroup: string,
     difficulty?: string,
-    custom: boolean,
-    instructions?: string,
+    custom: number | null,
+    instructions?: string | null,
     tutorialLink?: string
 }
