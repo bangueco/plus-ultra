@@ -27,10 +27,15 @@ const deleteTemplate = async (templateId: number) => {
   return await db.delete(template).where(eq(template.template_id, templateId))
 }
 
+const deleteAllTemplate = async () => {
+  return await db.delete(template)
+}
+
 export default {
   getAllTemplate,
   getTemplateById,
   createTemplate,
   updateTemplate,
-  deleteTemplate
+  deleteTemplate,
+  deleteAllTemplate
 }

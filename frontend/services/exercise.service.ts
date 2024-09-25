@@ -30,10 +30,15 @@ const deleteExercise =  async (exerciseId: number) => {
   return await db.delete(exercise).where(eq(exercise.exercise_id, exerciseId))
 }
 
+const deleteAllExercise = async () => {
+  return await db.delete(exercise)
+}
+
 export default {
   getAllExercise,
   getExerciseById,
   createExercise,
   editExercise,
-  deleteExercise
+  deleteExercise,
+  deleteAllExercise
 }
