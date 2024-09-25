@@ -9,26 +9,29 @@ import useSystemTheme from "@/hooks/useSystemTheme"
 import { Button, Dialog, Portal, Searchbar } from "react-native-paper"
 import {ExerciseInfo} from "@/types/exercise";
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
+import exerciseService from "@/services/exercise.service"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
 
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{name: string, instructions: string, tutorialLink: string}>()
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string | null }>();
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
   const [visible, setVisible] = useState<boolean>(false)
 
-  const [exerciseName, setExerciseName] = useState<String>()
-  const [equipmentName, setEquipmentName] = useState<String | null>()
-  const [muscleGroup, setMuscleGroup] = useState<String>()
+  const [exerciseName, setExerciseName] = useState<string>('')
+  const [muscleGroup, setMuscleGroup] = useState<string>('')
+  const [equipmentName, setEquipmentName] = useState<string>('')
+
+  const fetchExercises = async () => {
+    return await exerciseService.getAllExercise()
+  }
 
   useEffect(() => {
-    exercisesDatabase.db.getAllAsync<ExerciseInfo>('SELECT * FROM exercise;')
-    .then(data => {
-      setExercises(data)
-    })
-    .catch(error => console.error(error))
+    fetchExercises()
+    .then((data) => setExercises(data))
+    .catch(console.error)
 
     // uncomment this for debugging purposes only!
     // exercisesDatabase.seed().then(() => console.log('seeded'))
@@ -36,12 +39,11 @@ const Exercise = () => {
 
   const onPressNewExercise = async () => {
     try {
-      const insertExercise = await exercisesDatabase.db.runAsync(`INSERT INTO exercise (name, equipment, muscleGroup, custom) VALUES ('${exerciseName}', '${equipmentName}', '${muscleGroup}', '1');`)
-      const getInsertedExercise = await exercisesDatabase.db.getFirstAsync<ExerciseInfo>(`SELECT * FROM exercise WHERE id=${insertExercise.lastInsertRowId};`)
+      const insertExercise = await exerciseService.createExercise(exerciseName, muscleGroup, equipmentName)
+      const getInsertedExercise = await exerciseService.getExerciseById(insertExercise.lastInsertRowId)
       if (getInsertedExercise) {
-        const updatedExerciseState: Array<ExerciseInfo> = [...exercises, getInsertedExercise]
         setVisibleModal(false)
-        return setExercises(updatedExerciseState)
+        return setExercises([...exercises, getInsertedExercise[0]])
       }
     } catch (error) {
       console.error(error)
@@ -49,25 +51,16 @@ const Exercise = () => {
   }
 
   const onPressSelectExercise = async (id: number) => {
-    const getExercise = await exercisesDatabase.db.getFirstAsync<{
-      name: string,
-      instructions: string,
-      custom: number,
-      tutorialLink: string
-    }
-    >(`SELECT name, instructions, custom, tutorialLink FROM exercise WHERE id='${id}'`)
+    const getExercise = await exerciseService.getExerciseById(id)
 
-    if (getExercise?.custom === 1) return Alert.alert('This exercise is custom, you cannot view it.')
+    if (getExercise[0]?.custom === 1) return Alert.alert('This exercise is custom, you cannot view it.')
+    
+    setCurrentSelectedExercise({
+      name: getExercise[0].name,
+      instructions: getExercise[0].instructions
+    })
 
-    if (getExercise) {
-      setVisible(true)
-      return setCurrentSelectedExercise({
-        ...currentSelectedExercise, 
-        name: getExercise.name, 
-        instructions: getExercise.instructions, 
-        tutorialLink: getExercise.tutorialLink
-      })
-    }
+    setVisible(true)
   }
 
   return (
