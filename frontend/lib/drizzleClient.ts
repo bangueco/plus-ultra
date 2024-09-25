@@ -4,7 +4,7 @@ import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 
 import migrations from '@/db/migrations/migrations';
 
-const expoDb = openDatabaseSync("database.db");
+const expoDb = openDatabaseSync("database");
 export const db = drizzle(expoDb)
 
 export const useMigrationHelper = () => {
