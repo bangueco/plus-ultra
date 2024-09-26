@@ -65,7 +65,7 @@ const Workout = () => {
   const onPressCreateTemplate = async () => {
     try {
 
-      const initTemplate = await templateService.createTemplate(newTemplate.template_name)
+      const initTemplate = await templateService.createTemplate(newTemplate.template_name, true)
 
       await templateItemService.createTemplateItem(initTemplate.lastInsertRowId, ...newTemplate.exercises)
 
@@ -138,7 +138,7 @@ const Workout = () => {
 
   const onPressStartWorkout = () => {
     setTemplateVisible(false)
-    
+
     if (useRootNavigation.isReady()) {
       return useRootNavigation.navigate('WorkoutSession', {templateId: currentTemplate[0].template_id})
     }
@@ -271,7 +271,7 @@ const Workout = () => {
                     <CustomPressable 
                       key={item.id} 
                       text={item.name} 
-                      textStyle={{fontSize: 13, textAlign: 'center', color: systemTheme.colors.text}} 
+                      textStyle={{fontSize: 13, textAlign: 'center', color: systemTheme.colors.text}}
                       buttonStyle={{backgroundColor: 'transparent'}}
                       onPress={() => onPressSelectExercise(item.id, item.name)}
                     />

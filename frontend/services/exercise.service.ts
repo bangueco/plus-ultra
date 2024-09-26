@@ -14,7 +14,8 @@ const createExercise = async (exerciseName: string, exerciseMuscleGroup: string,
   return await db.insert(exercise).values({
     name: exerciseName,
     muscle_group: exerciseMuscleGroup,
-    equipment: exerciseEquipment
+    equipment: exerciseEquipment,
+    custom: 1
   })
 }
 
