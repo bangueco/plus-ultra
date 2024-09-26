@@ -56,11 +56,7 @@ export default function WorkoutSession({route}: RootProps) {
   }
 
   const onPressAddSet = async (template_id: number, item_id: number) => {
-    const newSet = await templatesDatabase.db.runAsync(`
-      INSERT INTO exercise_sets(reps, weight, item_id, template_id)
-
-      VALUES (0, 0, ${item_id}, ${template_id});
-    `)
+    const newSet = await exerciseSetService.addExerciseSet(0, 0, item_id, template_id)
 
     return setExercisesSets([...exercisesSets, {
       exercise_set_id: newSet.lastInsertRowId,
@@ -72,17 +68,17 @@ export default function WorkoutSession({route}: RootProps) {
   }
 
   const onPressDeleteSet = async (id: number) => {
-    await templatesDatabase.db.runAsync(`DELETE FROM exercise_sets WHERE id=${id}`)
+    await exerciseSetService.deleteExerciseSetByExerciseId(id)
 
     return setExercisesSets(exercisesSets.filter(set => set.exercise_set_id !== id))
   }
 
   const onChangeWeight = async (id: number, value: string) => {
-    return await templatesDatabase.db.runAsync(`UPDATE exercise_sets SET weight = ${value} WHERE id=${id}`)
+    return await exerciseSetService.updateWeight(id, parseInt(value))
   }
 
   const onChangeReps = async (id: number, value: string) => {
-    return await templatesDatabase.db.runAsync(`UPDATE exercise_sets SET reps = ${value} WHERE id=${id}`)
+    return await exerciseSetService.updateReps(id, parseInt(value))
   }
 
   useEffect(() => {
