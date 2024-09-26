@@ -13,10 +13,10 @@ export type TemplateItem = {
 }
 
 export type ExerciseSets = {
-  id: number,
+  exercise_set_id: number,
   reps: number,
   weight: number,
-  item_id: number,
+  template_item_id: number,
   template_id: number
 }
 
