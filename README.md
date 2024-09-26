@@ -35,7 +35,7 @@
 
 - [React Native and Expo](https://reactnative.dev/docs/environment-setup)
 - [Node.js](https://nodejs.org/)
-- [pnpm](https://pnpm.io/)
+- [Yarn](https://classic.yarnpkg.com/en/)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://github.com/docker/compose)
 - [PostgreSQL](https://www.postgresql.org/)
@@ -50,15 +50,15 @@
     ```bash
     cd plus-ultra
     ```
-3. Install pnpm:
+3. Install yarn package manager:
     ```bash
-    npm install -g pnpm
+    npm install -g yarn
     ```
 4. Install frontend and backend dependencies:
     ```bash
-    pnpm init
+    yarn init
     ```
-5. Install docker and docker compose (linux)
+5. Install docker and docker compose (assuming you use linux)
     ```bash
     yay docker && yay docker-compose
     ```
@@ -76,7 +76,7 @@
     ```
 9. Run this to start backend development server
     ```bash
-    pnpm dev
+    yarn dev
     ```
 10. Navigate to frontend directory and make a copy of .env and edit according to variables
     ```bash
@@ -86,9 +86,9 @@
     ```env
     EXPO_PUBLIC_API=http://0.0.0.0:3000/api
     ```
-12. Start frontend development and scan it with Expo Go
+12. Start frontend development server and scan it with Expo Go
     ```bash
-    pnpm run start
+    yarn start
     ```
 
 ## Usage
