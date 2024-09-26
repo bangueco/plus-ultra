@@ -10,10 +10,10 @@ const getTemplateById = async (templateId: number) => {
   return await db.select().from(template).where(eq(template.template_id, templateId))
 }
 
-const createTemplate = async (templateName: string) => {
+const createTemplate = async (templateName: string, custom: boolean) => {
   return await db.insert(template).values({
     template_name: templateName,
-    custom: 1
+    custom: custom ? 1 : 0
   })
 }
 
