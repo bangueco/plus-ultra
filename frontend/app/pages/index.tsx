@@ -17,10 +17,6 @@ const Welcome = () => {
   useEffect(() => {
     const user = SecureStore.getItem('user')
     if (user) return navigation.replace('Tabs')
-
-    seed()
-    .then(() => console.log('Table seeded'))
-    .catch(console.error)
   }, [])
 
   const { success, error } = useMigrationHelper();
@@ -39,6 +35,13 @@ const Welcome = () => {
         <Text>Migration is in progress...</Text>
       </View>
     );
+  }
+
+  if (success) {
+    // If migration is successful, seed the database
+    seed()
+    .then(() => console.log('Table seeded'))
+    .catch(console.error)
   }
 
   return (
