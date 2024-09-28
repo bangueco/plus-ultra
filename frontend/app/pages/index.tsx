@@ -12,8 +12,6 @@ const Welcome = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const {colors} = useSystemTheme()
 
-  // Initialize database here
-
   useEffect(() => {
     const user = SecureStore.getItem('user')
     if (user) return navigation.replace('Tabs')
