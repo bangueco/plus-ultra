@@ -24,16 +24,21 @@ const createTemplateItem = async (templateId: number, ...exercisesItem: Array<Ex
 }
 
 const deleteTemplateItem = async (templateItemId: number) => {
-  return db.delete(templateItem).where(eq(templateItem.template_item_id, templateItemId))
+  return await db.delete(templateItem).where(eq(templateItem.template_item_id, templateItemId))
 }
 
 const deleteItemsForTemplate = async (templateId: number) => {
-  return db.delete(templateItem).where(eq(templateItem.template_id, templateId))
+  return await db.delete(templateItem).where(eq(templateItem.template_id, templateId))
+}
+
+const deleteAllTemplateItem = async () => {
+  return await db.delete(templateItem)
 }
 
 export default {
   getAllTemplateItemsById,
   createTemplateItem,
   deleteTemplateItem,
-  deleteItemsForTemplate
+  deleteItemsForTemplate,
+  deleteAllTemplateItem
 }
