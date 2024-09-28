@@ -121,7 +121,7 @@ export default function Scan() {
     return (
       <View style={styles.container}>
         <Text style={{color: systemTheme.colors.text}}>In-order to use the scanner, you need to manually go to settings and enable the permissions.</Text>
-        <Button icon="settings" mode='contained' onPress={() => Linking.openSettings()}>Go to settings</Button>
+        <Button icon="cog" mode='contained' onPress={() => Linking.openSettings()}>Go to settings</Button>
       </View>
     );
   }

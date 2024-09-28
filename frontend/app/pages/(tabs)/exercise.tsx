@@ -1,6 +1,5 @@
 import { Alert, Modal, SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
-import { exercisesDatabase } from "@/database"
 import { useEffect, useState } from "react"
 import CustomTextInput from "@/components/custom/CustomTextInput"
 import { equipment, muscle_group } from "@/constants/exercise"
@@ -10,6 +9,8 @@ import { Button, Dialog, Portal, Searchbar } from "react-native-paper"
 import {ExerciseInfo} from "@/types/exercise";
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import exerciseService from "@/services/exercise.service"
+import seed from "@/db/seed"
+import { Image } from 'expo-image';
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
@@ -34,7 +35,7 @@ const Exercise = () => {
     .catch(console.error)
 
     // uncomment this for debugging purposes only!
-    // exercisesDatabase.seed().then(() => console.log('seeded'))
+    // seed().then(() => console.log('Debugging: Table seeded')).catch(console.error)
   }, [])
 
   const onPressNewExercise = async () => {
@@ -54,7 +55,7 @@ const Exercise = () => {
     const getExercise = await exerciseService.getExerciseById(id)
 
     if (getExercise[0]?.custom === 1) return Alert.alert('This exercise is custom, you cannot view it.')
-    
+
     setCurrentSelectedExercise({
       name: getExercise[0].name,
       instructions: getExercise[0].instructions
