@@ -1,21 +1,43 @@
 [
   {
-    "name": "Flat Barbell Bench Press",
-    "equipment": "barbell",
+    "name": "Flat Dumbbell Bench Press",
+    "equipment": "dumbbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a flat dumbbell bench press, lie back on a flat bench with a dumbbell in each hand, press the weights up above your chest with your arms fully extended, then lower the dumbbells slowly until your elbows are at a 90-degree angle before pressing them back up."
+  },
+  {
+    "name": "Incline Dumbbell Bench Press",
+    "equipment": "dumbbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform an incline dumbbell bench press, lie back on an inclined bench with dumbbells in hand, press the weights up above your chest, and then lower them slowly until your elbows are at a 90-degree angle before pressing them back up."
+  },
+  {
+    "name": "Decline Dumbbell Bench Press",
+    "equipment": "dumbbell",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform the flat barbell bench press, start by setting the barbell on a rack at chest height and lying back on a flat bench with your feet flat on the floor and a natural arch in your lower back. Grip the barbell slightly wider than shoulder-width, un-rack it, and position it above your chest with arms extended. Lower the barbell slowly to your chest, then press it back up to the starting position. Breathe in as you lower the bar and exhale as you press up. Aim for 8-12 reps and 3-4 sets. Use a spotter for heavy weights, maintain good form throughout, and remember to warm up before starting and stretch afterward.",
-    "tutorialLink": "@/assets/exercises/flat_barbell_bench.gif"
+    "instructions": "To perform a decline dumbbell bench press, lie back on a decline bench with dumbbells in hand, press the weights up above your chest, then lower them slowly until your elbows are at a 90-degree angle before pressing them back up."
+  },
+  {
+    "name": "Flat Barbell Bench Press",
+    "equipment": "barbell",
+    "muscleGroup": "Chest",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a flat barbell bench press, lie back on a flat bench with the barbell held above your chest, lower the barbell slowly until it touches your chest, and then press it back up to the starting position."
   },
   {
     "name": "Incline Barbell Bench Press",
     "equipment": "barbell",
     "muscleGroup": "Chest",
-    "difficulty": "Intermediate",
+    "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the incline barbell bench press, set an adjustable bench to a 30-45 degree incline, lie back on the bench, grip the barbell with your hands slightly wider than shoulder-width, lower the barbell to your upper chest, and then press it back up to the starting position.",
-    "tutorialLink": "@/assets/exercises/incline_barbell_bench.gif"
+    "instructions": "To perform an incline barbell bench press, lie back on an inclined bench with the barbell held above your chest, lower the barbell slowly until it touches your upper chest, and then press it back up to the starting position."
   },
   {
     "name": "Decline Barbell Bench Press",
@@ -23,107 +45,167 @@
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform the decline barbell bench press, lie on a decline bench with your feet secured, grip the barbell slightly wider than shoulder-width, lower the barbell to your chest, and then press it back up to the starting position.",
-    "tutorialLink": "@/assets/exercises/decline_barbell_bench.gif"
+    "instructions": "To perform a decline barbell bench press, lie back on a decline bench with the barbell held above your chest, lower the barbell slowly until it touches your lower chest, and then press it back up to the starting position."
   },
   {
-    "name": "Incline Dumbbell Bench Press",
-    "equipment": "dumbbell",
+    "name": "High to Low Cable Fly",
+    "equipment": "dual cable machine",
+    "muscleGroup": "Chest",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a high to low cable fly, set the pulleys at the highest point. Stand in the middle with a handle in each hand, arms slightly bent, and step forward. Pull the cables down and together in front of your hips while squeezing your chest, then slowly return to the starting position."
+  },
+  {
+    "name": "Low to High Cable Fly",
+    "equipment": "dual cable machine",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform an incline dumbbell bench press, lie back on an inclined bench with dumbbells in hand, press the weights up above your chest, and then lower them slowly until your elbows are at a 90-degree angle before pressing them back up.",
-    "tutorialLink": "@/assets/exercises/decline_barbell_bench.gif"
+    "instructions": "To perform a low to high cable fly, set the pulleys at the lowest point. Stand in the middle with a handle in each hand, arms slightly bent, and step forward. Pull the cables up and together in front of your chest, squeezing your chest muscles, then slowly return to the starting position."
   },
   {
-    "name": "Flat Dumbbell Bench Press",
-    "equipment": "dumbbell",
+    "name": "Pec Deck Fly",
+    "equipment": "pec deck machine",
+    "muscleGroup": "Chest",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a pec deck fly, sit on the pec deck machine with your back against the pad, place your arms on the pads with your elbows slightly bent, and bring the pads together in front of your chest. Slowly return to the starting position to complete the rep."
+  },
+  {
+    "name": "Incline Chest Press (Smith)",
+    "equipment": "smith machine",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform a flat dumbbell bench press, lie back on a flat bench with a dumbbell in each hand, press the weights up above your chest, and then lower them slowly until your elbows are at a 90-degree angle before pressing them back up.",
-    "tutorialLink": "@/assets/exercises/incline_dumbbell_bench.gif"
+    "instructions": "To perform a Smith machine incline chest press, set the bench to an incline position and adjust the bar to a suitable height. Sit on the bench with your back against it, grasp the bar with a grip slightly wider than shoulder-width, and lift it off the hooks. Lower the bar slowly to your upper chest, then press it back up to the starting position."
   },
   {
-    "name": "Dumbbell Flyes",
-    "equipment": "dumbbell",
+    "name": "Flat Chest Press (Smith)",
+    "equipment": "smith machine",
     "muscleGroup": "Chest",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform dumbbell flyes, lie back on a flat bench with a dumbbell in each hand, extend your arms straight up above your chest, and then slowly lower the weights out to the sides with a slight bend in your elbows until you feel a stretch in your chest, before bringing the dumbbells back together.",
-    "tutorialLink": "@/assets/exercises/dumbbell_fly_bench.gif"
+    "instructions": "To perform a Smith machine flat chest press, set the bench to a flat position and adjust the bar to a suitable height. Sit on the bench with your back flat against it, grasp the bar with a grip slightly wider than shoulder-width, and lift it off the hooks. Lower the bar slowly to your chest, then press it back up to the starting position."
   },
   {
-    "name": "Deadlift",
-    "equipment": "barbell",
+    "name": "Smith Machine Row",
+    "equipment": "smith machine",
     "muscleGroup": "Back",
-    "difficulty": "Advanced",
+    "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the barbell deadlift, stand with your feet hip-width apart and the barbell over your mid-foot. Bend at the hips and knees to grip the barbell with your hands slightly wider than shoulder-width apart. Keeping your back flat and chest up, drive through your heels to lift the barbell, extending your hips and knees. Once you reach a standing position, lower the barbell back to the ground with control. Breathe in as you lower the bar and exhale as you lift. Aim for 6-10 reps and 3-4 sets. Use proper form to avoid injury and consider using a belt for added support.",
-    "tutorialLink": "@/assets/exercises/barbell_deadlift.gif"
+    "instructions": "To perform a Smith machine row, set the bar at an appropriate height and stand facing the machine. Bend at the hips and knees to lower your torso, grasp the bar with an overhand grip, and pull the bar towards your lower chest while squeezing your shoulder blades together. Slowly lower the bar back to the starting position."
+  },
+  {
+    "name": "Seated Row Machine",
+    "equipment": "seated row machine",
+    "muscleGroup": "Back",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform the seated row machine exercise, sit down on the machine with your feet placed firmly on the footrests and your knees slightly bent. Grasp the handles with an overhand grip and pull them towards your torso while keeping your back straight. Squeeze your shoulder blades together at the peak of the movement, then slowly return to the starting position."
+  },
+  {
+    "name": "Seated Cable Row",
+    "equipment": "cable machine",
+    "muscleGroup": "Back",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a seated cable row, sit on the machine with your feet placed on the footrests and your knees slightly bent. Grasp the handle with both hands and pull it towards your torso while keeping your back straight and your elbows close to your body. Squeeze your shoulder blades together at the peak of the movement, then slowly return to the starting position."
+  },
+  {
+    "name": "Wide Grip Seated Cable Row",
+    "equipment": "cable machine",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a wide grip seated cable row, sit on the cable row machine with your feet placed on the footrests and your knees slightly bent. Grasp the wide grip handle with both hands and pull it towards your chest while keeping your back straight. Focus on squeezing your shoulder blades together at the peak of the movement, then slowly return to the starting position."
+  },
+  {
+    "name": "Lat Pulldown",
+    "equipment": "lat pulldown machine",
+    "muscleGroup": "Back",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a lat pulldown, sit at the machine with your thighs secured under the pad. Grasp the bar with a grip slightly wider than shoulder-width, lean back slightly, and pull the bar down towards your chest while squeezing your shoulder blades together. Slowly return the bar to the starting position."
+  },
+  {
+    "name": "Close Grip Lat Pulldown",
+    "equipment": "lat pulldown machine",
+    "muscleGroup": "Back",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a close grip lat pulldown, sit at the machine with your thighs secured under the pad. Grasp the bar with a close grip, palms facing each other, and pull the bar down towards your chest while keeping your elbows close to your body. Slowly return the bar to the starting position."
+  },
+  {
+    "name": "Reverse Grip Lat Pulldown",
+    "equipment": "lat pulldown machine",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a reverse grip lat pulldown, sit at the machine with your thighs secured under the pad. Grasp the bar with an underhand grip, slightly wider than shoulder-width, and pull the bar down towards your chest while keeping your elbows close to your body. Slowly return the bar to the starting position."
+  },
+  {
+    "name": "Wide Grip Lat Pulldown",
+    "equipment": "lat pulldown machine",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a wide grip lat pulldown, sit at the machine with your thighs secured under the pad. Grasp the bar with a wide grip and pull it down towards your upper chest while squeezing your shoulder blades together. Slowly return the bar to the starting position."
   },
   {
     "name": "Bent-Over Barbell Row",
     "equipment": "barbell",
     "muscleGroup": "Back",
-    "difficulty": "Intermediate",
+    "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the bent-over barbell row, stand with your feet shoulder-width apart and bend at the hips and knees, keeping your back straight and chest up. Grip the barbell with your hands slightly wider than shoulder-width apart. Pull the barbell towards your lower rib cage, squeezing your shoulder blades together at the top of the movement. Lower the barbell back down with control. Breathe in as you lower the bar and exhale as you pull up. Aim for 8-12 reps and 3-4 sets. Ensure proper form to avoid lower back strain.",
-    "tutorialLink": "@/assets/exercises/bent_over_barbell_row.gif"
+    "instructions": "To perform a bent-over barbell row, stand with your feet shoulder-width apart and hold a barbell with an overhand grip. Bend at your hips and knees until your torso is almost parallel to the ground. Pull the barbell towards your lower chest, squeezing your shoulder blades together, then lower the barbell back to the starting position."
   },
   {
-    "name": "Barbell T-Bar Row",
+    "name": "Underhand Barbell Row",
     "equipment": "barbell",
     "muscleGroup": "Back",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform the barbell T-bar row, place one end of a barbell in a corner or use a T-bar row machine if available. Stand over the barbell with your feet shoulder-width apart and grip the bar with both hands. Bend at the hips and knees, keeping your back flat. Row the barbell towards your chest, squeezing your shoulder blades together at the top of the movement. Lower the barbell back to the starting position with control. Breathe in as you lower the bar and exhale as you row up. Aim for 8-12 reps and 3-4 sets. Use proper form to avoid injury and engage your back muscles effectively.",
-    "tutorialLink": "@/assets/exercises/barbell_t_bar_row.gif"
+    "instructions": "To perform an underhand barbell row, stand with your feet shoulder-width apart and hold the barbell with an underhand grip. Bend at your hips and knees until your torso is nearly parallel to the ground. Pull the barbell towards your abdomen, squeezing your shoulder blades together, then lower it back to the starting position."
   },
   {
-    "name": "Barbell Shrugs",
+    "name": "Single-Arm Dumbbell Row",
+    "equipment": "dumbbell",
+    "muscleGroup": "Back",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a single-arm dumbbell row, place one knee and hand on a bench for support, keeping your back flat. With the other hand, hold a dumbbell and pull it towards your torso, squeezing your shoulder blade at the top of the movement. Lower the dumbbell back to the starting position and repeat for the desired number of reps before switching sides."
+  },
+  {
+    "name": "Bent-Over Dumbbell Row",
+    "equipment": "dumbbell",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a bent-over dumbbell row, stand with your feet shoulder-width apart and hold a dumbbell in each hand. Bend at your hips and knees until your torso is nearly parallel to the ground. Pull the dumbbells towards your lower chest, squeezing your shoulder blades together, then lower them back to the starting position."
+  },
+  {
+    "name": "Push-Ups",
+    "equipment": "bodyweight",
+    "muscleGroup": "Chest",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a push-up, start in a plank position with your hands slightly wider than shoulder-width apart. Lower your body toward the ground by bending your elbows, keeping your body straight. Push back up to the starting position."
+  },
+  {
+    "name": "Barbell Shoulder Press",
     "equipment": "barbell",
-    "muscleGroup": "Back",
-    "difficulty": "Beginner",
-    "custom": 0,
-    "instructions": "To perform barbell shrugs, stand with your feet shoulder-width apart and hold the barbell with an overhand grip at thigh level. Keeping your arms straight, lift your shoulders towards your ears as high as possible, squeezing your traps at the top. Lower your shoulders back down slowly. Breathe in as you lower and exhale as you shrug up. Aim for 10-15 reps and 3-4 sets. Ensure good posture and avoid using heavy weights that could compromise form.",
-    "tutorialLink": "@/assets/exercises/barbell_shrugs.gif"
-  },
-  {
-    "name": "Dumbbell Bent-Over Row",
-    "equipment": "dumbbell",
-    "muscleGroup": "Back",
-    "difficulty": "Intermediate",
-    "custom": 0,
-    "instructions": "To perform the dumbbell bent-over row, hold a dumbbell in each hand with your palms facing your body. Bend at the hips and knees while keeping your back straight. Pull the dumbbells towards your lower rib cage, squeezing your shoulder blades together at the top of the movement. Lower the dumbbells back down with control. Breathe in as you lower the weights and exhale as you pull them up. Aim for 8-12 reps and 3-4 sets. Maintain proper posture throughout to avoid strain on your lower back.",
-    "tutorialLink": "@/assets/exercises/dumbbell_bent_over_row.gif"
-  },
-  {
-    "name": "Dumbbell Single-Arm Row",
-    "equipment": "dumbbell",
-    "muscleGroup": "Back",
-    "difficulty": "Intermediate",
-    "custom": 0,
-    "instructions": "To perform the dumbbell single-arm row, place one knee and hand on a bench for support, keeping your back flat. With the other hand, hold a dumbbell with your palm facing inwards. Row the dumbbell towards your hip, squeezing your shoulder blade at the top of the movement. Lower the dumbbell back down with control. Breathe in as you lower the dumbbell and exhale as you row it up. Aim for 8-12 reps per side and 3-4 sets. Ensure a stable position on the bench to maximize effectiveness and prevent injury.",
-    "tutorialLink": "@/assets/exercises/dumbbell_single_arm_row.gif"
-  },
-  {
-    "name": "Dumbbell Shrugs",
-    "equipment": "dumbbell",
-    "muscleGroup": "Back",
-    "difficulty": "Beginner",
-    "custom": 0,
-    "instructions": "To perform dumbbell shrugs, stand with your feet shoulder-width apart and hold a dumbbell in each hand at your sides. Keeping your arms straight, lift your shoulders towards your ears as high as possible, squeezing your traps at the top of the movement. Lower your shoulders back down slowly. Breathe in as you lower the weights and exhale as you shrug up. Aim for 10-15 reps and 3-4 sets. Focus on controlled movements to effectively target your traps and avoid excessive weight that could compromise form.",
-    "tutorialLink": "@/assets/exercises/dumbbell_shrugs.gif"
-  },
-  {
-    "name": "Shoulder Press",
-    "equipment": "dumbbell",
     "muscleGroup": "Shoulders",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform the dumbbell shoulder press, sit or stand with a dumbbell in each hand at shoulder height, palms facing forward. Press the dumbbells upward until your arms are fully extended above your head. Lower the dumbbells back to shoulder height with control. Breathe in as you lower the weights and exhale as you press them up. Aim for 8-12 reps and 3-4 sets. Keep your core engaged and avoid arching your back during the movement.",
-    "tutorialLink": "@/assets/exercises/dumbbell_shoulder_press.gif"
+    "instructions": "To perform a barbell shoulder press, stand with your feet shoulder-width apart and grasp the barbell with an overhand grip slightly wider than shoulder-width. Lift the barbell to shoulder height, keeping your elbows below the bar. Press the barbell overhead until your arms are fully extended, then lower it back to shoulder height."
+  },
+  {
+    "name": "Dumbbell Shoulder Press",
+    "equipment": "dumbbell",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a dumbbell shoulder press, sit or stand with a dumbbell in each hand at shoulder height, palms facing forward. Press the dumbbells overhead until your arms are fully extended, keeping your core engaged and back straight. Lower the dumbbells back to shoulder height and repeat."
   },
   {
     "name": "Lateral Raise",
@@ -131,26 +213,31 @@
     "muscleGroup": "Shoulders",
     "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the dumbbell lateral raise, stand with your feet shoulder-width apart and hold a dumbbell in each hand at your sides. Keeping a slight bend in your elbows, lift the dumbbells out to the sides until they reach shoulder height. Lower the dumbbells back down slowly with control. Breathe in as you lower the weights and exhale as you lift them. Aim for 12-15 reps and 3-4 sets. Focus on controlled, deliberate movements to maximize shoulder engagement and avoid using excessive weight.",
-    "tutorialLink": "@/assets/exercises/dumbbell_lateral_raise.gif"
+    "instructions": "To perform a lateral raise, stand with your feet shoulder-width apart and hold a dumbbell in each hand at your sides. With a slight bend in your elbows, raise the dumbbells out to the sides until they reach shoulder height. Lower the dumbbells back to the starting position and repeat."
   },
   {
-    "name": "Front Raise",
-    "equipment": "dumbbell",
+    "name": "Reverse Pec Deck Fly",
+    "equipment": "pec deck machine",
     "muscleGroup": "Shoulders",
     "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the dumbbell front raise, stand with your feet shoulder-width apart and hold a dumbbell in each hand in front of your thighs. Keeping your arms straight, lift the dumbbells in front of you to shoulder height. Lower the dumbbells back down with control. Breathe in as you lower the weights and exhale as you lift them. Aim for 10-12 reps and 3-4 sets. Avoid swinging your body to lift the weights and focus on isolating the front deltoids.",
-    "tutorialLink": "@/assets/exercises/dumbbell_front_raise.gif"
+    "instructions": "To perform a reverse pec deck fly, sit on the pec deck machine facing the pads with your chest against the pad. Grasp the handles with your arms extended in front of you, then pull the handles back and out to the sides, squeezing your shoulder blades together. Return to the starting position and repeat."
   },
   {
-    "name": "Rear Delt Fly",
-    "equipment": "dumbbell",
-    "muscleGroup": "Shoulders",
-    "difficulty": "Intermediate",
+    "name": "Chest Fly (Multi-Flight Machine)",
+    "equipment": "multi-flight machine",
+    "muscleGroup": "Chest",
+    "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the dumbbell rear delt fly, bend at the hips with a slight bend in your knees, holding a dumbbell in each hand with your palms facing each other. With a slight bend in your elbows, lift the dumbbells out to the sides until your arms are parallel to the floor. Squeeze your shoulder blades together at the top of the movement. Lower the dumbbells back down with control. Breathe in as you lower the weights and exhale as you lift them. Aim for 10-12 reps and 3-4 sets. Maintain a neutral spine throughout the exercise to prevent lower back strain.",
-    "tutorialLink": "@/assets/exercises/dumbbell_rear_delt_fly.gif"
+    "instructions": "To perform a chest fly on a multi-flight machine, adjust the pulleys to shoulder height. Stand in the center, grasp the handles with your arms slightly bent, and pull the handles together in front of your chest. Slowly return to the starting position."
+  },
+  {
+    "name": "Lateral Raise (Multi-Flight Machine)",
+    "equipment": "multi-flight machine",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a cable lateral raise, adjust the pulley to the lowest setting. Stand with your side facing the machine and grasp the handle with the hand farthest from the machine. With a slight bend in your elbow, raise your arm to the side until it's parallel to the ground, then lower it back down."
   },
   {
     "name": "Dumbbell Bicep Curl",
@@ -158,97 +245,214 @@
     "muscleGroup": "Arms",
     "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the dumbbell bicep curl, stand with your feet shoulder-width apart and hold a dumbbell in each hand with your palms facing forward. Keeping your elbows close to your torso, curl the dumbbells towards your shoulders while contracting your biceps. Slowly lower the dumbbells back to the starting position. Breathe in as you lower the weights and exhale as you curl them up. Aim for 10-15 reps and 3-4 sets. Avoid swinging your body and focus on controlled movements to maximize bicep engagement.",
-    "tutorialLink": "@/assets/exercises/dumbbell_bicep_curl.gif"
+    "instructions": "To perform a dumbbell bicep curl, stand with a dumbbell in each hand at your sides. Keeping your elbows close to your body, curl the dumbbells up towards your shoulders. Squeeze your biceps at the top, then lower the dumbbells back to the starting position."
   },
   {
-    "name": "Dumbbell Hammer Curl",
+    "name": "Hammer Curl (Dumbbell)",
     "equipment": "dumbbell",
     "muscleGroup": "Arms",
     "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the dumbbell hammer curl, stand with your feet shoulder-width apart and hold a dumbbell in each hand with your palms facing each other. Keeping your elbows close to your torso, curl the dumbbells towards your shoulders while keeping your palms facing each other. Slowly lower the dumbbells back to the starting position. Breathe in as you lower the weights and exhale as you curl them up. Aim for 10-15 reps and 3-4 sets. Maintain a stable posture to effectively target the brachialis and brachioradialis muscles.",
-    "tutorialLink": "@/assets/exercises/dumbbell_hammer_curl.gif"
+    "instructions": "To perform a hammer curl, stand with a dumbbell in each hand at your sides, palms facing each other. Curl the dumbbells up towards your shoulders while keeping your elbows close to your body. Lower the dumbbells back to the starting position."
   },
   {
-    "name": "Tricep Dips",
-    "equipment": "bodyweight",
-    "muscleGroup": "Arms",
-    "difficulty": "Intermediate",
-    "custom": 0,
-    "instructions": "To perform tricep dips, position yourself on parallel bars with your arms fully extended and your body upright. Lower your body by bending your elbows until your upper arms are parallel to the floor. Press back up to the starting position by straightening your arms. Breathe in as you lower your body and exhale as you press up. Aim for 8-12 reps and 3-4 sets. Ensure proper form to avoid shoulder strain and engage your triceps effectively.",
-    "tutorialLink": "@/assets/exercises/tricep_dips.gif"
-  },
-  {
-    "name": "Overhead Tricep Extension",
+    "name": "Overhead Tricep Extension (Dumbbell)",
     "equipment": "dumbbell",
     "muscleGroup": "Arms",
-    "difficulty": "Intermediate",
+    "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the overhead tricep extension, stand with your feet shoulder-width apart and hold a dumbbell with both hands above your head, arms fully extended. Lower the dumbbell behind your head by bending your elbows, then press it back up to the starting position. Breathe in as you lower the weight and exhale as you press it up. Aim for 10-12 reps and 3-4 sets. Keep your elbows close to your head and avoid arching your back during the movement.",
-    "tutorialLink": "@/assets/exercises/overhead_tricep_extension.gif"
+    "instructions": "To perform an overhead tricep extension, stand or sit holding a dumbbell with both hands above your head, arms extended. Slowly lower the dumbbell behind your head by bending your elbows, then raise it back to the starting position."
   },
   {
-    "name": "Tricep Kickback",
-    "equipment": "dumbbell",
+    "name": "Barbell Bicep Curl",
+    "equipment": "barbell",
+    "muscleGroup": "Arms",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a barbell bicep curl, stand with your feet shoulder-width apart and hold a barbell with an underhand grip. Keeping your elbows close to your body, curl the barbell up towards your shoulders, squeezing your biceps at the top. Lower the barbell back to the starting position."
+  },
+  {
+    "name": "Barbell Tricep Extension",
+    "equipment": "barbell",
     "muscleGroup": "Arms",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform the tricep kickback, hold a dumbbell in each hand and bend at the hips with a slight bend in your knees, keeping your back straight. Lift your upper arms so they are parallel to the floor and your elbows are at a 90-degree angle. Extend your arms back, straightening your elbows, then return to the starting position. Breathe in as you bend your elbows and exhale as you extend them. Aim for 10-12 reps and 3-4 sets. Focus on controlled movements to effectively target the triceps.",
-    "tutorialLink": "@/assets/exercises/tricep_kickback.gif"
+    "instructions": "To perform a barbell tricep extension, stand or sit with a barbell held overhead with both hands. Lower the barbell behind your head by bending your elbows, then raise it back to the starting position."
   },
   {
-    "name": "Barbell Squat",
+    "name": "Barbell Skull Crusher",
+    "equipment": "barbell",
+    "muscleGroup": "Arms",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a barbell skull crusher, lie on a flat bench and hold a barbell with an overhand grip, arms extended above your chest. Lower the barbell towards your forehead by bending your elbows, then extend your arms back to the starting position."
+  },
+  {
+    "name": "Barbell Wrist Curl",
+    "equipment": "barbell",
+    "muscleGroup": "Arms",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a barbell wrist curl, sit on a bench with your forearms resting on your thighs, holding a barbell with an underhand grip. Allow the barbell to roll down to your fingers, then curl it back up by flexing your wrists."
+  },
+  {
+    "name": "Cable Lateral Raise",
+    "equipment": "cable machine",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a cable lateral raise, adjust the pulley to the lowest setting. Stand with the cable on your side and grasp the handle with the hand farthest from the machine. Raise your arm to the side until it's parallel to the ground, then lower it back down."
+  },
+  {
+    "name": "Single Arm Cable Tricep Pushdown",
+    "equipment": "cable machine",
+    "muscleGroup": "Arms",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a single arm cable tricep pushdown, adjust the pulley to a high position. Stand facing the machine and grasp the handle with one hand. Keeping your elbow close to your body, push the handle down towards your thigh until your arm is fully extended. Slowly return to the starting position and repeat."
+  },
+  {
+    "name": "Rope Tricep Pushdown",
+    "equipment": "cable machine",
+    "muscleGroup": "Arms",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a rope tricep pushdown, adjust the pulley to a high position and attach a rope handle. Stand facing the machine and grasp the rope with both hands. Keeping your elbows close to your body, push the rope down until your arms are fully extended, spreading the rope at the bottom for a full contraction. Slowly return to the starting position."
+  },
+  {
+    "name": "Rope Tricep Overhead Extension",
+    "equipment": "cable machine",
+    "muscleGroup": "Arms",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a rope tricep overhead extension, adjust the pulley to a low position and attach a rope handle. Stand with your back to the machine and grasp the rope with both hands, arms extended overhead. Keeping your elbows close to your head, lower the rope behind your head by bending your elbows, then extend your arms back to the starting position."
+  },
+  {
+    "name": "Cable Face Pull",
+    "equipment": "cable machine",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a cable face pull, adjust the pulley to a high position. Stand facing the machine and grasp the handle with both hands. Pull the handle towards your face, keeping your elbows high and squeezing your shoulder blades together. Return to the starting position."
+  },
+  {
+    "name": "Smith Machine Squat",
+    "equipment": "smith machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a Smith machine squat, set the barbell at shoulder height and position yourself under the bar with it resting on your upper traps. Stand with your feet shoulder-width apart. Lower your body into a squat by bending your knees and hips, keeping your chest up and back straight. Push through your heels to return to the starting position."
+  },
+  {
+    "name": "Smith Machine Deadlift",
+    "equipment": "smith machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a Smith machine deadlift, set the barbell to knee height and stand with your feet shoulder-width apart. Position the barbell over your midfoot. Bend at the hips and knees to grasp the bar with an overhand grip. Stand up by pushing through your heels, keeping your back straight, then lower the bar back to the starting position."
+  },
+  {
+    "name": "Smith Machine Front Squat",
+    "equipment": "smith machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a front squat on the Smith machine, set the barbell at shoulder height. Position the barbell across the front of your shoulders, with your elbows up and hands under the bar. Squat down by bending your knees, keeping your chest up and back straight. Push through your heels to return to the starting position."
+  },
+  {
+    "name": "Smith Machine Calf Raises",
+    "equipment": "smith machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform calf raises on the Smith machine, set the barbell at shoulder height and position it on your upper back. Stand with the balls of your feet on an elevated platform, allowing your heels to hang off. Raise your heels as high as possible, then lower them back down to stretch your calves."
+  },
+  {
+    "name": "Smith Machine Hip Thrust",
+    "equipment": "smith machine",
+    "muscleGroup": "Glutes",
+    "difficulty": "Advanced",
+    "custom": 0,
+    "instructions": "To perform hip thrusts on the Smith machine, set the bar at hip height. Sit on the ground with your upper back against a bench, rolling the barbell over your hips. Push through your heels to lift your hips towards the ceiling, squeezing your glutes at the top. Lower back down and repeat."
+  },
+  {
+    "name": "Barbell Back Squat",
     "equipment": "barbell",
     "muscleGroup": "Legs",
     "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform the barbell squat, stand with your feet shoulder-width apart and the barbell resting on your upper back. Bend at the hips and knees to lower your body until your thighs are parallel to the floor, then press back up to the starting position. Breathe in as you lower your body and exhale as you press up. Aim for 8-12 reps and 3-4 sets. Maintain proper form to avoid injury and engage your core throughout the movement.",
-    "tutorialLink": "@/assets/exercises/barbell_squat.gif"
+    "instructions": "To perform a barbell back squat, place the barbell on your upper traps and stand with your feet shoulder-width apart. Lower your body by bending your knees and hips, keeping your chest up and back straight. Push through your heels to return to the starting position."
   },
   {
-    "name": "Leg Press",
-    "equipment": "machine",
+    "name": "Barbell Front Squat",
+    "equipment": "barbell",
+    "muscleGroup": "Legs",
+    "difficulty": "Advanced",
+    "custom": 0,
+    "instructions": "To perform a barbell front squat, place the barbell on your shoulders in front of your neck with your elbows high. Stand with your feet shoulder-width apart. Lower your body into a squat, keeping your chest up and back straight. Push through your heels to return to standing."
+  },
+  {
+    "name": "Deadlift",
+    "equipment": "barbell",
+    "muscleGroup": "Legs",
+    "difficulty": "Advanced",
+    "custom": 0,
+    "instructions": "To perform a barbell deadlift, stand with your feet hip-width apart and the barbell over your midfoot. Bend at the hips and knees to grasp the bar with an overhand grip. Stand up by pushing through your heels and extending your hips and knees. Lower the bar back to the ground with control."
+  },
+  {
+    "name": "Barbell Lunges",
+    "equipment": "barbell",
+    "muscleGroup": "Legs",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform barbell lunges, place the barbell on your upper back. Step forward with one leg and lower your body until your back knee is close to the ground. Push through your front heel to return to standing, then repeat on the other side."
+  },
+  {
+    "name": "Dumbbell Squats",
+    "equipment": "dumbbell",
     "muscleGroup": "Legs",
     "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the leg press, sit on the leg press machine with your feet shoulder-width apart on the platform. Lower the platform by bending your knees until your thighs are parallel to the floor, then press back up to the starting position. Breathe in as you lower the platform and exhale as you press up. Aim for 10-15 reps and 3-4 sets. Ensure proper foot placement and avoid locking your knees at the top of the movement.",
-    "tutorialLink": "@/assets/exercises/leg_press.gif"
+    "instructions": "To perform dumbbell squats, hold a dumbbell in each hand at your sides or at shoulder level. Stand with your feet shoulder-width apart. Lower your body by bending your knees and hips, keeping your chest up and back straight. Push through your heels to return to standing."
   },
   {
-    "name": "Lunges",
-    "equipment": "bodyweight",
+    "name": "Dumbbell Lunges",
+    "equipment": "dumbbell",
     "muscleGroup": "Legs",
     "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform lunges, stand with your feet together and take a step forward with one leg. Lower your body until both knees are bent at a 90-degree angle, then press back up to the starting position. Alternate legs with each rep. Breathe in as you lower your body and exhale as you press up. Aim for 10-12 reps per leg and 3-4 sets. Maintain proper form to avoid knee strain and engage your core throughout the movement.",
-    "tutorialLink": "@/assets/exercises/lunges.gif"
+    "instructions": "To perform dumbbell lunges, hold a dumbbell in each hand at your sides. Step forward with one leg and lower your body until your back knee is close to the ground. Push through your front heel to return to standing, then repeat on the other side."
   },
   {
-    "name": "Leg Curl",
-    "equipment": "machine",
+    "name": "Dumbbell Bulgarian Split Squats",
+    "equipment": "dumbbell",
+    "muscleGroup": "Legs",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform dumbbell Bulgarian split squats, hold a dumbbell in each hand and place one foot on a bench behind you. Lower your body by bending your front knee until your back knee nearly touches the ground. Push through your front heel to return to standing."
+  },
+  {
+    "name": "Dumbbell Calf Raises",
+    "equipment": "dumbbell",
+    "muscleGroup": "Calves",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform dumbbell calf raises, hold a dumbbell in each hand at your sides. Stand with the balls of your feet on an elevated surface, allowing your heels to hang off. Raise your heels as high as possible, then lower them back down to stretch your calves."
+  },
+  {
+    "name": "Dumbbell Romanian Deadlift",
+    "equipment": "dumbbell",
     "muscleGroup": "Legs",
     "difficulty": "Beginner",
     "custom": 0,
-    "instructions": "To perform the leg curl, lie face down on the leg curl machine with your ankles under the padded lever. Curl your legs up towards your glutes, then lower them back to the starting position. Breathe in as you lower your legs and exhale as you curl them up. Aim for 10-15 reps and 3-4 sets. Focus on controlled movements to effectively target the hamstrings.",
-    "tutorialLink": "@/assets/exercises/leg_curl.gif"
+    "instructions": "To perform a dumbbell Romanian deadlift, stand with your feet shoulder-width apart while holding a dumbbell in each hand at your thighs. Keep a slight bend in your knees and hinge at your hips, lowering the dumbbells along your legs while maintaining a flat back. Lower the dumbbells until you feel a stretch in your hamstrings, then push through your hips to return to the starting position."
   },
   {
-    "name": "Leg Extension",
-    "equipment": "machine",
-    "muscleGroup": "Legs",
-    "difficulty": "Beginner",
+    "name": "Barbell Romanian Deadlift",
+    "equipment": "barbell",
+    "muscleGroup": "Hamstrings and Glutes",
+    "difficulty": "Intermediate",
     "custom": 0,
-    "instructions": "To perform the leg extension, sit on the leg extension machine with your ankles under the padded lever. Extend your legs until they are straight, then lower them back to the starting position. Breathe in as you lower your legs and exhale as you extend them. Aim for 10-15 reps and 3-4 sets. Ensure proper form to avoid knee strain and focus on controlled movements.",
-    "tutorialLink": "@/assets/exercises/leg_extension.gif"
-  },
-  {
-    "name": "Calf Raise",
-    "equipment": "bodyweight",
-    "muscleGroup": "Legs",
-    "difficulty": "Beginner",
-    "custom": 0,
-    "instructions": "To perform calf raises, stand with your feet shoulder-width apart and your toes on the edge of a step or platform. Raise your heels as high as possible, then lower them back down with control. Breathe in as you lower your heels and exhale as you raise them. Aim for 15-20 reps and 3-4 sets. Focus on controlled movements to effectively target the calf muscles.",
-    "tutorialLink": "@/assets/exercises/calf_raise.gif"
+    "instructions": "To perform a barbell Romanian deadlift, stand with your feet shoulder-width apart and hold the barbell in front of your thighs. Keeping a slight bend in your knees, hinge at your hips and lower the barbell along your legs until you feel a stretch in your hamstrings. Return to the starting position by pushing through your hips."
   }
 ]
