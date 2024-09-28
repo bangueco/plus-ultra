@@ -11,10 +11,12 @@ import { RootNativeStackParamList } from '@/types/navigation';
 import useSystemTheme from '@/hooks/useSystemTheme';
 import { PaperProvider } from 'react-native-paper';
 import { useRootNavigation } from '@/hooks/useRootNavigation';
+import { useDrizzleStudioHelper } from '@/lib/drizzleClient';
 
 const Stack = createNativeStackNavigator<RootNativeStackParamList>()
 
 export default function RootLayout() {
+  useDrizzleStudioHelper()
 
   const systemTheme = useSystemTheme()
 
