@@ -30,7 +30,8 @@ export default async function seed() {
         custom: 0,
         difficulty: e.difficulty,
         equipment: e.equipment,
-        instructions: e.instructions
+        instructions: e.instructions,
+        gifName: e.gifName
       });
     }));
 

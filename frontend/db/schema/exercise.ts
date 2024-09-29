@@ -8,4 +8,5 @@ export const exercise = sqliteTable('Exercise', {
   custom: integer('custom', {mode: "number"}).default(0).notNull(),
   difficulty: text('difficulty', {mode: "text"}),
   instructions: text('instructions', {mode: "text"}),
+  gifName: text('gifName', {mode: "text"})
 })
