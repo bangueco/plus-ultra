@@ -1,0 +1,1 @@
+ALTER TABLE `Exercise` ADD `gifName` text;

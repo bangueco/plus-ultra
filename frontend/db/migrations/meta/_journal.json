@@ -8,6 +8,13 @@
       "when": 1727100816372,
       "tag": "0000_groovy_wonder_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1727623497924,
+      "tag": "0001_tired_raider",
+      "breakpoints": true
     }
   ]
 }
