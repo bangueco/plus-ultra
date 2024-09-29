@@ -11,12 +11,13 @@ import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import exerciseService from "@/services/exercise.service"
 import seed from "@/db/seed"
 import { Image } from 'expo-image';
+import { exercisesImage } from "@/constants/exercisesImage"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
 
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string | null }>();
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, gifName: string }>({ name: '', instructions: '', gifName: '' });
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
   const [visible, setVisible] = useState<boolean>(false)
@@ -58,7 +59,8 @@ const Exercise = () => {
 
     setCurrentSelectedExercise({
       name: getExercise[0].name,
-      instructions: getExercise[0].instructions
+      instructions: getExercise[0].instructions ?? '',
+      gifName: getExercise[0].gifName ?? ''
     })
 
     setVisible(true)
@@ -138,8 +140,14 @@ const Exercise = () => {
       </View>
       <Portal>
         <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-          <Dialog.Title style={{textAlign: 'center'}}>{currentSelectedExercise?.name}</Dialog.Title>
-          <Dialog.Content>
+          <Dialog.Title style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>{currentSelectedExercise?.name}</Dialog.Title>
+          <Dialog.Content style={{gap: 10}}>
+            <Image
+              source={exercisesImage[currentSelectedExercise.gifName as keyof typeof exercisesImage]}
+              style={{width: '100%', height: 230}}
+              contentFit="fill"
+              transition={1000}
+            />
             <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
           </Dialog.Content>
           <Dialog.Actions>
