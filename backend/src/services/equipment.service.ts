@@ -23,9 +23,7 @@ type Image = {
 const identifyEquipment = (response: LensApiResult) => {
 
   const equipments = [
-    'dumbbell',
-    'lat pulldown',
-    'barbell'
+    'dumbbell', 'lat pulldown machine', 'barbell', 'pec deck machine', 'multi-flight machine', 'cable machine', 'smith machine'
   ]
 
   let equipmentCount: Array<EquipmentCountProps> = []
