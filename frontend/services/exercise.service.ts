@@ -10,6 +10,10 @@ const getExerciseById = async (id: number) => {
   return await db.select().from(exercise).where(eq(exercise.exercise_id, id))
 }
 
+const getAllExerciseByEquipment = async (equipmentName: string) => {
+  return await db.select().from(exercise).where(eq(exercise.equipment, equipmentName))
+}
+
 const createExercise = async (exerciseName: string, exerciseMuscleGroup: string, exerciseEquipment: string) => {
   return await db.insert(exercise).values({
     name: exerciseName,
@@ -38,6 +42,7 @@ const deleteAllExercise = async () => {
 export default {
   getAllExercise,
   getExerciseById,
+  getAllExerciseByEquipment,
   createExercise,
   editExercise,
   deleteExercise,
