@@ -1,4 +1,4 @@
-import { exercisesDatabase } from "@/database";
+import exerciseService from "./exercise.service";
 
 interface Exercises {
   id: number
@@ -6,11 +6,11 @@ interface Exercises {
 }
 
 const getExercisesFromEquipment = async(equipment_name: string) => {
-  const exercisesOfEquipment = await exercisesDatabase.db.getAllAsync<Exercises>(`SELECT id, name FROM exercise WHERE equipment="${equipment_name}";`)
+  const exercisesOfEquipment = await exerciseService.getAllExerciseByEquipment(equipment_name)
 
   const exercises = exercisesOfEquipment.map(exercise => {
     return {
-      id: exercise.id, 
+      id: exercise.exercise_id,
       title: exercise.name
     }
   })
