@@ -6,5 +6,5 @@ export type ExerciseInfo = {
     difficulty?: string | null,
     custom: number | null,
     instructions?: string | null,
-    tutorialLink?: string
+    gifName?: string | null
 }
