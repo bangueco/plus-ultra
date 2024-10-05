@@ -416,7 +416,7 @@
   {
     "name": "Smith Machine Hip Thrust",
     "equipment": "smith machine",
-    "muscleGroup": "Glutes",
+    "muscleGroup": "Legs",
     "difficulty": "Advanced",
     "custom": 0,
     "instructions": "To perform hip thrusts on the Smith machine, set the bar at hip height. Sit on the ground with your upper back against a bench, rolling the barbell over your hips. Push through your heels to lift your hips towards the ceiling, squeezing your glutes at the top. Lower back down and repeat.",
@@ -488,7 +488,7 @@
   {
     "name": "Dumbbell Calf Raises",
     "equipment": "dumbbell",
-    "muscleGroup": "Calves",
+    "muscleGroup": "Legs",
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform dumbbell calf raises, hold a dumbbell in each hand at your sides. Stand with the balls of your feet on an elevated surface, allowing your heels to hang off. Raise your heels as high as possible, then lower them back down to stretch your calves.",
@@ -506,7 +506,7 @@
   {
     "name": "Barbell Romanian Deadlift",
     "equipment": "barbell",
-    "muscleGroup": "Hamstrings and Glutes",
+    "muscleGroup": "Legs",
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a barbell Romanian deadlift, stand with your feet shoulder-width apart and hold the barbell in front of your thighs. Keeping a slight bend in your knees, hinge at your hips and lower the barbell along your legs until you feel a stretch in your hamstrings. Return to the starting position by pushing through your hips.",
