@@ -10,8 +10,6 @@ import {ExerciseInfo} from "@/types/exercise";
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import exerciseService from "@/services/exercise.service"
 import seed from "@/db/seed"
-import { Image } from 'expo-image';
-import { exercisesImage } from "@/constants/exercisesImage"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
@@ -142,18 +140,6 @@ const Exercise = () => {
         <Dialog visible={visible} onDismiss={() => setVisible(false)}>
           <Dialog.Title style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>{currentSelectedExercise?.name}</Dialog.Title>
           <Dialog.Content style={{gap: 10}}>
-            {
-              exercisesImage[currentSelectedExercise.gifName as keyof typeof exercisesImage]
-              ?
-              <Image
-                source={exercisesImage[currentSelectedExercise.gifName as keyof typeof exercisesImage]}
-                style={{width: '100%', height: 230}}
-                contentFit="fill"
-                transition={1000}
-              />
-              :
-              null
-            }
             <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
           </Dialog.Content>
           <Dialog.Actions>
