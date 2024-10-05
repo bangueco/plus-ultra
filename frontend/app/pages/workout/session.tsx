@@ -1,4 +1,3 @@
-import { templatesDatabase } from "@/database";
 import { RootProps, useRootNavigation } from "@/hooks/useRootNavigation";
 import useSystemTheme from "@/hooks/useSystemTheme";
 import { ExerciseSets, TemplateItem } from "@/types/templates";
@@ -139,7 +138,7 @@ export default function WorkoutSession({route}: RootProps) {
         </View>
         <Text style={{fontSize: 18, color: systemTheme.colors.text}}>
           {hours}:{minutes.toString().padStart(2, "0")}:
-          {seconds.toString().padStart(2, "0")}:
+          {seconds.toString().padStart(2, "0")}
         </Text>
         <View>
           <Button
