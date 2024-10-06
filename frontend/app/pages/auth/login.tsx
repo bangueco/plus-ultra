@@ -61,6 +61,10 @@ export default function Login () {
       } else {
         setErrorMessage(error.response.data.message)
       }
+    } else if (error instanceof AxiosError) {
+      Alert.alert(error.message)
+    } else {
+      Alert.alert('Unknown error has occured')
     }
   }
 
