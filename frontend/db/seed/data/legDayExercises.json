@@ -1,0 +1,27 @@
+[
+  {
+    "exercise_id": 43,
+    "item_name": "Smith Machine Squat",
+    "muscleGroup": "Legs"
+  },
+  {
+    "exercise_id": 60,
+    "item_name": "Leg Press",
+    "muscleGroup": "Legs"
+  },
+  {
+    "exercise_id": 61,
+    "item_name": "Leg Curl",
+    "muscleGroup": "Legs"
+  },
+  {
+    "exercise_id": 62,
+    "item_name": "Seated Leg Curl",
+    "muscleGroup": "Legs"
+  },
+  {
+    "exercise_id": 63,
+    "item_name": "Seated Calf Raise",
+    "muscleGroup": "Legs"
+  }
+]
