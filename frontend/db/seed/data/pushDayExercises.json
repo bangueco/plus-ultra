@@ -28,5 +28,10 @@
     "exercise_id": 21,
     "item_name": "Overhead Tricep Extension",
     "muscleGroup": "Arms"
+  },
+  {
+    "exercise_id": 40,
+    "item_name": "Rope Tricep Pushdown",
+    "muscleGroup": "Arms"
   }
 ]
