@@ -511,5 +511,59 @@
     "custom": 0,
     "instructions": "To perform a barbell Romanian deadlift, stand with your feet shoulder-width apart and hold the barbell in front of your thighs. Keeping a slight bend in your knees, hinge at your hips and lower the barbell along your legs until you feel a stretch in your hamstrings. Return to the starting position by pushing through your hips.",
     "gifName": "barbell_romanian_deadlift"
+  },
+  {
+    "name": "Rope Pullover",
+    "equipment": "cable machine with rope attachment",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a rope pullover, attach a rope to the high pulley of a cable machine. Stand with your feet shoulder-width apart and grasp the rope with both hands, palms facing each other. Keeping your arms straight, pull the rope down and towards your hips while squeezing your back muscles. Slowly return to the starting position with control.",
+    "gifName": "rope_pullover"
+  },
+  {
+    "name": "Reverse Pec Deck Fly",
+    "equipment": "pec deck machine",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a reverse pec deck fly, sit on the pec deck machine facing the pads. Adjust the seat height so that your shoulders are level with the handles. Grasp the handles with your palms facing inwards. Keeping a slight bend in your elbows, pull the handles apart and backward, squeezing your shoulder blades together. Slowly return to the starting position with control.",
+    "gifName": "reverse_pec_deck_fly"
+  },
+  {
+    "name": "Leg Press",
+    "equipment": "leg press machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a leg press, sit on the leg press machine and place your feet shoulder-width apart on the platform. Adjust the seat and backrest if necessary. Push the platform away from you by extending your legs, but avoid locking your knees. Slowly bend your knees and lower the platform back to the starting position, ensuring your back remains flat against the seat and your knees align with your toes.",
+    "gifName": "leg_press"
+  },
+  {
+    "name": "Leg Curl",
+    "equipment": "leg curl machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a leg curl, adjust the leg curl machine to fit your body size and lie face down on the bench. Place your legs under the padded lever, just above your ankles. Grasp the handles for stability. Curl your legs upward by flexing your knees, bringing your heels as close to your buttocks as possible. Slowly lower the weight back to the starting position with control, keeping tension on your hamstrings throughout the movement.",
+    "gifName": "leg_curl"
+  },
+  {
+    "name": "Seated Leg Curl",
+    "equipment": "seated leg curl machine",
+    "muscleGroup": "Legs",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "To perform a seated leg curl, adjust the seat and backrest of the seated leg curl machine to fit your body size. Sit down and position your legs under the padded lever, just above your ankles. Secure the thigh pad above your knees. Grasp the handles for stability. Curl your legs downward by flexing your knees, bringing your heels as close to your buttocks as possible. Slowly return to the starting position with control, keeping tension on your hamstrings throughout the movement.",
+    "gifName": "seated_leg_curl"
+  },
+  {
+    "name": "Seated Calf Raise",
+    "equipment": "seated calf raise machine",
+    "muscleGroup": "Calves",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "To perform a seated calf raise, sit on the seated calf raise machine and place the balls of your feet on the platform with your heels hanging off. Adjust the knee pad so that it rests comfortably on your thighs. Release the safety bar and lower your heels as far as possible to feel a stretch in your calves. Push through the balls of your feet to raise your heels as high as you can, squeezing your calf muscles at the top of the movement. Slowly lower your heels back to the starting position with control.",
+    "gifName": "seated_calf_raise"
   }
 ]
