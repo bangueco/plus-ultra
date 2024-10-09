@@ -2,7 +2,7 @@ import CustomPressable from "@/components/custom/CustomPressable"
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
-import { Alert, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
+import { Alert, Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
 import { Button, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
 import { ExerciseInfo } from "@/types/exercise"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -26,7 +26,12 @@ const Workout = () => {
   const [templateVisible, setTemplateVisible] = useState<boolean>(false)
   const [guideVisible, setGuideVisible] = useState<boolean>(false)
   const [workoutTemplates, setWorkoutTemplates] = useState<Array<TemplatesType>>([])
-  const [currentTemplate, setCurrentTemplate] = useState<Array<TemplateItem>>([])
+  const [currentTemplate, setCurrentTemplate] = useState<{
+    template_name: string, exercises: Array<TemplateItem>
+  }>({
+    template_name: '',
+    exercises: []
+  })
   const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string}>()
 
   const fetchTemplates = async () => {
@@ -47,11 +52,15 @@ const Workout = () => {
     }
   }
 
-  const onPressSelectTemplate = async (id: number) => {
+  const onPressViewTemplate = async (id: number) => {
     try {
       setTemplateVisible(true)
+      const template_name = await templateService.getTemplateById(id)
       const item = await templateItemService.getAllTemplateItemsById(id)
-      setCurrentTemplate(item)
+      setCurrentTemplate({
+        template_name: template_name[0].template_name,
+        exercises: item
+      })
     } catch (error) {
       console.error(error)
     }
@@ -59,7 +68,7 @@ const Workout = () => {
 
   const onDismissTemplate = () => {
     setTemplateVisible(false)
-    setCurrentTemplate([])
+    setCurrentTemplate({template_name: '', exercises: []})
   }
 
   const onPressCreateTemplate = async () => {
@@ -140,7 +149,7 @@ const Workout = () => {
     setTemplateVisible(false)
 
     if (useRootNavigation.isReady()) {
-      return useRootNavigation.navigate('WorkoutSession', {templateId: currentTemplate[0].template_id})
+      return useRootNavigation.navigate('WorkoutSession', {templateId: currentTemplate.exercises[0].template_id})
     }
   }
 
@@ -171,11 +180,11 @@ const Workout = () => {
         <Portal>
           {/* Show dialog for viewing templates */}
           <Dialog visible={templateVisible} onDismiss={onDismissTemplate}>
-            <Dialog.Title style={{textAlign: 'center'}}>Workout</Dialog.Title>
+            <Dialog.Title style={{textAlign: 'center'}}>{currentTemplate.template_name}</Dialog.Title>
             <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
               <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 25, marginTop: 5, maxHeight: 400}}>
                 {
-                  currentTemplate && currentTemplate.map(item => (
+                  currentTemplate && currentTemplate.exercises.map(item => (
                     <View
                       style={[styles.templateItem]}
                       key={item.template_item_id}
@@ -323,21 +332,21 @@ const Workout = () => {
                 {
                   workoutTemplates && workoutTemplates.filter((template) => template.custom === 1).length > 0 ? (
                     workoutTemplates.filter((template) => template.custom === 1).map((template) => (
-                    <View
+                    <Pressable
                       key={template.template_id}
                       style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
+                      onPress={() => onPressViewTemplate(template.template_id)}
                     >
                       <View
                         style={{position: 'absolute', top: -15, right: -10}}
                       >
                         <TemplateMenu
-                          viewTemplate={() => onPressSelectTemplate(template.template_id)}
                           editTemplate={() => {}}
                           deleteTemplate={() => onPressDeleteTemplate(template.template_id)}
                         />
                       </View>
                       <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
-                    </View>
+                    </Pressable>
                   ))
                 ) : (
                     <Text style={{color: systemTheme.colors.text}}>No custom templates</Text>
@@ -351,21 +360,13 @@ const Workout = () => {
             <View style={styles.templates}>
               {
                 workoutTemplates && workoutTemplates.filter((template) => template.custom === 0).map((template) => (
-                  <View
+                  <Pressable
                     key={template.template_id}
                     style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
+                    onPress={() => onPressViewTemplate(template.template_id)}
                   >
-                    <View
-                      style={{position: 'absolute', top: -15, right: -10}}
-                    >
-                      <TemplateMenu
-                        viewTemplate={() => onPressSelectTemplate(template.template_id)}
-                        editTemplate={() => { Alert.alert('You Cannot edit example templates!') }}
-                        deleteTemplate={() => {Alert.alert('You Cannot delete example templates!')}}
-                      />
-                    </View>
                     <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
-                  </View>
+                  </Pressable>
                 ))
               }
             </View>
@@ -401,8 +402,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 1,
     borderRadius: 5,
-    width: 110,
-    height: 100,
+    width: 105,
+    height: 105,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center'
