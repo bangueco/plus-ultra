@@ -18,7 +18,9 @@ const CustomPressable = ({ text, buttonStyle, textStyle, ...props }: CustomPress
       onPressOut={() => setIsPressed(false)}
       {...props}
     >
-      <Text style={[styles.defaultTextStyle, textStyle]}>
+      <Text style={[styles.defaultTextStyle, textStyle]}
+        numberOfLines={1}
+      >
         {text}
       </Text>
     </Pressable>

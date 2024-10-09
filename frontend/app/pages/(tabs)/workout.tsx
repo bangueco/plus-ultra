@@ -12,6 +12,7 @@ import TemplateMenu from "@/components/TemplateMenu"
 import templateService from "@/services/template.service"
 import templateItemService from "@/services/templateItem.service"
 import exerciseService from "@/services/exercise.service"
+import ViewExerciseInfo from "@/components/ViewExerciseInfo"
 
 
 const Workout = () => {
@@ -281,16 +282,20 @@ const Workout = () => {
                       key={item.id} 
                       text={item.name} 
                       textStyle={{fontSize: 13, textAlign: 'center', color: systemTheme.colors.text}}
-                      buttonStyle={{backgroundColor: 'transparent'}}
+                      buttonStyle={{backgroundColor: 'transparent', width: '80%'}}
                       onPress={() => onPressSelectExercise(item.id, item.name)}
                     />
-                    <Icon
-                      source={
-                        selectedExercises.some(exercise => exercise.exercise_id === item.id) ? 'check-circle-outline' : 'circle-outline'
-                      }
-                      size={23}
-                      color={systemTheme.colors.primary}
-                    />
+                    {
+                      selectedExercises.some(exercise => exercise.exercise_id === item.id)
+                      ?
+                      <Icon
+                        source='check-circle'
+                        size={23}
+                        color={systemTheme.colors.primary}
+                      />
+                      :
+                      <ViewExerciseInfo id={item.id} />
+                    }
                   </View>
                 )}
                 renderSectionHeader={({section: {title}}) => (
