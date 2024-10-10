@@ -331,33 +331,29 @@ const Workout = () => {
           <View style={{gap: 5, flexGrow: 1}}>
             <Text style={{color: systemTheme.colors.text, fontSize: 20}}># My templates</Text>
             <View style={styles.templates}>
-              <View
-                style={styles.templates}
-              >
-                {
-                  workoutTemplates && workoutTemplates.filter((template) => template.custom === 1).length > 0 ? (
-                    workoutTemplates.filter((template) => template.custom === 1).map((template) => (
-                    <Pressable
-                      key={template.template_id}
-                      style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
-                      onPress={() => onPressViewTemplate(template.template_id)}
+              {
+                workoutTemplates && workoutTemplates.filter((template) => template.custom === 1).length > 0 ? (
+                  workoutTemplates.filter((template) => template.custom === 1).map((template) => (
+                  <Pressable
+                    key={template.template_id}
+                    style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
+                    onPress={() => onPressViewTemplate(template.template_id)}
+                  >
+                    <View
+                      style={{position: 'absolute', top: -15, right: -10}}
                     >
-                      <View
-                        style={{position: 'absolute', top: -15, right: -10}}
-                      >
-                        <TemplateMenu
-                          editTemplate={() => {}}
-                          deleteTemplate={() => onPressDeleteTemplate(template.template_id)}
-                        />
-                      </View>
-                      <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
-                    </Pressable>
-                  ))
-                ) : (
-                    <Text style={{color: systemTheme.colors.text}}>No custom templates</Text>
-                  )
-                }
-              </View>
+                      <TemplateMenu
+                        editTemplate={() => {}}
+                        deleteTemplate={() => onPressDeleteTemplate(template.template_id)}
+                      />
+                    </View>
+                    <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
+                  </Pressable>
+                ))
+              ) : (
+                  <Text style={{color: systemTheme.colors.text}}>No custom templates</Text>
+                )
+              }
             </View>
           </View>
           <View style={{gap: 5, flexGrow: 1}}>
