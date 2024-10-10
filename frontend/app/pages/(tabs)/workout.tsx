@@ -394,9 +394,9 @@ const styles = StyleSheet.create({
     paddingBottom: 125
   },
   templates: {
-    flexDirection: 'row', 
-    gap: 15, 
+    flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   templateItem: {
     padding: 10,
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 1,
     borderRadius: 5,
-    width: 105,
+    width: 110,
     height: 105,
     padding: 10,
     justifyContent: 'center',
