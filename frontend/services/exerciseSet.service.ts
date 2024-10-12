@@ -23,16 +23,16 @@ const addExerciseSet = async (reps: number, weight: number, item_id: number, tem
   })
 }
 
-const updateReps = async (templateItemId: number, reps: number) => {
+const updateReps = async (exerciseSetId: number, reps: number) => {
   return await db.update(exerciseSets).set({
     reps
-  }).where(eq(exerciseSets.template_item_id, templateItemId))
+  }).where(eq(exerciseSets.exercise_set_id, exerciseSetId))
 }
 
-const updateWeight = async (templateItemId: number, weight: number) => {
+const updateWeight = async (exerciseSetId: number, weight: number) => {
   return await db.update(exerciseSets).set({
     weight
-  }).where(eq(exerciseSets.template_item_id, templateItemId))
+  }).where(eq(exerciseSets.exercise_set_id, exerciseSetId))
 }
 
 const deleteExerciseSetByExerciseId = async (exerciseSetId: number) => {
