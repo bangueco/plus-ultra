@@ -6,6 +6,10 @@ const getAllExerciseSets = async () => {
   return await db.select().from(exerciseSets)
 }
 
+const getExerciseSetById = async (id: number) => {
+  return await db.select().from(exerciseSets).where(eq(exerciseSets.exercise_set_id, id))
+}
+
 const getAllExerciseSetsByTemplateId = async (templateId: number) => {
   return await db.select().from(exerciseSets).where(eq(exerciseSets.template_id, templateId))
 }
@@ -37,6 +41,7 @@ const deleteExerciseSetByExerciseId = async (exerciseSetId: number) => {
 
 export default {
   getAllExerciseSets,
+  getExerciseSetById,
   getAllExerciseSetsByTemplateId,
   addExerciseSet,
   updateReps,
