@@ -12,6 +12,8 @@ import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler"
 import templateService from "@/services/template.service";
 import templateItemService from "@/services/templateItem.service";
 import exerciseSetService from "@/services/exerciseSet.service";
+import { useTabNavigation } from "@/hooks/useTabsNavigation";
+import historyService from "@/services/history.service";
 
 export default function WorkoutSession({route}: RootProps) {
 
@@ -23,6 +25,12 @@ export default function WorkoutSession({route}: RootProps) {
   const [templateName, setTemplateName] = useState<string>('')
   const [templateExercises, setTemplateExercises] = useState<Array<TemplateItem>>([])
   const [exercisesSets, setExercisesSets] = useState<Array<ExerciseSets>>([])
+  const [performedWorkout, setPerformedWorkout] = useState<Array<{
+    set_id: number,
+    template_item_id: number,
+    reps: number,
+    weight: number
+  }>>([])
 
   const fetchData = async () => {
     const nameOfTemplate = await templateService.getTemplateById(route.params.templateId)
@@ -42,7 +50,35 @@ export default function WorkoutSession({route}: RootProps) {
     return setWorkoutStarted(true)
   }
 
-  const onPressCancelWorkout = () => {
+  const onPressFinishWorkout = async () => {
+    if (!useTabNavigation.isReady()) return
+
+    setWorkoutStarted(false)
+    useTabNavigation.navigate('History')
+
+    await historyService.createHistory(templateName, `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`, route.params.templateId, '2024-07-30')
+
+    return onPressGoBack()
+  }
+
+  const onPressCheckSet = async (setId: number, templateItemId: number) => {
+    if (performedWorkout.some(workout => workout.set_id === setId)) {
+      const filter = performedWorkout.filter(item => item.set_id !== setId)
+      return setPerformedWorkout(filter)
+    }
+
+    const exerciseSetInfo = await exerciseSetService.getExerciseSetById(setId)
+    console.log(exerciseSetInfo)
+
+    return setPerformedWorkout([...performedWorkout, {
+      set_id: setId,
+      template_item_id: templateItemId,
+      reps: exerciseSetInfo[0].reps,
+      weight: exerciseSetInfo[0].weight
+    }])
+  }
+
+  const onPressCancelWorkout = () => {workoutStarted
     setWorkoutStarted(false)
 
     return onPressGoBack()
@@ -144,6 +180,7 @@ export default function WorkoutSession({route}: RootProps) {
           <Button
             disabled={!workoutStarted}
             mode="contained"
+            onPress={onPressFinishWorkout}
           >
             Finish
           </Button>
@@ -193,8 +230,8 @@ export default function WorkoutSession({route}: RootProps) {
                                 }}
                                 defaultValue={set.weight.toString()}
                                 onChangeText={(e) => onChangeWeight(set.exercise_set_id, e)}
-                                editable={workoutStarted}
-                                selectTextOnFocus={workoutStarted}
+                                editable={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
+                                selectTextOnFocus={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
                               />
                             </DataTable.Cell>
                             <DataTable.Cell>
@@ -205,15 +242,20 @@ export default function WorkoutSession({route}: RootProps) {
                                 }}
                                 defaultValue={set.reps.toString()}
                                 onChangeText={(e) => onChangeReps(set.exercise_set_id, e)}
-                                editable={workoutStarted}
-                                selectTextOnFocus={workoutStarted}
+                                editable={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
+                                selectTextOnFocus={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
                               />
                             </DataTable.Cell>
                             <DataTable.Cell>
-                              <BouncyCheckbox
-                                size={20}
-                                fillColor={systemTheme.colors.primary}
-                                disabled={!workoutStarted}
+                              <IconButton
+                                icon={
+                                  performedWorkout.some(workout => workout.set_id === set.exercise_set_id)
+                                  ? "checkbox-marked-circle"
+                                  : "checkbox-blank-circle-outline"
+                                }
+                                size={18}
+                                onPress={() => onPressCheckSet(set.exercise_set_id, set.template_item_id)}
+                                iconColor={systemTheme.colors.primary}
                               />
                             </DataTable.Cell>
                           </DataTable.Row>
