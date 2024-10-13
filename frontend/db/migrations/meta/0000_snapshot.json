@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "4efdf349-86c5-4056-b7fb-1d89fff1bd4e",
+  "id": "87e55c53-dd74-462e-b0fe-8dacafa753d6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Exercise": {
@@ -127,6 +127,141 @@
         "ExerciseSet_template_id_Template_template_id_fk": {
           "name": "ExerciseSet_template_id_Template_template_id_fk",
           "tableFrom": "ExerciseSet",
+          "tableTo": "Template",
+          "columnsFrom": [
+            "template_id"
+          ],
+          "columnsTo": [
+            "template_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "History": {
+      "name": "History",
+      "columns": {
+        "history_id": {
+          "name": "history_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "template_name": {
+          "name": "template_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "elapsed_time": {
+          "name": "elapsed_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "calories_burned": {
+          "name": "calories_burned",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "HistoryExercise": {
+      "name": "HistoryExercise",
+      "columns": {
+        "history_exercise_id": {
+          "name": "history_exercise_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "history_id": {
+          "name": "history_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "template_item_id": {
+          "name": "template_item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "template_id": {
+          "name": "template_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reps": {
+          "name": "reps",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weight": {
+          "name": "weight",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "HistoryExercise_history_id_History_history_id_fk": {
+          "name": "HistoryExercise_history_id_History_history_id_fk",
+          "tableFrom": "HistoryExercise",
+          "tableTo": "History",
+          "columnsFrom": [
+            "history_id"
+          ],
+          "columnsTo": [
+            "history_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "HistoryExercise_template_item_id_TemplateItem_template_item_id_fk": {
+          "name": "HistoryExercise_template_item_id_TemplateItem_template_item_id_fk",
+          "tableFrom": "HistoryExercise",
+          "tableTo": "TemplateItem",
+          "columnsFrom": [
+            "template_item_id"
+          ],
+          "columnsTo": [
+            "template_item_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "HistoryExercise_template_id_Template_template_id_fk": {
+          "name": "HistoryExercise_template_id_Template_template_id_fk",
+          "tableFrom": "HistoryExercise",
           "tableTo": "Template",
           "columnsFrom": [
             "template_id"
