@@ -1,4 +1,6 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { template } from "./template";
+import { templateItem } from "./templateItems";
 
 export const history = sqliteTable("History", {
   history_id: integer('history_id', {mode: 'number'}).primaryKey().notNull(),
@@ -11,8 +13,8 @@ export const history = sqliteTable("History", {
 export const historyExercise = sqliteTable("HistoryExercise", {
   history_exercise_id: integer('history_exercise_id', {mode: 'number'}).primaryKey().notNull(),
   history_id: integer('history_id', {mode: 'number'}).notNull().references(() => history.history_id),
-  exercise_id: integer('exercise_id', {mode: 'number'}).notNull(),
-  sets: integer('sets', {mode: 'number'}).notNull(),
+  template_item_id: integer('template_item_id', {mode: 'number'}).notNull().references(() => templateItem.template_item_id),
+  template_id: integer('template_id', {mode: 'number'}).notNull().references(() => template.template_id),
   reps: integer('reps', {mode: 'number'}).notNull(),
   weight: integer('weight', {mode: 'number'}).notNull()
 })
