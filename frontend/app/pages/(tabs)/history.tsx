@@ -1,26 +1,12 @@
 import useSystemTheme from "@/hooks/useSystemTheme"
-import historyService from "@/services/history.service"
-import { useEffect, useState } from "react"
+import { useHistoryStore } from "@/store/useHistoryStore"
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Icon } from "react-native-paper"
-
-type HistoryExercise = {
-  history_id: number,
-  template_name: string,
-  elapsed_time: string,
-  calories_burned: number,
-  date: string
-}
 
 const History = () => {
 
   const systemTheme = useSystemTheme()
-
-  const [history, setHistory] = useState<Array<HistoryExercise>>([])
-
-  useEffect(() => {
-    historyService.getAllHistory().then((data) => setHistory(data)).catch(console.error)
-  }, [])
+  const { history } = useHistoryStore();
 
   return (
     <View style={styles.container}>
