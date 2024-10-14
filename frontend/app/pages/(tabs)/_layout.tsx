@@ -15,6 +15,8 @@ import { TabsParamList } from '@/types/navigation';
 import useSystemTheme from '@/hooks/useSystemTheme';
 import { PaperProvider } from 'react-native-paper';
 import { useTabNavigation } from '@/hooks/useTabsNavigation';
+import { useHistoryStore } from '@/store/useHistoryStore';
+import { useExerciseStore } from '@/store/useExerciseStore';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -23,10 +25,17 @@ export default function TabsLayout() {
   const systemTheme = useSystemTheme()
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const { fetchHistory } = useHistoryStore()
+  const { fetchExercise } = useExerciseStore()
 
   useEffect(() => {
     const user = SecureStore.getItem('user')
-    if (!user) navigation.replace('Login')
+    if (!user) return navigation.replace('Login')
+  }, [])
+
+  useEffect(() => {
+    fetchHistory()
+    fetchExercise()
   }, [])
 
   return (
