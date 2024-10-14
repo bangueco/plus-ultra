@@ -1,50 +1,31 @@
 import { Alert, Modal, SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import CustomTextInput from "@/components/custom/CustomTextInput"
 import { equipment, muscle_group } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { Button, Dialog, Portal, Searchbar } from "react-native-paper"
-import {ExerciseInfo} from "@/types/exercise";
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import exerciseService from "@/services/exercise.service"
-import seed from "@/db/seed"
+import { useExerciseStore } from "@/store/useExerciseStore"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
+  const { addExercise, exercise } = useExerciseStore()
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, gifName: string }>({ name: '', instructions: '', gifName: '' });
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
-  const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
   const [visible, setVisible] = useState<boolean>(false)
 
   const [exerciseName, setExerciseName] = useState<string>('')
   const [muscleGroup, setMuscleGroup] = useState<string>('')
   const [equipmentName, setEquipmentName] = useState<string>('')
 
-  const fetchExercises = async () => {
-    return await exerciseService.getAllExercise()
-  }
-
-  useEffect(() => {
-    fetchExercises()
-    .then((data) => setExercises(data))
-    .catch(console.error)
-
-    // uncomment this for debugging purposes only!
-    // seed().then(() => console.log('Debugging: Table seeded')).catch(console.error)
-  }, [])
-
   const onPressNewExercise = async () => {
     try {
-      const insertExercise = await exerciseService.createExercise(exerciseName, muscleGroup, equipmentName)
-      const getInsertedExercise = await exerciseService.getExerciseById(insertExercise.lastInsertRowId)
-      if (getInsertedExercise) {
-        setVisibleModal(false)
-        return setExercises([...exercises, getInsertedExercise[0]])
-      }
+      return await addExercise(exerciseName, muscleGroup, equipmentName)
     } catch (error) {
       console.error(error)
     }
@@ -148,8 +129,8 @@ const Exercise = () => {
         </Dialog>
       </Portal>
       <SectionList
-        extraData={exercises}
-        sections={sortByMuscleGroup(exercises)}
+        extraData={exercise}
+        sections={sortByMuscleGroup(exercise)}
         renderItem={({item}) => (
           <CustomPressable 
             key={item.id} 

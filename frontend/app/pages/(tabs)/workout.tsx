@@ -4,7 +4,6 @@ import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
 import { Alert, Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
 import { Button, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
-import { ExerciseInfo } from "@/types/exercise"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import { useRootNavigation } from "@/hooks/useRootNavigation"
@@ -13,12 +12,13 @@ import templateService from "@/services/template.service"
 import templateItemService from "@/services/templateItem.service"
 import exerciseService from "@/services/exercise.service"
 import ViewExerciseInfo from "@/components/ViewExerciseInfo"
+import { useExerciseStore } from "@/store/useExerciseStore"
 
 
 const Workout = () => {
   const systemTheme = useSystemTheme()
+  const { exercise } = useExerciseStore()
 
-  const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
   const [selectedExercises, setSelectedExercises] = useState<Array<{exercise_id: number, item_name: string, muscleGroup: string}>>([])
 
   const [newTemplateVisible, setNewTemplateVisible] = useState<boolean>(false)
@@ -39,15 +39,6 @@ const Workout = () => {
     try {
       const templates = await templateService.getAllTemplate()
       return setWorkoutTemplates(templates)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const fetchExercises = async () => {
-    try {
-      const listOfExercises = await exerciseService.getAllExercise()
-      return setExercises(listOfExercises)
     } catch (error) {
       console.error(error)
     }
@@ -172,7 +163,6 @@ const Workout = () => {
 
   useEffect(() => {
     fetchTemplates().catch((error) => console.error(error))
-    fetchExercises().catch((error) => console.error(error))
   }, [])
 
   return (
@@ -274,8 +264,8 @@ const Workout = () => {
             <Dialog.Title style={{textAlign: 'center'}}>Exercises</Dialog.Title>
             <Dialog.Content style={{height: 350}}>
               <SectionList
-                extraData={exercises}
-                sections={sortByMuscleGroup(exercises)}
+                extraData={exercise}
+                sections={sortByMuscleGroup(exercise)}
                 renderItem={({item}) => (
                   <View key={item.id} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}>
                     <CustomPressable 
