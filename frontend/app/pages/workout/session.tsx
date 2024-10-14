@@ -12,12 +12,13 @@ import templateService from "@/services/template.service";
 import templateItemService from "@/services/templateItem.service";
 import exerciseSetService from "@/services/exerciseSet.service";
 import { useTabNavigation } from "@/hooks/useTabsNavigation";
-import historyService from "@/services/history.service";
 import historyExerciseService from "@/services/historyExercise.service";
+import { useHistoryStore } from "@/store/useHistoryStore";
 
 export default function WorkoutSession({route}: RootProps) {
 
   const systemTheme = useSystemTheme()
+  const { addHistory } = useHistoryStore()
 
   const [time, setTime] = useState(0);
   const [workoutStarted, setWorkoutStarted] = useState<boolean>(false)
@@ -57,22 +58,7 @@ export default function WorkoutSession({route}: RootProps) {
     setWorkoutStarted(false)
     useTabNavigation.navigate('History')
 
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-
-    const currentDate = new Date()
-
-    const workoutDate = `${days[currentDate.getDay()]}, ${months[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`
-
-    const history = await historyService.createHistory(
-      templateName,
-      `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
-      route.params.templateId,
-      workoutDate
-    )
+    const history = await addHistory(templateName, hours, minutes, seconds)
 
     const results = await Promise.allSettled(
       performedWorkout.map(async (workout) => {
