@@ -267,14 +267,20 @@ const Workout = () => {
                 extraData={exercise}
                 sections={sortByMuscleGroup(exercise)}
                 renderItem={({item}) => (
-                  <View key={item.id} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}>
-                    <CustomPressable 
-                      key={item.id} 
-                      text={item.name} 
-                      textStyle={{fontSize: 13, textAlign: 'center', color: systemTheme.colors.text}}
-                      buttonStyle={{backgroundColor: 'transparent', width: '80%'}}
+                  <Pressable key={item.id} style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border,
+                        backgroundColor: 'transparent',
+                      }}
                       onPress={() => onPressSelectExercise(item.id, item.name)}
-                    />
+                    >
+                    <Text
+                      style={{color: systemTheme.colors.text, width: '80%'}}
+                      numberOfLines={1}
+                    >
+                      {item.name}
+                    </Text>
                     {
                       selectedExercises.some(exercise => exercise.exercise_id === item.id)
                       ?
@@ -286,7 +292,7 @@ const Workout = () => {
                       :
                       <ViewExerciseInfo id={item.id} />
                     }
-                  </View>
+                  </Pressable>
                 )}
                 renderSectionHeader={({section: {title}}) => (
                   <View style={{padding: 5, marginTop: 30}}>
@@ -294,6 +300,7 @@ const Workout = () => {
                   </View>
                 )}
                 stickySectionHeadersEnabled={false}
+                showsVerticalScrollIndicator={false}
               />
             </Dialog.Content>
             <Dialog.Actions>
@@ -326,7 +333,7 @@ const Workout = () => {
                   workoutTemplates.filter((template) => template.custom === 1).map((template) => (
                   <Pressable
                     key={template.template_id}
-                    style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
+                    style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
                     onPress={() => onPressViewTemplate(template.template_id)}
                   >
                     <View
@@ -353,7 +360,7 @@ const Workout = () => {
                 workoutTemplates && workoutTemplates.filter((template) => template.custom === 0).map((template) => (
                   <Pressable
                     key={template.template_id}
-                    style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline}]}
+                    style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
                     onPress={() => onPressViewTemplate(template.template_id)}
                   >
                     <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
@@ -382,7 +389,7 @@ const styles = StyleSheet.create({
   templates: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start'
   },
   templateItem: {
     padding: 10,
@@ -397,7 +404,9 @@ const styles = StyleSheet.create({
     height: 105,
     padding: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: 3,
+    marginRight: 3
   }
 })
 
