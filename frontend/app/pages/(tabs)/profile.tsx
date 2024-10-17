@@ -24,7 +24,7 @@ const Profile = () => {
     setVisibleProfile(!visibleProfile)
     logout()
     if (useRootNavigation.isReady()) {
-      useRootNavigation.dispatch(StackActions.replace('Login'))
+      return useRootNavigation.navigate('Login')
     }
   }
 
