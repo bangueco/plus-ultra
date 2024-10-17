@@ -6,7 +6,7 @@ CREATE TABLE `Exercise` (
 	`custom` integer DEFAULT 0 NOT NULL,
 	`difficulty` text,
 	`instructions` text,
-	`gifName` text
+	`created_by` text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `ExerciseSet` (

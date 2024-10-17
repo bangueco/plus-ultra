@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "87e55c53-dd74-462e-b0fe-8dacafa753d6",
+  "id": "7aa99427-fcd1-4332-99bf-38e1775210e3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Exercise": {
@@ -57,11 +57,11 @@
           "notNull": false,
           "autoincrement": false
         },
-        "gifName": {
-          "name": "gifName",
+        "created_by": {
+          "name": "created_by",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },

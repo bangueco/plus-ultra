@@ -14,12 +14,13 @@ const getAllExerciseByEquipment = async (equipmentName: string) => {
   return await db.select().from(exercise).where(eq(exercise.equipment, equipmentName))
 }
 
-const createExercise = async (exerciseName: string, exerciseMuscleGroup: string, exerciseEquipment: string) => {
+const createExercise = async (exerciseName: string, exerciseMuscleGroup: string, exerciseEquipment: string, createdBy: string) => {
   return await db.insert(exercise).values({
     name: exerciseName,
     muscle_group: exerciseMuscleGroup,
     equipment: exerciseEquipment,
-    custom: 1
+    custom: 1,
+    created_by: createdBy
   })
 }
 
