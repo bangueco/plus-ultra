@@ -9,13 +9,16 @@ import { Button, Dialog, Portal, Searchbar } from "react-native-paper"
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import exerciseService from "@/services/exercise.service"
 import { useExerciseStore } from "@/store/useExerciseStore"
+import { useUserStore } from "@/store/useUserStore"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
   const { addExercise, exercise } = useExerciseStore()
 
+  const { user } = useUserStore()
+
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, gifName: string }>({ name: '', instructions: '', gifName: '' });
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string }>({ name: '', instructions: '' });
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
 
@@ -25,7 +28,7 @@ const Exercise = () => {
 
   const onPressNewExercise = async () => {
     try {
-      return await addExercise(exerciseName, muscleGroup, equipmentName)
+      return await addExercise(exerciseName, muscleGroup, equipmentName, `${user.username}`)
     } catch (error) {
       console.error(error)
     }
@@ -39,7 +42,6 @@ const Exercise = () => {
     setCurrentSelectedExercise({
       name: getExercise[0].name,
       instructions: getExercise[0].instructions ?? '',
-      gifName: getExercise[0].gifName ?? ''
     })
 
     setVisible(true)

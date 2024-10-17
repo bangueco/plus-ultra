@@ -2,11 +2,11 @@ import CustomBtn from "@/components/custom/CustomBtn"
 import { FontAwesome } from "@expo/vector-icons"
 import { useState } from "react"
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native"
-import * as SecureStore from "expo-secure-store";
 import { StackActions } from "@react-navigation/native"
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { Searchbar } from "react-native-paper"
 import { useRootNavigation } from "@/hooks/useRootNavigation";
+import { useUserStore } from "@/store/useUserStore";
 
 const Profile = () => {
   const systemTheme = useSystemTheme()
@@ -14,13 +14,15 @@ const Profile = () => {
 
   const [searchQuery, setSearchQuery] = useState<string>('')
 
+  const {logout} = useUserStore()
+
   const toggleProfileVisibility = () => {
     setVisibleProfile(!visibleProfile)
   }
 
   const logoutUser = async () => {
     setVisibleProfile(!visibleProfile)
-    await SecureStore.deleteItemAsync('user')
+    logout()
     if (useRootNavigation.isReady()) {
       useRootNavigation.dispatch(StackActions.replace('Login'))
     }

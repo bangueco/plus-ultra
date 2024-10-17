@@ -9,7 +9,7 @@ type State = {
 
 type Action = {
   fetchExercise: () => Promise<void>,
-  addExercise: (exerciseName: string, muscleGroup: string, equipmentName: string) => Promise<SQLiteRunResult>,
+  addExercise: (exerciseName: string, muscleGroup: string, equipmentName: string, createdBy: string) => Promise<SQLiteRunResult>,
 }
 
 export const useExerciseStore = create<State & Action>((set) => ({
@@ -22,8 +22,8 @@ export const useExerciseStore = create<State & Action>((set) => ({
       console.error(error)
     }
   },
-  addExercise: async (exerciseName, muscleGroup, equipmentName) => {
-    const newExercise = await exerciseService.createExercise(exerciseName, muscleGroup, equipmentName)
+  addExercise: async (exerciseName, muscleGroup, equipmentName, createdBy) => {
+    const newExercise = await exerciseService.createExercise(exerciseName, muscleGroup, equipmentName, createdBy)
 
     set((state) => ({
       exercise: [...state.exercise, {
@@ -32,6 +32,7 @@ export const useExerciseStore = create<State & Action>((set) => ({
         muscle_group: muscleGroup,
         equipment: equipmentName,
         custom: 1,
+        created_by: createdBy
       }]
     }))
 

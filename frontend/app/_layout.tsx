@@ -12,6 +12,8 @@ import useSystemTheme from '@/hooks/useSystemTheme';
 import { PaperProvider } from 'react-native-paper';
 import { useRootNavigation } from '@/hooks/useRootNavigation';
 import { useDrizzleStudioHelper } from '@/lib/drizzleClient';
+import { useUserStore } from '@/store/useUserStore';
+import { useEffect } from 'react';
 
 const Stack = createNativeStackNavigator<RootNativeStackParamList>()
 
@@ -19,6 +21,11 @@ export default function RootLayout() {
   useDrizzleStudioHelper()
 
   const systemTheme = useSystemTheme()
+  const { getUserInfo } = useUserStore()
+
+  useEffect(() => {
+    getUserInfo()
+  }, [])
 
   return (
     <PaperProvider theme={systemTheme}>
@@ -28,10 +35,10 @@ export default function RootLayout() {
           <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
           <Stack.Screen name="Register" component={Register} options={{headerShown: false}} />
           <Stack.Screen name="Tabs" component={TabsLayout} options={{headerShown: false}} />
-          <Stack.Screen name="WorkoutSession" 
+          <Stack.Screen name="WorkoutSession"
             component={WorkoutSession}
             initialParams={{templateId: 0}}
-            options={{headerShown: false, gestureEnabled: false}} 
+            options={{headerShown: false, gestureEnabled: false}}
           />
         </Stack.Navigator>
       </NavigationContainer>
