@@ -31,7 +31,7 @@ export default async function seed() {
         difficulty: e.difficulty,
         equipment: e.equipment,
         instructions: e.instructions,
-        gifName: e.gifName
+        created_by: e.createdBy
       });
     }));
 
