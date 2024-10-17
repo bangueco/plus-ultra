@@ -30,15 +30,14 @@ export default function RootLayout() {
   return (
     <PaperProvider theme={systemTheme}>
       <NavigationContainer theme={systemTheme} independent={true} ref={useRootNavigation}>
-        <Stack.Navigator>
-          <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false}} />
-          <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
-          <Stack.Screen name="Register" component={Register} options={{headerShown: false}} />
-          <Stack.Screen name="Tabs" component={TabsLayout} options={{headerShown: false}} />
+        <Stack.Navigator screenOptions={{gestureEnabled: false, headerShown: false}}>
+          <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Tabs" component={TabsLayout} />
           <Stack.Screen name="WorkoutSession"
             component={WorkoutSession}
             initialParams={{templateId: 0}}
-            options={{headerShown: false, gestureEnabled: false}}
           />
         </Stack.Navigator>
       </NavigationContainer>
