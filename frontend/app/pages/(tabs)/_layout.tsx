@@ -17,6 +17,7 @@ import { PaperProvider } from 'react-native-paper';
 import { useTabNavigation } from '@/hooks/useTabsNavigation';
 import { useHistoryStore } from '@/store/useHistoryStore';
 import { useExerciseStore } from '@/store/useExerciseStore';
+import { useUserStore } from '@/store/useUserStore';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -27,6 +28,7 @@ export default function TabsLayout() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { fetchHistory } = useHistoryStore()
   const { fetchExercise } = useExerciseStore()
+  const { getUserInfo } = useUserStore()
 
   useEffect(() => {
     const user = SecureStore.getItem('user')
@@ -36,6 +38,7 @@ export default function TabsLayout() {
   useEffect(() => {
     fetchHistory()
     fetchExercise()
+    getUserInfo()
   }, [])
 
   return (

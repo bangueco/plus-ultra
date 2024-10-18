@@ -73,8 +73,7 @@ export default function Login () {
       clearErrorMessage()
       const user: UserInfo = await authService.login(username, password)
       await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken)
-      navigation.replace('Tabs')
-      return Alert.alert('Login Succesfully')
+      return navigation.replace('Tabs')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
     }

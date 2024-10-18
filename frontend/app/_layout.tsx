@@ -21,11 +21,6 @@ export default function RootLayout() {
   useDrizzleStudioHelper()
 
   const systemTheme = useSystemTheme()
-  const { getUserInfo } = useUserStore()
-
-  useEffect(() => {
-    getUserInfo()
-  }, [])
 
   return (
     <PaperProvider theme={systemTheme}>
