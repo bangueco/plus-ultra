@@ -7,6 +7,7 @@ import useSystemTheme from "@/hooks/useSystemTheme";
 import * as SecureStore from 'expo-secure-store';
 import { useMigrationHelper } from "@/lib/drizzleClient";
 import seed from "@/db/seed";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const Welcome = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -29,9 +30,7 @@ const Welcome = () => {
 
   if (!success) {
     return (
-      <View>
-        <Text>Migration is in progress...</Text>
-      </View>
+      <LoadingScreen />
     );
   }
 
