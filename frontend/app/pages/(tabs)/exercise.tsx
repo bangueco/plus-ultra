@@ -1,69 +1,51 @@
 import { Alert, Modal, SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
-import { exercisesDatabase } from "@/database"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import CustomTextInput from "@/components/custom/CustomTextInput"
 import { equipment, muscle_group } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { Button, Dialog, Portal, Searchbar } from "react-native-paper"
-import {ExerciseInfo} from "@/types/exercise";
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
+import exerciseService from "@/services/exercise.service"
+import { useExerciseStore } from "@/store/useExerciseStore"
+import { useUserStore } from "@/store/useUserStore"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
+  const { addExercise, exercise } = useExerciseStore()
+
+  const { user } = useUserStore()
 
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{name: string, instructions: string, tutorialLink: string}>()
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string }>({ name: '', instructions: '' });
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
-  const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
   const [visible, setVisible] = useState<boolean>(false)
 
-  const [exerciseName, setExerciseName] = useState<String>()
-  const [equipmentName, setEquipmentName] = useState<String | null>()
-  const [muscleGroup, setMuscleGroup] = useState<String>()
-
-  useEffect(() => {
-    exercisesDatabase.db.getAllAsync<ExerciseInfo>('SELECT * FROM exercise;')
-    .then(data => {
-      setExercises(data)
-    })
-    .catch(error => console.error(error))
-  }, [])
+  const [exerciseName, setExerciseName] = useState<string>('')
+  const [muscleGroup, setMuscleGroup] = useState<string>('')
+  const [equipmentName, setEquipmentName] = useState<string>('')
 
   const onPressNewExercise = async () => {
     try {
-      const insertExercise = await exercisesDatabase.db.runAsync(`INSERT INTO exercise (name, equipment, muscleGroup) VALUES ('${exerciseName}', '${equipmentName}', '${muscleGroup}');`)
-      const getInsertedExercise = await exercisesDatabase.db.getFirstAsync<ExerciseInfo>(`SELECT * FROM exercise WHERE id=${insertExercise.lastInsertRowId};`)
-      if (getInsertedExercise) {
-        const updatedExerciseState: Array<ExerciseInfo> = [...exercises, getInsertedExercise]
-        setVisibleModal(false)
-        return setExercises(updatedExerciseState)
-      }
+      return await addExercise(exerciseName, muscleGroup, equipmentName, `${user.username}`)
     } catch (error) {
       console.error(error)
     }
   }
 
   const onPressSelectExercise = async (id: number) => {
+    const getExercise = await exerciseService.getExerciseById(id)
+
+    if (getExercise[0]?.custom === 1) return Alert.alert('This exercise is custom, you cannot view it.')
+
+    setCurrentSelectedExercise({
+      name: getExercise[0].name,
+      instructions: getExercise[0].instructions ?? '',
+    })
+
     setVisible(true)
-    const getExercise = await exercisesDatabase.db.getFirstAsync<{
-      name: string, 
-      instructions: string, 
-      tutorialLink: string}
-    >(`SELECT name, instructions, tutorialLink FROM exercise WHERE id='${id}'`)
-
-    if (getExercise) {
-      return setCurrentSelectedExercise({
-        ...currentSelectedExercise, 
-        name: getExercise.name, 
-        instructions: getExercise.instructions, 
-        tutorialLink: getExercise.tutorialLink
-      })
-    }
   }
-
-  // console.log(currentSelectedExercise)
 
   return (
     <View style={style.container}>
@@ -139,19 +121,18 @@ const Exercise = () => {
       </View>
       <Portal>
         <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-          <Dialog.Title style={{textAlign: 'center'}}>{currentSelectedExercise?.name}</Dialog.Title>
-          <Dialog.Content>
+          <Dialog.Title style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>{currentSelectedExercise?.name}</Dialog.Title>
+          <Dialog.Content style={{gap: 10}}>
             <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button>Add exercise</Button>
-            <Button onPress={() => setVisible(false)}>Exit</Button>
+            <Button onPress={() => setVisible(false)}>OK</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
       <SectionList
-        extraData={exercises}
-        sections={sortByMuscleGroup(exercises)}
+        extraData={exercise}
+        sections={sortByMuscleGroup(exercise)}
         renderItem={({item}) => (
           <CustomPressable 
             key={item.id} 

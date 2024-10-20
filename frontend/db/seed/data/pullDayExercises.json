@@ -1,0 +1,32 @@
+[
+  {
+    "exercise_id": 12,
+    "item_name": "Smith Machine Row",
+    "muscleGroup": "Back"
+  },
+  {
+    "exercise_id": 16,
+    "item_name": "Lat Pulldown",
+    "muscleGroup": "Back"
+  },
+  {
+    "exercise_id": 58,
+    "item_name": "Rope Pullover",
+    "muscleGroup": "Back"
+  },
+  {
+    "exercise_id": 59,
+    "item_name": "Reverse Pec Deck Fly",
+    "muscleGroup": "Shoulders"
+  },
+  {
+    "exercise_id": 31,
+    "item_name": "Dumbbell Bicep Curl",
+    "muscleGroup": "Arms"
+  },
+  {
+    "exercise_id": 32,
+    "item_name": "Hammer Curl (Dumbbell)",
+    "muscleGroup": "Arms"
+  }
+]

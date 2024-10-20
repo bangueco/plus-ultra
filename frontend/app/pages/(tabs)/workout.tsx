@@ -1,21 +1,24 @@
 import CustomPressable from "@/components/custom/CustomPressable"
-import { exercisesDatabase, templatesDatabase } from "@/database"
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
 import { useEffect, useState } from "react"
-import { Alert, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
-import { Button, Checkbox, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
-import { ExerciseInfo } from "@/types/exercise"
+import { Alert, Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
+import { Button, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
-import { StackActions } from "@react-navigation/native"
 import { useRootNavigation } from "@/hooks/useRootNavigation"
+import TemplateMenu from "@/components/TemplateMenu"
+import templateService from "@/services/template.service"
+import templateItemService from "@/services/templateItem.service"
+import exerciseService from "@/services/exercise.service"
+import ViewExerciseInfo from "@/components/ViewExerciseInfo"
+import { useExerciseStore } from "@/store/useExerciseStore"
 
 
 const Workout = () => {
   const systemTheme = useSystemTheme()
+  const { exercise } = useExerciseStore()
 
-  const [exercises, setExercises] = useState<Array<ExerciseInfo>>([])
   const [selectedExercises, setSelectedExercises] = useState<Array<{exercise_id: number, item_name: string, muscleGroup: string}>>([])
 
   const [newTemplateVisible, setNewTemplateVisible] = useState<boolean>(false)
@@ -24,27 +27,32 @@ const Workout = () => {
   const [templateVisible, setTemplateVisible] = useState<boolean>(false)
   const [guideVisible, setGuideVisible] = useState<boolean>(false)
   const [workoutTemplates, setWorkoutTemplates] = useState<Array<TemplatesType>>([])
-  const [currentTemplate, setCurrentTemplate] = useState<Array<TemplateItem>>([])
-  const [currentTemplateCustom, setCurrentTemplateCustom] = useState<boolean>(true)
+  const [currentTemplate, setCurrentTemplate] = useState<{
+    template_name: string, exercises: Array<TemplateItem>
+  }>({
+    template_name: '',
+    exercises: []
+  })
   const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string}>()
 
   const fetchTemplates = async () => {
     try {
-      const templates = await templatesDatabase.db.getAllAsync<TemplatesType>('SELECT * FROM templates;')
-      console.log('Templates fetched successfully')
+      const templates = await templateService.getAllTemplate()
       return setWorkoutTemplates(templates)
     } catch (error) {
       console.error(error)
     }
   }
 
-  const onPressSelectTemplate = async (id: number) => {
+  const onPressViewTemplate = async (id: number) => {
     try {
       setTemplateVisible(true)
-      const template = await templatesDatabase.db.getFirstAsync<{custom: string}>(`SELECT custom FROM templates WHERE template_id=${id}`)
-      template?.custom === 'true' ? setCurrentTemplateCustom(true) : setCurrentTemplateCustom(false)
-      const item = await templatesDatabase.db.getAllAsync<TemplateItem>(`SELECT * FROM template_items WHERE template_id=${id}`)
-      setCurrentTemplate(item)
+      const template_name = await templateService.getTemplateById(id)
+      const item = await templateItemService.getAllTemplateItemsById(id)
+      setCurrentTemplate({
+        template_name: template_name[0].template_name,
+        exercises: item
+      })
     } catch (error) {
       console.error(error)
     }
@@ -52,21 +60,15 @@ const Workout = () => {
 
   const onDismissTemplate = () => {
     setTemplateVisible(false)
-    setCurrentTemplate([])
+    setCurrentTemplate({template_name: '', exercises: []})
   }
 
   const onPressCreateTemplate = async () => {
     try {
-      const insertTemplate = await templatesDatabase.db.runAsync(`
-        INSERT INTO templates(template_name, custom) VALUES ('${newTemplate.template_name}', 'true');
-      `)
 
-      newTemplate.exercises.map(async (item) => {
-        return await templatesDatabase.db.execAsync(`
-          INSERT INTO template_items(item_name, muscleGroup, template_id, exercise_id)
-          VALUES ('${item.item_name}', '${item.muscleGroup}', '${insertTemplate.lastInsertRowId}', '${item.exercise_id}')
-        `)
-      })
+      const initTemplate = await templateService.createTemplate(newTemplate.template_name, true)
+
+      await templateItemService.createTemplateItem(initTemplate.lastInsertRowId, ...newTemplate.exercises)
 
       await fetchTemplates()
 
@@ -82,13 +84,9 @@ const Workout = () => {
 
   const onPressDeleteTemplate = async (id: number) => {
     try {
-      await templatesDatabase.db.runAsync(`
-        DELETE FROM templates WHERE template_id=${id}
-      `)
+      await templateService.deleteTemplate(id)
 
-      await templatesDatabase.db.runAsync(`
-        DELETE FROM template_items WHERE template_id=${id}
-      `)
+      await templateItemService.deleteItemsForTemplate(id)
 
       onDismissTemplate()
 
@@ -116,24 +114,23 @@ const Workout = () => {
       const filter = selectedExercises.filter(exercise => exercise.exercise_id !== id)
       return setSelectedExercises(filter)
     }
-    const exerciseMuscleGroup = await exercisesDatabase.db.getFirstAsync<{muscleGroup: string}>(`SELECT muscleGroup FROM exercise WHERE id=${id}`)
-    if (exerciseMuscleGroup) {
-      return setSelectedExercises([...selectedExercises, {exercise_id: id, item_name: name, muscleGroup: exerciseMuscleGroup.muscleGroup}])
+    const exercise = await exerciseService.getExerciseById(id)
+    if (exercise) {
+      return setSelectedExercises([...selectedExercises, {exercise_id: id, item_name: name, muscleGroup: exercise[0].muscle_group}])
     }
   }
 
   const onPressShowGuide = async (id: number) => {
     try {
       handleGuideShow()
-      const exercise = await exercisesDatabase.db.getFirstAsync<ExerciseInfo>(`SELECT * FROM exercise WHERE id=${id}`)
+      const exercise = await exerciseService.getExerciseById(id)
 
-      if (exercise && exercise.instructions) {
-        const {name, instructions} = exercise
-        return setCurrentGuide({name, instructions})
+      if (exercise && exercise[0].instructions) {
+        return setCurrentGuide({name: exercise[0].name, instructions: exercise[0].instructions})
       }
 
-      if (exercise && exercise.name) {
-        return setCurrentGuide({name: exercise.name})
+      if (exercise && exercise[0].name) {
+        return setCurrentGuide({name: exercise[0].name})
       }
     } catch (error) {
       console.error(error)
@@ -142,9 +139,9 @@ const Workout = () => {
 
   const onPressStartWorkout = () => {
     setTemplateVisible(false)
-    
+
     if (useRootNavigation.isReady()) {
-      return useRootNavigation.dispatch(StackActions.replace('WorkoutSession', {templateId: currentTemplate[0].template_id}))
+      return useRootNavigation.navigate('WorkoutSession', {templateId: currentTemplate.exercises[0].template_id})
     }
   }
 
@@ -165,15 +162,7 @@ const Workout = () => {
   }
 
   useEffect(() => {
-    fetchTemplates().then(() => console.log('Fetched successfully'))
-  }, [])
-
-  useEffect(() => {
-    exercisesDatabase.db.getAllAsync<ExerciseInfo>('SELECT * FROM exercise;')
-    .then(data => {
-      setExercises(data)
-    })
-    .catch(error => console.error(error))
+    fetchTemplates().catch((error) => console.error(error))
   }, [])
 
   return (
@@ -182,14 +171,14 @@ const Workout = () => {
         <Portal>
           {/* Show dialog for viewing templates */}
           <Dialog visible={templateVisible} onDismiss={onDismissTemplate}>
-            <Dialog.Title style={{textAlign: 'center'}}>Workout</Dialog.Title>
+            <Dialog.Title style={{textAlign: 'center'}}>{currentTemplate.template_name}</Dialog.Title>
             <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
               <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 25, marginTop: 5, maxHeight: 400}}>
                 {
-                  currentTemplate && currentTemplate.map(item => (
+                  currentTemplate && currentTemplate.exercises.map(item => (
                     <View
                       style={[styles.templateItem]}
-                      key={item.item_id}
+                      key={item.template_item_id}
                     >
                       <View style={{
                         justifyContent: 'flex-end'
@@ -203,9 +192,9 @@ const Workout = () => {
                           }}
                         numberOfLines={1}
                         >
-                          {item.item_name}
+                          {item.template_item_name}
                         </Text>
-                        <Text style={{color: systemTheme.colors.primary}}>{item.muscleGroup}</Text>
+                        <Text style={{color: systemTheme.colors.primary}}>{item.muscle_group}</Text>
                       </View>
                       <View>
                         <IconButton
@@ -222,11 +211,6 @@ const Workout = () => {
             </Dialog.ScrollArea>
             <Dialog.Actions>
               <Button onPress={onPressStartWorkout}>Start Workout</Button>
-              {
-                currentTemplateCustom
-                ? <Button onPress={() => onPressDeleteTemplate(currentTemplate[0].template_id)}>Delete Template</Button>
-                : null
-              }
             </Dialog.Actions>
           </Dialog>
           {/* Show pop up dialog for viewing exercise guides */}
@@ -280,25 +264,35 @@ const Workout = () => {
             <Dialog.Title style={{textAlign: 'center'}}>Exercises</Dialog.Title>
             <Dialog.Content style={{height: 350}}>
               <SectionList
-                extraData={exercises}
-                sections={sortByMuscleGroup(exercises)}
+                extraData={exercise}
+                sections={sortByMuscleGroup(exercise)}
                 renderItem={({item}) => (
-                  <View key={item.id} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}>
-                    <CustomPressable 
-                      key={item.id} 
-                      text={item.name} 
-                      textStyle={{fontSize: 13, textAlign: 'center', color: systemTheme.colors.text}} 
-                      buttonStyle={{backgroundColor: 'transparent'}}
+                  <Pressable key={item.id} style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border,
+                        backgroundColor: 'transparent',
+                      }}
                       onPress={() => onPressSelectExercise(item.id, item.name)}
-                    />
-                    <Icon
-                      source={
-                        selectedExercises.some(exercise => exercise.exercise_id === item.id) ? 'check-circle-outline' : 'circle-outline'
-                      }
-                      size={23}
-                      color={systemTheme.colors.primary}
-                    />
-                  </View>
+                    >
+                    <Text
+                      style={{color: systemTheme.colors.text, width: '80%'}}
+                      numberOfLines={1}
+                    >
+                      {item.name}
+                    </Text>
+                    {
+                      selectedExercises.some(exercise => exercise.exercise_id === item.id)
+                      ?
+                      <Icon
+                        source='check-circle'
+                        size={23}
+                        color={systemTheme.colors.primary}
+                      />
+                      :
+                      <ViewExerciseInfo id={item.id} />
+                    }
+                  </Pressable>
                 )}
                 renderSectionHeader={({section: {title}}) => (
                   <View style={{padding: 5, marginTop: 30}}>
@@ -306,6 +300,7 @@ const Workout = () => {
                   </View>
                 )}
                 stickySectionHeadersEnabled={false}
+                showsVerticalScrollIndicator={false}
               />
             </Dialog.Content>
             <Dialog.Actions>
@@ -320,92 +315,56 @@ const Workout = () => {
           </Dialog>
           {/* End of dialog */}
         </Portal>
-        <View>
-          <Text style={{color: systemTheme.colors.text, fontSize: 20}}>Start Workout</Text>
-        </View>
         <View style={{marginTop: 30, gap: 10, alignItems: 'center'}}>
-          <Text style={{color: systemTheme.colors.primary, fontSize: 17}}>Quick Start</Text>
+          <Text style={{color: systemTheme.colors.text, fontSize: 17}}>Start Workout</Text>
           <CustomPressable
             buttonStyle={{backgroundColor: systemTheme.colors.primary, borderRadius: 5, width: '90%'}}
             textStyle={{fontSize: 20, color: 'white'}}
-            text="Start an empty workout"
+            text="Add new template"
+            onPress={() => setNewTemplateVisible(true)}
           />
         </View>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.templateContainer}>
           <View style={{gap: 5, flexGrow: 1}}>
             <Text style={{color: systemTheme.colors.text, fontSize: 20}}># My templates</Text>
             <View style={styles.templates}>
-              <View
-                style={styles.templates}
-              >
-                <CustomPressable
-                  text="+"
-                  onPress={() => setNewTemplateVisible(true)}
-                  buttonStyle={{
-                    backgroundColor: 'transparent', 
-                    borderColor: systemTheme.colors.border, 
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    width: 110,
-                    height: 100,
-                  }}
-                  textStyle={{
-                    fontSize: 50,
-                    color: systemTheme.colors.text
-                  }}
-                />
-                {
-                  workoutTemplates && workoutTemplates.map((template) => (
-                    template.custom === 'true'
-                    ?
-                    <CustomPressable
-                      onPress={() => onPressSelectTemplate(template.template_id)}
-                      key={template.template_id}
-                      text={template.template_name}
-                      buttonStyle={{
-                        backgroundColor: 'transparent', 
-                        borderColor: systemTheme.colors.border, 
-                        borderWidth: 1,
-                        borderRadius: 5,
-                        width: 110,
-                        height: 100,
-                      }}
-                      textStyle={{
-                        fontSize: 14,
-                        color: systemTheme.colors.text
-                      }}
-                    />
-                    : null
-                  ))
-                }
-              </View>
+              {
+                workoutTemplates && workoutTemplates.filter((template) => template.custom === 1).length > 0 ? (
+                  workoutTemplates.filter((template) => template.custom === 1).map((template) => (
+                  <Pressable
+                    key={template.template_id}
+                    style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
+                    onPress={() => onPressViewTemplate(template.template_id)}
+                  >
+                    <View
+                      style={{position: 'absolute', top: -15, right: -10}}
+                    >
+                      <TemplateMenu
+                        editTemplate={() => {}}
+                        deleteTemplate={() => onPressDeleteTemplate(template.template_id)}
+                      />
+                    </View>
+                    <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
+                  </Pressable>
+                ))
+              ) : (
+                  <Text style={{color: systemTheme.colors.text}}>No custom templates</Text>
+                )
+              }
             </View>
           </View>
           <View style={{gap: 5, flexGrow: 1}}>
             <Text style={{color: systemTheme.colors.text, fontSize: 20}}># Example templates</Text>
             <View style={styles.templates}>
               {
-                workoutTemplates && workoutTemplates.map((template) => (
-                  template.custom === 'false'
-                  ?
-                  <CustomPressable
-                    onPress={() => onPressSelectTemplate(template.template_id)}
+                workoutTemplates && workoutTemplates.filter((template) => template.custom === 0).map((template) => (
+                  <Pressable
                     key={template.template_id}
-                    text={template.template_name}
-                    buttonStyle={{
-                      backgroundColor: 'transparent', 
-                      borderColor: systemTheme.colors.border, 
-                      borderWidth: 1,
-                      borderRadius: 5,
-                      width: 110,
-                      height: 100,
-                    }}
-                    textStyle={{
-                      fontSize: 14,
-                      color: systemTheme.colors.text
-                    }}
-                  />
-                  : null
+                    style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
+                    onPress={() => onPressViewTemplate(template.template_id)}
+                  >
+                    <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
+                  </Pressable>
                 ))
               }
             </View>
@@ -428,14 +387,26 @@ const styles = StyleSheet.create({
     paddingBottom: 125
   },
   templates: {
-    flexDirection: 'row', 
-    gap: 15, 
+    flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'flex-start'
   },
   templateItem: {
     padding: 10,
     flexDirection: 'row',
     gap: 10,
+  },
+  templateContainerStyle: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 110,
+    height: 105,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 3,
+    marginRight: 3
   }
 })
 

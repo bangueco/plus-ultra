@@ -1,16 +1,19 @@
-version: '3.8'
-
 services:
   database:
-    image: "postgres:latest"
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: dev-db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: admin
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_DB: dev
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: root
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    command: -c 'config_file=/etc/postgresql/postgresql.conf'
+    networks:
+      - default
 
 volumes:
-  postgres_data
+  postgres_data:

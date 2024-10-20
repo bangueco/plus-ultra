@@ -52,6 +52,10 @@ export default function Register () {
       } else if (error.response.data.field === 'email') {
         setEmailErrorMessage(error.response.data.message)
       }
+    } else if (error instanceof AxiosError) {
+      Alert.alert(error.message)
+    } else {
+      Alert.alert('Unknown error has occured')
     }
   }
 

@@ -3,26 +3,43 @@ import CustomPressable from "@/components/custom/CustomPressable";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { useEffect } from "react";
-import { exercisesDatabase, templatesDatabase } from "@/database";
 import useSystemTheme from "@/hooks/useSystemTheme";
 import * as SecureStore from 'expo-secure-store';
+import { useMigrationHelper } from "@/lib/drizzleClient";
+import seed from "@/db/seed";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const Welcome = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const {colors} = useSystemTheme()
 
-  // Initialize database here
-
   useEffect(() => {
-    const setup = async () => {
-      await templatesDatabase.seed()
-      return await exercisesDatabase.seed()
-    }
     const user = SecureStore.getItem('user')
     if (user) return navigation.replace('Tabs')
-
-    setup()
   }, [])
+
+  const { success, error } = useMigrationHelper();
+
+  if (error) {
+    return (
+      <View>
+        <Text>Migration error: {error.message}</Text>
+      </View>
+    );
+  }
+
+  if (!success) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
+  if (success) {
+    // If migration is successful, seed the database
+    seed()
+    .then(() => console.log('Table seeded'))
+    .catch(console.error)
+  }
 
   return (
     <View style={style.container}>

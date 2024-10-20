@@ -1,19 +1,24 @@
-import { templatesDatabase } from "@/database";
 import { RootProps, useRootNavigation } from "@/hooks/useRootNavigation";
 import useSystemTheme from "@/hooks/useSystemTheme";
 import { ExerciseSets, TemplateItem } from "@/types/templates";
-import { StackActions } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import { StyleSheet } from "react-native";
 import { Button, Dialog, IconButton, Portal } from 'react-native-paper';
 import { DataTable } from 'react-native-paper';
-import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
+
+import templateService from "@/services/template.service";
+import templateItemService from "@/services/templateItem.service";
+import exerciseSetService from "@/services/exerciseSet.service";
+import { useTabNavigation } from "@/hooks/useTabsNavigation";
+import historyExerciseService from "@/services/historyExercise.service";
+import { useHistoryStore } from "@/store/useHistoryStore";
 
 export default function WorkoutSession({route}: RootProps) {
 
   const systemTheme = useSystemTheme()
+  const { addHistory } = useHistoryStore()
 
   const [time, setTime] = useState(0);
   const [workoutStarted, setWorkoutStarted] = useState<boolean>(false)
@@ -21,12 +26,76 @@ export default function WorkoutSession({route}: RootProps) {
   const [templateName, setTemplateName] = useState<string>('')
   const [templateExercises, setTemplateExercises] = useState<Array<TemplateItem>>([])
   const [exercisesSets, setExercisesSets] = useState<Array<ExerciseSets>>([])
+  const [performedWorkout, setPerformedWorkout] = useState<Array<{
+    set_id: number,
+    template_item_id: number
+    template_id: number,
+    reps: number,
+    weight: number
+  }>>([])
+
+  const fetchData = async () => {
+    const nameOfTemplate = await templateService.getTemplateById(route.params.templateId)
+
+    const exercisesOfTemplate = await templateItemService.getAllTemplateItemsById(route.params.templateId)
+
+    const setsOfExercises = await exerciseSetService.getAllExerciseSetsByTemplateId(route.params.templateId)
+
+    if (nameOfTemplate && exercisesOfTemplate && setsOfExercises) {
+      setTemplateName(nameOfTemplate[0]?.template_name)
+      setTemplateExercises(exercisesOfTemplate)
+      setExercisesSets(setsOfExercises)
+    }
+  }
 
   const onPressStartWorkout = () => {
     return setWorkoutStarted(true)
   }
 
-  const onPressCancelWorkout = () => {
+  const onPressFinishWorkout = async () => {
+    if (!useTabNavigation.isReady()) return
+
+    setWorkoutStarted(false)
+    useTabNavigation.navigate('History')
+
+    const history = await addHistory(templateName, hours, minutes, seconds)
+
+    const results = await Promise.allSettled(
+      performedWorkout.map(async (workout) => {
+        await historyExerciseService.createHistoryExercise(
+          history.lastInsertRowId,
+          workout.template_item_id,
+          workout.template_id,
+          workout.reps,
+          workout.weight)
+      })
+    )
+
+    console.log(results)
+
+    return onPressGoBack()
+  }
+
+  console.log(performedWorkout)
+
+  const onPressCheckSet = async (setId: number, templateItemId: number, templateId: number) => {
+    if (performedWorkout.some(workout => workout.set_id === setId)) {
+      const filter = performedWorkout.filter(item => item.set_id !== setId)
+      return setPerformedWorkout(filter)
+    }
+
+    const exerciseSetInfo = await exerciseSetService.getExerciseSetById(setId)
+
+    return setPerformedWorkout([...performedWorkout, {
+      set_id: setId,
+      template_item_id: templateItemId,
+      template_id: templateId,
+      reps: exerciseSetInfo[0].reps,
+      weight: exerciseSetInfo[0].weight
+    }])
+  }
+
+  const onPressCancelWorkout = () => {workoutStarted
     setWorkoutStarted(false)
 
     return onPressGoBack()
@@ -34,20 +103,16 @@ export default function WorkoutSession({route}: RootProps) {
 
   const onPressGoBack = () => {
     if (useRootNavigation.isReady()) {
-      return useRootNavigation.dispatch(StackActions.replace('Tabs'))
+      return useRootNavigation.goBack()
     }
   }
 
   const onPressAddSet = async (template_id: number, item_id: number) => {
-    const newSet = await templatesDatabase.db.runAsync(`
-      INSERT INTO exercise_sets(reps, weight, item_id, template_id)
-
-      VALUES (0, 0, ${item_id}, ${template_id});
-    `)
+    const newSet = await exerciseSetService.addExerciseSet(0, 0, item_id, template_id)
 
     return setExercisesSets([...exercisesSets, {
-      id: newSet.lastInsertRowId,
-      item_id,
+      exercise_set_id: newSet.lastInsertRowId,
+      template_item_id: item_id,
       template_id,
       reps: 0,
       weight: 0
@@ -55,37 +120,21 @@ export default function WorkoutSession({route}: RootProps) {
   }
 
   const onPressDeleteSet = async (id: number) => {
-    await templatesDatabase.db.runAsync(`DELETE FROM exercise_sets WHERE id=${id}`)
+    await exerciseSetService.deleteExerciseSetByExerciseId(id)
 
-    return setExercisesSets(exercisesSets.filter(set => set.id !== id))
+    return setExercisesSets(exercisesSets.filter(set => set.exercise_set_id !== id))
   }
 
   const onChangeWeight = async (id: number, value: string) => {
-    return await templatesDatabase.db.runAsync(`UPDATE exercise_sets SET weight = ${value} WHERE id=${id}`)
+    return await exerciseSetService.updateWeight(id, parseInt(value))
   }
 
   const onChangeReps = async (id: number, value: string) => {
-    return await templatesDatabase.db.runAsync(`UPDATE exercise_sets SET reps = ${value} WHERE id=${id}`)
+    return await exerciseSetService.updateReps(id, parseInt(value))
   }
 
   useEffect(() => {
-    const nameOfTemplate = templatesDatabase.db.getFirstSync<{template_name: string}>(`SELECT template_name 
-      FROM templates WHERE template_id=${route.params.templateId}
-    `)
-
-    const exercisesOfTemplate = templatesDatabase.db.getAllSync<TemplateItem>(`SELECT * FROM template_items 
-      WHERE template_id=${route.params.templateId}
-    `)
-
-    const setsOfExercises = templatesDatabase.db.getAllSync<ExerciseSets>(`SELECT * FROM exercise_sets 
-      WHERE template_id=${route.params.templateId}
-    `)
-
-    if (nameOfTemplate && exercisesOfTemplate && setsOfExercises) {
-      setTemplateName(nameOfTemplate?.template_name)
-      setTemplateExercises(exercisesOfTemplate)
-      setExercisesSets(setsOfExercises)
-    }
+    fetchData().then(() => console.log('Data fetched'))
   }, [])
 
   useEffect(() => {
@@ -94,7 +143,7 @@ export default function WorkoutSession({route}: RootProps) {
       intervalId = setInterval(() => {
         setTime(prevTime => prevTime + 1);
       }, 1000);
-    } 
+    }
     return () => clearInterval(intervalId);
   }, [workoutStarted, time]);
 
@@ -142,12 +191,13 @@ export default function WorkoutSession({route}: RootProps) {
         </View>
         <Text style={{fontSize: 18, color: systemTheme.colors.text}}>
           {hours}:{minutes.toString().padStart(2, "0")}:
-          {seconds.toString().padStart(2, "0")}:
+          {seconds.toString().padStart(2, "0")}
         </Text>
         <View>
           <Button
             disabled={!workoutStarted}
             mode="contained"
+            onPress={onPressFinishWorkout}
           >
             Finish
           </Button>
@@ -161,7 +211,7 @@ export default function WorkoutSession({route}: RootProps) {
           {
             templateExercises && templateExercises.map((exercise, index) => (
               <View key={index}>
-                <Text style={{color: systemTheme.colors.primary, fontSize: 15}}>{index + 1}. {exercise.item_name}</Text>
+                <Text style={{color: systemTheme.colors.primary, fontSize: 15}}>{index + 1}. {exercise.template_item_name}</Text>
                 <DataTable style={{paddingBottom: 30}}>
                   <DataTable.Header>
                     <DataTable.Title>Sets</DataTable.Title>
@@ -171,15 +221,15 @@ export default function WorkoutSession({route}: RootProps) {
                   </DataTable.Header>
                   <GestureHandlerRootView>
                     {
-                      exercisesSets && exercisesSets.filter(set => set.item_id === exercise.item_id).map((set, index) => (
+                      exercisesSets && exercisesSets.filter(set => set.template_item_id === exercise.template_item_id).map((set, index) => (
                         <Swipeable
-                          key={set.id}
+                          key={set.exercise_set_id}
                           renderRightActions={() => (
                             <View>
                               <IconButton
                                 mode="contained"
                                 icon="trash-can"
-                                onPress={() => onPressDeleteSet(set.id)}
+                                onPress={() => onPressDeleteSet(set.exercise_set_id)}
                                 size={15}
                                 iconColor="red"
                               />
@@ -187,7 +237,7 @@ export default function WorkoutSession({route}: RootProps) {
                           )}
                           enabled={workoutStarted}
                         >
-                          <DataTable.Row key={set.id}>
+                          <DataTable.Row key={set.exercise_set_id}>
                             <DataTable.Cell>{index + 1}</DataTable.Cell>
                             <DataTable.Cell>
                               <TextInput
@@ -196,9 +246,9 @@ export default function WorkoutSession({route}: RootProps) {
                                   textAlign: 'center', borderColor: systemTheme.colors.primary
                                 }}
                                 defaultValue={set.weight.toString()}
-                                onChangeText={(e) => onChangeWeight(set.id, e)}
-                                editable={workoutStarted}
-                                selectTextOnFocus={workoutStarted}
+                                onChangeText={(e) => onChangeWeight(set.exercise_set_id, e)}
+                                editable={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
+                                selectTextOnFocus={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
                               />
                             </DataTable.Cell>
                             <DataTable.Cell>
@@ -208,16 +258,21 @@ export default function WorkoutSession({route}: RootProps) {
                                   textAlign: 'center', borderColor: systemTheme.colors.primary
                                 }}
                                 defaultValue={set.reps.toString()}
-                                onChangeText={(e) => onChangeReps(set.id, e)}
-                                editable={workoutStarted}
-                                selectTextOnFocus={workoutStarted}
+                                onChangeText={(e) => onChangeReps(set.exercise_set_id, e)}
+                                editable={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
+                                selectTextOnFocus={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
                               />
                             </DataTable.Cell>
                             <DataTable.Cell>
-                              <BouncyCheckbox
-                                size={20}
-                                fillColor={systemTheme.colors.primary}
-                                disabled={!workoutStarted}
+                              <IconButton
+                                icon={
+                                  performedWorkout.some(workout => workout.set_id === set.exercise_set_id)
+                                  ? "checkbox-marked-circle"
+                                  : "checkbox-blank-circle-outline"
+                                }
+                                size={18}
+                                onPress={() => onPressCheckSet(set.exercise_set_id, set.template_item_id, set.template_id)}
+                                iconColor={systemTheme.colors.primary}
                               />
                             </DataTable.Cell>
                           </DataTable.Row>
@@ -226,7 +281,7 @@ export default function WorkoutSession({route}: RootProps) {
                     }
                   </GestureHandlerRootView>
                 </DataTable>
-                <Button disabled={!workoutStarted} mode="contained" onPress={() => onPressAddSet(exercise.template_id, exercise.item_id)}>
+                <Button disabled={!workoutStarted} mode="contained" onPress={() => onPressAddSet(exercise.template_id, exercise.template_item_id)}>
                   Add set
                 </Button>
               </View>

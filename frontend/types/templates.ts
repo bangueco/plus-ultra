@@ -1,23 +1,22 @@
 export type TemplatesType = {
   template_id: number,
   template_name: string,
-  custom: string
+  custom: number | null
 }
 
 export type TemplateItem = {
-  item_id: number,
-  item_name: string,
-  muscleGroup: string,
+  template_item_id: number,
+  template_item_name: string,
+  muscle_group: string,
   template_id: number,
   exercise_id: number,
-  custom: string
 }
 
 export type ExerciseSets = {
-  id: number,
+  exercise_set_id: number,
   reps: number,
   weight: number,
-  item_id: number,
+  template_item_id: number,
   template_id: number
 }
 

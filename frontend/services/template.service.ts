@@ -1,23 +1,41 @@
-import { exercisesDatabase, templatesDatabase } from "@/database";
-import { NewTemplateItem } from "@/types/templates";
+import { template, } from "@/db/schema/template";
+import { db } from "@/lib/drizzleClient";
+import { eq } from "drizzle-orm";
 
-const createTemplate = async (template: NewTemplateItem) => {
-  // initialize creating template
-  const initTemplate = await templatesDatabase.db.runAsync(`
-    INSERT INTO templates(template_name, custom) 
-    VALUES (${template.template_name}, 'true');`
-  )
+const getAllTemplate = async () => {
+  return await db.select().from(template)
+}
 
-  // insert all exercises
-  const insertExercises = template.exercises.map(async exercise => {
-    const getMuscleGroup = await exercisesDatabase.db.getFirstAsync<{muscleGroup: string}>(`SELECT muscleGroup FROM exercise WHERE id=${exercise.exercise_id}`)
-    await templatesDatabase.db.runAsync(`
-      INSERT INTO template_items(item_name, muscleGroup, template_id, exercise_id)
-      VALUES ('${template.template_name}', '${getMuscleGroup?.muscleGroup}')`
-    )
+const getTemplateById = async (templateId: number) => {
+  return await db.select().from(template).where(eq(template.template_id, templateId))
+}
+
+const createTemplate = async (templateName: string, custom: boolean) => {
+  return await db.insert(template).values({
+    template_name: templateName,
+    custom: custom ? 1 : 0
   })
 }
 
-export {
-  createTemplate
+const updateTemplate = async (templateId: number, templateName: string) => {
+  return await db.update(template).set({
+    template_name: templateName
+  }).where(eq(template.template_id, templateId))
+}
+
+const deleteTemplate = async (templateId: number) => {
+  return await db.delete(template).where(eq(template.template_id, templateId))
+}
+
+const deleteAllTemplate = async () => {
+  return await db.delete(template)
+}
+
+export default {
+  getAllTemplate,
+  getTemplateById,
+  createTemplate,
+  updateTemplate,
+  deleteTemplate,
+  deleteAllTemplate
 }
