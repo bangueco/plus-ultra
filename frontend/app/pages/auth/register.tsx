@@ -12,6 +12,18 @@ import ErrorMessage from "@/components/custom/ErrorMessage";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { TextInput } from "react-native-paper";
 
+import * as SecureStore from 'expo-secure-store'
+import asyncStore from "@/lib/asyncStore";
+import { useRootNavigation } from "@/hooks/useRootNavigation";
+
+type UserInfo = {
+  id: number,
+  username: string,
+  email: string,
+  accessToken: string,
+  refreshToken: string
+}
+
 export default function Register () {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { colors } = useTheme();
@@ -64,8 +76,11 @@ export default function Register () {
       clearErrorMessage()
       if (password !== confirmPassword) return setConfirmPasswordErrorMessage('Passwords must be identical to each other.')
       await authService.register(username, email, password)
-      navigation.replace('Login')
-      return Alert.alert('Registered Successfully')
+      // TODO: Automatic login when registered user, but before that, navigate to setup page.
+      const userInfo: UserInfo = await authService.login(username, password)
+      await SecureStore.setItemAsync('user', JSON.stringify(userInfo))
+      await asyncStore.setItem('firstTimeSetup', true)
+      return useRootNavigation.navigate('Disclaimer')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
     }
