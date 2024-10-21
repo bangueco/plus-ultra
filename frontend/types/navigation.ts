@@ -4,6 +4,8 @@ type RootNativeStackParamList = {
   Register: undefined;
   Tabs: undefined;
   WorkoutSession: {templateId: number}
+  Disclaimer: undefined
+  UserInfo: undefined
 };
 
 type TabsParamList = {

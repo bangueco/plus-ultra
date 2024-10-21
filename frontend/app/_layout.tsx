@@ -6,14 +6,14 @@ import Login from './pages/auth/login';
 import Register from './pages/auth/register';
 import TabsLayout from './pages/(tabs)/_layout';
 import WorkoutSession from './pages/workout/session';
+import Disclaimer from './pages/setup/disclaimer';
+import UserInfo from './pages/setup/user-info';
 
 import { RootNativeStackParamList } from '@/types/navigation';
 import useSystemTheme from '@/hooks/useSystemTheme';
 import { PaperProvider } from 'react-native-paper';
 import { useRootNavigation } from '@/hooks/useRootNavigation';
 import { useDrizzleStudioHelper } from '@/lib/drizzleClient';
-import { useUserStore } from '@/store/useUserStore';
-import { useEffect } from 'react';
 
 const Stack = createNativeStackNavigator<RootNativeStackParamList>()
 
@@ -25,7 +25,7 @@ export default function RootLayout() {
   return (
     <PaperProvider theme={systemTheme}>
       <NavigationContainer theme={systemTheme} independent={true} ref={useRootNavigation}>
-        <Stack.Navigator screenOptions={{gestureEnabled: false, headerShown: false}}>
+        <Stack.Navigator screenOptions={{gestureEnabled: false, headerShown: false, }}>
           <Stack.Screen name="Welcome" component={Welcome} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Register" component={Register} />
@@ -34,6 +34,8 @@ export default function RootLayout() {
             component={WorkoutSession}
             initialParams={{templateId: 0}}
           />
+          <Stack.Screen name="Disclaimer" component={Disclaimer}/>
+          <Stack.Screen name="UserInfo" component={UserInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
