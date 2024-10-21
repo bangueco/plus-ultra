@@ -14,7 +14,14 @@ const muscle_group = [
   {label: "Core", value: 'Core'},
 ]
 
+const fitnessLevel = [
+  {label: "Beginner", value: "Beginner"},
+  {label: "Intermediate", value: "Intermediate"},
+  {label: "Advanced", value: "Advanced"}
+]
+
 export {
   equipment,
-  muscle_group
+  muscle_group,
+  fitnessLevel
 }
