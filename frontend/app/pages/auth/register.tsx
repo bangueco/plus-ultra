@@ -32,9 +32,11 @@ export default function Register () {
   const [email, setEmail] = useState<string | undefined>(undefined)
   const [password, setPassword] = useState<string | undefined>(undefined)
   const [confirmPassword, setConfirmPassword] = useState<string | undefined>(undefined)
+  const [age, setAge] = useState<string | undefined>(undefined)
 
   const [usernameErrorMessage, setUsernameErrorMessage] = useState<string>('')
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>('')
+  const [ageErrorMessage, setAgeErrorMessage] = useState<string>('')
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState<string>('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('')
 
@@ -55,6 +57,8 @@ export default function Register () {
           setEmailErrorMessage(data.message)
         } else if (data.field === 'password') {
           setPasswordErrorMessage(data.message)
+        } else if (data.field === 'age') {
+          setAgeErrorMessage(data.message)
         }
       })
     } else if (error instanceof AxiosError && error.response?.data) {
@@ -75,11 +79,11 @@ export default function Register () {
     try {
       clearErrorMessage()
       if (password !== confirmPassword) return setConfirmPasswordErrorMessage('Passwords must be identical to each other.')
-      await authService.register(username, email, password)
+      await authService.register(username, email, password, Number(age))
       // TODO: Automatic login when registered user, but before that, navigate to setup page.
       const userInfo: UserInfo = await authService.login(username, password)
       await SecureStore.setItemAsync('user', JSON.stringify(userInfo))
-      await asyncStore.setItem('firstTimeSetup', true)
+      await asyncStore.setItem('preferences', {firstTime: true, darkMode: false})
       return useRootNavigation.navigate('Disclaimer')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
@@ -116,6 +120,15 @@ export default function Register () {
               onChangeText={handleChangeText(setEmail)}
             />
             {emailErrorMessage && <ErrorMessage text={emailErrorMessage} />}
+          </View>
+          <View style={{padding: 3}}>
+            <TextInput
+              mode="outlined"
+              label="Age"
+              left={<TextInput.Icon icon="format-list-numbered" />}
+              onChangeText={handleChangeText(setAge)}
+            />
+            {ageErrorMessage && <ErrorMessage text={ageErrorMessage} />}
           </View>
           <View style={{padding: 3}}>
             <TextInput

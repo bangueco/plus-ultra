@@ -19,7 +19,8 @@ type UserInfo = {
   username: string,
   email: string,
   accessToken: string,
-  refreshToken: string
+  refreshToken: string,
+  age: number
 }
 
 export default function Login () {
@@ -33,8 +34,8 @@ export default function Login () {
   const [passwordErrorMessage, setPasswordErrorMessage] =  useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
 
-  const saveUserInfo = async (id: number, email: string, username: string, accessToken: string, refreshToken: string) => {
-    return await SecureStore.setItemAsync('user', JSON.stringify({id, username, email, accessToken, refreshToken}))
+  const saveUserInfo = async (id: number, email: string, username: string, accessToken: string, refreshToken: string, age: number) => {
+    return await SecureStore.setItemAsync('user', JSON.stringify({id, username, email, accessToken, refreshToken, age}))
   }
 
   const clearErrorMessage = () => {
@@ -72,7 +73,7 @@ export default function Login () {
     try {
       clearErrorMessage()
       const user: UserInfo = await authService.login(username, password)
-      await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken)
+      await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken, user.age)
       return navigation.replace('Tabs')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
