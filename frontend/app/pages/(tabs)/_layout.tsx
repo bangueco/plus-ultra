@@ -18,8 +18,14 @@ import { useTabNavigation } from '@/hooks/useTabsNavigation';
 import { useHistoryStore } from '@/store/useHistoryStore';
 import { useExerciseStore } from '@/store/useExerciseStore';
 import { useUserStore } from '@/store/useUserStore';
+import asyncStore from '@/lib/asyncStore';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
+
+type Preferences = {
+  firstTime: boolean,
+  darkMode: boolean
+}
 
 export default function TabsLayout() {
 
@@ -33,6 +39,20 @@ export default function TabsLayout() {
   useEffect(() => {
     const user = SecureStore.getItem('user')
     if (!user) return navigation.replace('Login')
+  }, [])
+
+  useEffect(() => {
+    const isFirstTime = async () => {
+
+      const firstTime = await asyncStore.getItem('preferences')
+      if (!firstTime) return
+      const parsed: Preferences = JSON.parse(firstTime)
+
+      if (parsed.firstTime) return navigation.replace('Disclaimer')
+    }
+
+    isFirstTime()
+
   }, [])
 
   useEffect(() => {
