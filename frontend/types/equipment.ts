@@ -1,8 +1,6 @@
-type EquipmentExercises = {
-  equipment_name: string
-  exercises: Array<{id: number, title: string}>
-}
+import { ExerciseInfo } from "./exercise"
 
-export {
-  EquipmentExercises
+export type EquipmentExercises = {
+  equipment_name: string
+  exercises: Array<ExerciseInfo>
 }
