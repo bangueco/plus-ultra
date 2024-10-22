@@ -1,17 +1,20 @@
+import { ExerciseInfo } from "@/types/exercise";
 import exerciseService from "./exercise.service";
+import { EquipmentExercises } from "@/types/equipment";
 
-interface Exercises {
-  id: number
-  name: string
-}
+const getExercisesFromEquipment = async (equipment_name: string): Promise<EquipmentExercises> => {
+  const exercisesOfEquipment: Array<ExerciseInfo> = await exerciseService.getAllExerciseByEquipment(equipment_name)
 
-const getExercisesFromEquipment = async(equipment_name: string) => {
-  const exercisesOfEquipment = await exerciseService.getAllExerciseByEquipment(equipment_name)
-
-  const exercises = exercisesOfEquipment.map(exercise => {
+  const exercises: Array<ExerciseInfo> = exercisesOfEquipment.map(exercise => {
     return {
-      id: exercise.exercise_id,
-      title: exercise.name
+      exercise_id: exercise.exercise_id,
+      name: exercise.name,
+      instructions: exercise.instructions,
+      difficulty: exercise.difficulty,
+      custom: exercise.custom,
+      equipment: exercise.equipment,
+      created_by: exercise.created_by,
+      muscle_group: exercise.muscle_group
     }
   })
 
