@@ -24,7 +24,8 @@ const Tab = createBottomTabNavigator<TabsParamList>();
 
 type Preferences = {
   firstTime: boolean,
-  darkMode: boolean
+  darkMode: boolean,
+  userFitnessLevel: string
 }
 
 export default function TabsLayout() {
@@ -45,7 +46,9 @@ export default function TabsLayout() {
     const isFirstTime = async () => {
 
       const firstTime = await asyncStore.getItem('preferences')
-      if (!firstTime) return
+      if (!firstTime) {
+        return await asyncStore.setItem('preferences', {firstTime: false, darkMode: false, fitnessLevel: 'Beginner'})
+      }
       const parsed: Preferences = JSON.parse(firstTime)
 
       if (parsed.firstTime) return navigation.replace('Disclaimer')

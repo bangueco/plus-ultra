@@ -26,7 +26,7 @@ const UserInfo = () => {
       return Alert.alert('Please select your current fitness level')
     }
 
-    await asyncStore.setItem('preferences', {firstTime: false, darkMode: false})
+    await asyncStore.setItem('preferences', {firstTime: false, darkMode: false, fitnessLevel: userFitnessLevel})
 
     return useRootNavigation.dispatch(StackActions.replace('Tabs'))
   }
