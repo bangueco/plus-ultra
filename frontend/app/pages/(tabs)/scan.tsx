@@ -1,6 +1,6 @@
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
-import { ActivityIndicator, Alert, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Pressable, SafeAreaView, SectionList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, AntDesign} from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -8,7 +8,17 @@ import * as ImagePicker from 'expo-image-picker';
 import useSystemTheme from '@/hooks/useSystemTheme';
 import { getExercisesFromEquipment } from '@/services/equipment.service';
 import { EquipmentExercises } from '@/types/equipment';
-import { Button } from 'react-native-paper';
+import { Button, SegmentedButtons } from 'react-native-paper';
+import sortByMuscleGroup from '@/hooks/sortByMuscleGroup';
+import CustomPressable from '@/components/custom/CustomPressable';
+import { ExerciseInfo } from '@/types/exercise';
+import asyncStore from '@/lib/asyncStore';
+
+type Preferences = {
+  firstTime: boolean,
+  darkMode: boolean,
+  userFitnessLevel: string
+}
 
 export default function Scan() {
   const camera = useRef<CameraView>(null)
@@ -16,11 +26,29 @@ export default function Scan() {
   const systemTheme = useSystemTheme()
 
   const [cameraActive, setCameraActive] = useState<Boolean>(false)
-  const [equipmentExercises, setEquipmentExercises] = useState<EquipmentExercises | null>(null)
+  const [equipmentExercises, setEquipmentExercises] = useState<EquipmentExercises>()
   const [loading, setLoading] = useState<Boolean>(false)
   const [photo, setPhoto] = useState<CameraCapturedPicture | ImagePicker.ImagePickerAsset | null>(null)
   const [cameraReady, setCameraReady] = useState<Boolean>(false)
   const [permission, requestPermission] = useCameraPermissions()
+
+  const [currentSelected, setCurrentSelected] = useState<string>('all')
+
+  const filterByDifficulty = async (exercise: Array<ExerciseInfo>): Promise<Array<ExerciseInfo> | undefined> => {
+    const preference = await asyncStore.getItem('preferences')
+
+    if (!preference) return
+
+    const parsedPreference: Preferences = JSON.parse(preference)
+
+    if (parsedPreference.userFitnessLevel === 'Beginner') {
+      return exercise.filter(diff => diff.difficulty === 'Beginner')
+    } else if (parsedPreference.userFitnessLevel === 'Intermediate') {
+      return exercise.filter(diff => diff.difficulty === 'Intermediate')
+    } else {
+      return exercise
+    }
+  }
 
   const toggleCameraReady = () => {
     setCameraReady(true)
@@ -128,13 +156,71 @@ export default function Scan() {
 
   if (equipmentExercises) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Text>Equipment: {equipmentExercises.equipment_name}</Text>
-        <FlatList
-          data={equipmentExercises.exercises}
-          renderItem={({item}) => <Text key={item.id}>{item.title}</Text>}
+      <View style={{paddingTop: '15%', justifyContent: 'center', alignItems: 'center', gap: 10, paddingBottom: '15%'}}>
+        <Text style={{color: systemTheme.colors.text}}>{equipmentExercises.equipment_name.toUpperCase()}</Text>
+        <SegmentedButtons
+        value={currentSelected}
+        onValueChange={(e) => setCurrentSelected(e)}
+        buttons={[
+          {
+            value: 'all',
+            label: 'All Exercises',
+          },
+          {
+            value: 'recommended',
+            label: 'Recommended',
+          },
+        ]}
         />
-      </SafeAreaView>
+        {
+          currentSelected === 'all' && (
+            <SectionList
+              extraData={filterByDifficulty(equipmentExercises.exercises)}
+              sections={sortByMuscleGroup(equipmentExercises.exercises)}
+              renderItem={({item}) => (
+                <CustomPressable
+                  key={item.id} 
+                  text={item.name} 
+                  textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+                  buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
+                  onPress={() => console.log("TODO: Add view exercise info here")}
+                />
+              )}
+              renderSectionHeader={({section: {title}}) => (
+                <View style={{padding: 5, marginTop: 30}}>
+                  <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
+                </View>
+              )}
+              stickySectionHeadersEnabled={false}
+              showsVerticalScrollIndicator={false}
+            />
+          )
+        }
+        {
+          currentSelected === 'recommended' && (
+            <SectionList
+              extraData={filterByDifficulty(equipmentExercises.exercises)}
+              sections={sortByMuscleGroup(equipmentExercises.exercises)}
+              renderItem={({item}) => (
+                <CustomPressable
+                  key={item.id} 
+                  text={item.name} 
+                  textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+                  buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
+                  onPress={() => console.log("TODO: Add view exercise info here")}
+                />
+              )}
+              renderSectionHeader={({section: {title}}) => (
+                <View style={{padding: 5, marginTop: 30}}>
+                  <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
+                </View>
+              )}
+              stickySectionHeadersEnabled={false}
+              showsVerticalScrollIndicator={false}
+            />
+          )
+        }
+      </View>
     )
   }
 
@@ -199,7 +285,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 20
+    gap: 20,
   },
   message: {
     textAlign: 'center',
