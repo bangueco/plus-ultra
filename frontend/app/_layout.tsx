@@ -18,7 +18,9 @@ import { useDrizzleStudioHelper } from '@/lib/drizzleClient';
 const Stack = createNativeStackNavigator<RootNativeStackParamList>()
 
 export default function RootLayout() {
-  useDrizzleStudioHelper()
+  if (!process.env.EXPO_PUBLIC_DISABLE_FEATURE) {
+    useDrizzleStudioHelper()
+  }
 
   const systemTheme = useSystemTheme()
 
