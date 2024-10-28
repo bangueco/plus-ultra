@@ -11,7 +11,9 @@
     "test": "jest --watchAll",
     "lint": "expo lint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "build-dev:android": "expo install --check && eas build --platform android --profile development",
+    "build-prod:android": "expo install --check && eas build --platform android --profile production"
   },
   "jest": {
     "preset": "jest-expo"
@@ -19,7 +21,7 @@
   "dependencies": {
     "@babel/runtime": "^7.25.6",
     "@expo/vector-icons": "^14.0.3",
-    "@react-native-async-storage/async-storage": "^2.0.0",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-picker/picker": "2.7.5",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
@@ -27,10 +29,10 @@
     "axios": "^1.7.2",
     "babel-plugin-inline-import": "^3.0.0",
     "drizzle-orm": "^0.33.0",
-    "expo": "~51.0.11",
+    "expo": "~51.0.38",
     "expo-camera": "~15.0.16",
     "expo-constants": "~16.0.2",
-    "expo-dev-client": "~4.0.26",
+    "expo-dev-client": "~4.0.28",
     "expo-drizzle-studio-plugin": "^0.0.2",
     "expo-font": "~12.0.7",
     "expo-image": "~1.13.0",
@@ -38,7 +40,7 @@
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.15",
     "expo-secure-store": "~13.0.2",
-    "expo-splash-screen": "~0.27.5",
+    "expo-splash-screen": "~0.27.6",
     "expo-sqlite": "~14.0.6",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.6",
