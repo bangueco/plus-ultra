@@ -10,6 +10,8 @@ export const db = drizzle(expoDb)
 
 export const useDrizzleStudioHelper = () => {
 
+  if (process.env.EXPO_PUBLIC_ENVIRONMENT !== 'development') return
+
   return useDrizzleStudio(expoDb)
 }
 
