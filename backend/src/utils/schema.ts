@@ -1,5 +1,9 @@
 import z from 'zod';
 
+// If year is 2024, we minus it with 15, therefore adding age limits.
+// const currentYear = new Date().getFullYear() - 15;
+// const maxDate = new Date(currentYear, 11, 31);
+
 const UserSchema = {
   username: z.string({ message: 'Username is required.' })
     .min(3, {message: 'Username must be atleast 3 characters or more.'})
@@ -7,7 +11,7 @@ const UserSchema = {
   password: z.string({ message: 'Password is required.' })
     .min(8, {message: 'Password must contain atleast 8 characters or more.'}),
   email: z.string({ message: 'Email is required.' }).email({ message: 'Invalid email format.' }),
-  age: z.number({message: 'Age is not a valid number!'}).min(14, {message: 'You must be 14+ years old to use this app.'})
+  birthdate: z.string().datetime()
 };
 
 export {
