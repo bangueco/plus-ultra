@@ -15,14 +15,8 @@ import { TextInput } from "react-native-paper";
 import * as SecureStore from 'expo-secure-store'
 import asyncStore from "@/lib/asyncStore";
 import { useRootNavigation } from "@/hooks/useRootNavigation";
-
-type UserInfo = {
-  id: number,
-  username: string,
-  email: string,
-  accessToken: string,
-  refreshToken: string
-}
+import { DatePickerInput } from "react-native-paper-dates";
+import { User } from "@/types/user";
 
 export default function Register () {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -32,11 +26,11 @@ export default function Register () {
   const [email, setEmail] = useState<string | undefined>(undefined)
   const [password, setPassword] = useState<string | undefined>(undefined)
   const [confirmPassword, setConfirmPassword] = useState<string | undefined>(undefined)
-  const [age, setAge] = useState<string | undefined>(undefined)
+  const [birthdate, setBirthDate] = useState<Date | undefined>(undefined)
 
   const [usernameErrorMessage, setUsernameErrorMessage] = useState<string>('')
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>('')
-  const [ageErrorMessage, setAgeErrorMessage] = useState<string>('')
+  const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('')
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState<string>('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('')
 
@@ -45,6 +39,7 @@ export default function Register () {
     setEmailErrorMessage('')
     setConfirmPasswordErrorMessage('')
     setPasswordErrorMessage('')
+    setBirthDateErrorMessage('')
   }
 
   const handleErrorMessage = (error: unknown) => {
@@ -57,8 +52,8 @@ export default function Register () {
           setEmailErrorMessage(data.message)
         } else if (data.field === 'password') {
           setPasswordErrorMessage(data.message)
-        } else if (data.field === 'age') {
-          setAgeErrorMessage(data.message)
+        } else if (data.field === 'birthdate') {
+          setBirthDateErrorMessage(data.message)
         }
       })
     } else if (error instanceof AxiosError && error.response?.data) {
@@ -67,6 +62,8 @@ export default function Register () {
         setUsernameErrorMessage(error.response.data.message)
       } else if (error.response.data.field === 'email') {
         setEmailErrorMessage(error.response.data.message)
+      } else if (error.response.data.field === 'birthdate') {
+        setBirthDateErrorMessage(error.response.data.message)
       }
     } else if (error instanceof AxiosError) {
       Alert.alert(error.message)
@@ -79,9 +76,9 @@ export default function Register () {
     try {
       clearErrorMessage()
       if (password !== confirmPassword) return setConfirmPasswordErrorMessage('Passwords must be identical to each other.')
-      await authService.register(username, email, password, Number(age))
+      await authService.register(username, email, password, birthdate)
       // TODO: Automatic login when registered user, but before that, navigate to setup page.
-      const userInfo: UserInfo = await authService.login(username, password)
+      const userInfo: User = await authService.login(username, password)
       await SecureStore.setItemAsync('user', JSON.stringify(userInfo))
       await asyncStore.setItem('preferences', {firstTime: true, darkMode: false})
       return useRootNavigation.navigate('Disclaimer')
@@ -99,11 +96,13 @@ export default function Register () {
       <View style={styles.registerContainer}>
         <Text style={{fontWeight: '800', fontSize: 23, color: colors.text, padding: 10}}>Create New Account</Text>
         <View style={
-          {
-            width: '100%', 
-            padding: 10}
+            {
+              width: '100%', 
+              padding: 5,
+              gap: 10
+            }
           }>
-          <View style={{padding: 3}}>
+          <View>
             <TextInput
               mode="outlined"
               label="Username"
@@ -112,7 +111,7 @@ export default function Register () {
             />
             {usernameErrorMessage && <ErrorMessage text={usernameErrorMessage} />}
           </View>
-          <View style={{padding: 3}}>
+          <View>
             <TextInput
               mode="outlined"
               label="Email"
@@ -121,16 +120,18 @@ export default function Register () {
             />
             {emailErrorMessage && <ErrorMessage text={emailErrorMessage} />}
           </View>
-          <View style={{padding: 3}}>
-            <TextInput
+          <View style={{flexDirection: 'row'}}>
+            <DatePickerInput
+              locale="en"
+              label="Birthdate"
+              value={birthdate}
+              onChange={(d) => setBirthDate(d)}
+              inputMode="start"
               mode="outlined"
-              label="Age"
-              left={<TextInput.Icon icon="format-list-numbered" />}
-              onChangeText={handleChangeText(setAge)}
             />
-            {ageErrorMessage && <ErrorMessage text={ageErrorMessage} />}
           </View>
-          <View style={{padding: 3}}>
+          {birthDateErrorMessage && <ErrorMessage text={birthDateErrorMessage} />}
+          <View>
             <TextInput
               mode="outlined"
               label="Password"
@@ -140,7 +141,7 @@ export default function Register () {
             />
             {passwordErrorMessage && <ErrorMessage text={passwordErrorMessage} />}
           </View>
-          <View style={{padding: 3}}>
+          <View>
             <TextInput
               mode="outlined"
               label="Confirm Password"
