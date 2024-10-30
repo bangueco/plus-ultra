@@ -7,18 +7,31 @@ import { generateAccessToken, generateRefreshToken } from "../utils/lib/token"
 
 const register = async (request: Request, response: Response, next: NextFunction) => {
   try {
-    const {username, email, password, age} = request.body
+    const {username, email, password, birthdate} = request.body
 
     const isUsernameExist = await userService.findByUsername(username)
     const isEmailExist = await userService.findByEmail(email)
 
+    const birthDate = new Date(birthdate)
+
+    const today = new Date()
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
     if (isUsernameExist) throw new ValidationError(HttpStatusCode.BAD_REQUEST, 'username', 'Username is already taken.')
     if (isEmailExist) throw new ValidationError(HttpStatusCode.BAD_REQUEST, 'email', 'Email is already taken.')
-    if (typeof age !== 'number') throw new ValidationError(HttpStatusCode.BAD_REQUEST, "age", "Age is not a valid number")
     
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    if (age < 15) {
+      throw new ValidationError(HttpStatusCode.BAD_REQUEST, 'birthdate', 'You must be over 15 years old.')
+    }
+
     const hashedPassword = await hashPassword(password)
 
-    const user = await userService.createUser(username, email, hashedPassword, age)
+    const user = await userService.createUser(username, email, hashedPassword, birthDate)
     return response.status(HttpStatusCode.CREATED).json(user)
   } catch (error) {
     return next(error)
@@ -46,7 +59,7 @@ const login = async (request: Request, response: Response, next: NextFunction) =
       username: isUsernameExist.username,
       accessToken,
       refreshToken,
-      age: isUsernameExist.age
+      birthdate: isUsernameExist.birthdate
     })
   } catch (error) {
     return next(error)

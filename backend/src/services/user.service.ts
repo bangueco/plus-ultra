@@ -12,8 +12,8 @@ const findByEmail = async (email: string) => {
   return await prisma.user.findUnique({where: {email}})
 }
 
-const createUser = async (username: string, email: string, password: string, age: number) => {
-  return await prisma.user.create({data: {username, email, password, age}})
+const createUser = async (username: string, email: string, password: string, birthdate: Date) => {
+  return await prisma.user.create({data: {username, email, password, birthdate}})
 }
 
 export default {
