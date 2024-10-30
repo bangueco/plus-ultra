@@ -14,11 +14,13 @@ import useSystemTheme from '@/hooks/useSystemTheme';
 import { PaperProvider } from 'react-native-paper';
 import { useRootNavigation } from '@/hooks/useRootNavigation';
 import { useDrizzleStudioHelper } from '@/lib/drizzleClient';
+import { enGB, registerTranslation } from 'react-native-paper-dates'
 
 const Stack = createNativeStackNavigator<RootNativeStackParamList>()
 
 export default function RootLayout() {
 
+  registerTranslation('en', enGB)
   useDrizzleStudioHelper()
 
   const systemTheme = useSystemTheme()
