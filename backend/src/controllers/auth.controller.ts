@@ -31,7 +31,7 @@ const register = async (request: Request, response: Response, next: NextFunction
 
     const hashedPassword = await hashPassword(password)
 
-    const user = await userService.createUser(username, email, hashedPassword, birthDate)
+    const user = await userService.createUser(username, email, hashedPassword, birthDate, false)
     return response.status(HttpStatusCode.CREATED).json(user)
   } catch (error) {
     return next(error)
@@ -59,7 +59,8 @@ const login = async (request: Request, response: Response, next: NextFunction) =
       username: isUsernameExist.username,
       accessToken,
       refreshToken,
-      birthdate: isUsernameExist.birthdate
+      birthdate: isUsernameExist.birthdate,
+      isEmailValid: isUsernameExist.isEmailValid
     })
   } catch (error) {
     return next(error)
