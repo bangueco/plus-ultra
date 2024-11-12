@@ -5,6 +5,7 @@ import helmet from 'helmet'
 import authRouter from './routes/auth.routes'
 import errorHandler from './middlewares/errorHandler'
 import equipmentRouter from './routes/equipment.routes'
+import userRouter from './routes/user.routes'
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.use(helmet())
 // Routes
 app.use('/api/auth', authRouter)
 app.use('/api/equipment', equipmentRouter)
+app.use('/api/user', userRouter)
 
 // Middlewares
 app.use(errorHandler)
