@@ -21,3 +21,15 @@ model User {
   birthdate DateTime
   isEmailValid Boolean
 }
+
+model Exercise {
+  id Int @id @default(autoincrement())
+  exercise_id Int?
+  name String
+  muscle_group String
+  equipment String
+  custom Int
+  difficulty String?
+  instructions String?
+  created_by Int
+}
