@@ -7,13 +7,13 @@ type State = {
 }
 
 type Action = {
-  getUserInfo: () => Promise<void>,
+  setUserInfo: () => Promise<void>,
   logout: () => Promise<void>
 }
 
 export const useUserStore = create<State & Action>((set) => ({
-  user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: ''},
-  getUserInfo: async () => {
+  user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false},
+  setUserInfo: async () => {
     const userJson = await SecureStore.getItemAsync('user')
 
     if (!userJson) return
@@ -24,6 +24,6 @@ export const useUserStore = create<State & Action>((set) => ({
   },
   logout: async () => {
     await SecureStore.deleteItemAsync('user')
-    return set({user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: ''}})
+    return set({user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false}})
   }
 }))
