@@ -12,13 +12,21 @@ const findByEmail = async (email: string) => {
   return await prisma.user.findUnique({where: {email}})
 }
 
-const createUser = async (username: string, email: string, password: string, birthdate: Date, isEmailValid: boolean) => {
-  return await prisma.user.create({data: {username, email, password, birthdate, isEmailValid}})
+const createUser = async (username: string, email: string, password: string, birthdate: Date, isEmailValid: boolean, emailToken: string) => {
+  return await prisma.user.create({data: {username, email, password, birthdate, isEmailValid, emailToken}})
+}
+
+const updateUser = async (id: number, data: Record<string, any>) => {
+  return await prisma.user.update({
+    where: {id},
+    data
+  })
 }
 
 export default {
   findById,
   findByUsername,
   findByEmail,
-  createUser
+  createUser,
+  updateUser
 }
