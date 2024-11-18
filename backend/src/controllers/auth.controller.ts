@@ -3,7 +3,8 @@ import userService from "../services/user.service"
 import { HttpStatusCode } from "../utils/http"
 import { ValidationError } from "../utils/error"
 import { hashPassword, verifyPassword } from "../utils/lib/hashing"
-import { generateAccessToken, generateRefreshToken } from "../utils/lib/token"
+import { generateAccessToken, generateEmailToken, generateRefreshToken } from "../utils/lib/token"
+import emailService from "../services/email.service"
 
 const register = async (request: Request, response: Response, next: NextFunction) => {
   try {
@@ -30,8 +31,11 @@ const register = async (request: Request, response: Response, next: NextFunction
     }
 
     const hashedPassword = await hashPassword(password)
+    const emailToken = generateEmailToken(email)
 
-    const user = await userService.createUser(username, email, hashedPassword, birthDate, false)
+    emailService.sendVerificationEmail(email, emailToken)
+
+    const user = await userService.createUser(username, email, hashedPassword, birthDate, false, emailToken)
     return response.status(HttpStatusCode.CREATED).json(user)
   } catch (error) {
     return next(error)

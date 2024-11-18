@@ -9,6 +9,10 @@ const generateRefreshToken = (id: number, username: string) => {
   return jwt.sign({id, username}, config.jwtRefreshKey, {expiresIn: '30d'})
 }
 
+const generateEmailToken = (email: string) => {
+  return jwt.sign({email}, config.jwtAccessKey)
+}
+
 const verifyToken = (token: string) => {
   return jwt.verify(token, config.jwtAccessKey)
 }
@@ -16,5 +20,6 @@ const verifyToken = (token: string) => {
 export {
   generateAccessToken,
   generateRefreshToken,
+  generateEmailToken,
   verifyToken
 }
