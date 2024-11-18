@@ -1,4 +1,3 @@
-import { User } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/error";
 import userService from "../services/user.service";
@@ -6,12 +5,12 @@ import { HttpStatusCode } from "../utils/http";
 
 const isEmailVerified = async (request: Request, response: Response, next: NextFunction) => {
 
-  const { id } = request.body as User
+  const username = request.query.username
 
   try {
-    if (!id) throw new ApiError(HttpStatusCode.BAD_REQUEST, "User id is not specified!")
+    if (!username) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Username is not specified!")
 
-    const user = await userService.findById(id)
+    const user = await userService.findByUsername(String(username))
 
     if (!user) throw new ApiError(HttpStatusCode.NOT_FOUND, "User not found.")
 
