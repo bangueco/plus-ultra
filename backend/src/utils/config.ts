@@ -8,7 +8,9 @@ const config = {
   serpApiKey: process.env.SERP_API_KEY || '',
   cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || '',
-  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+  gmailUsername: process.env.GMAIL_USERNAME,
+  gmailPassword: process.env.GMAIL_PASSWORD
 }
 
 export default config
