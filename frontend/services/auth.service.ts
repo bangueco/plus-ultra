@@ -13,8 +13,8 @@ const login = async (username: string | undefined, password: string | undefined)
   return request.data
 }
 
-const isEmailValid = async (id: number) => {
-  const request = await axios.post(`${baseURL}/email/status`, {id})
+const isEmailValid = async (username: string) => {
+  const request = await axios.get(`${baseURL}/user/email/status?username=${username}`)
   return request.data
 }
 
