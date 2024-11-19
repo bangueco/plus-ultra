@@ -17,10 +17,13 @@ import asyncStore from "@/lib/asyncStore";
 import { useRootNavigation } from "@/hooks/useRootNavigation";
 import { DatePickerInput } from "react-native-paper-dates";
 import { User } from "@/types/user";
+import { useUserStore } from "@/store/useUserStore";
 
 export default function Register () {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { colors } = useTheme();
+
+  const { getUserInfo } = useUserStore()
 
   const [username, setUsername] = useState<string | undefined>(undefined)
   const [email, setEmail] = useState<string | undefined>(undefined)
@@ -80,8 +83,9 @@ export default function Register () {
       // TODO: Automatic login when registered user, but before that, navigate to setup page.
       const userInfo: User = await authService.login(username, password)
       await SecureStore.setItemAsync('user', JSON.stringify(userInfo))
+      getUserInfo()
       await asyncStore.setItem('preferences', {firstTime: true, darkMode: false})
-      return useRootNavigation.navigate('Disclaimer')
+      return useRootNavigation.navigate('Verification')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
     }

@@ -35,11 +35,13 @@ export default function TabsLayout() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { fetchHistory } = useHistoryStore()
   const { fetchExercise } = useExerciseStore()
-  const { getUserInfo } = useUserStore()
+  const { getUserInfo, user } = useUserStore()
 
   useEffect(() => {
-    const user = SecureStore.getItem('user')
-    if (!user) return navigation.replace('Login')
+    const userAuth = SecureStore.getItem('user')
+    if (!userAuth) return navigation.replace('Login')
+
+    if (!user.isEmailValid) return navigation.replace('Verification')
   }, [])
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function TabsLayout() {
       }
       const parsed: Preferences = JSON.parse(firstTime)
 
-      if (parsed.firstTime) return navigation.replace('Disclaimer')
+      if (parsed.firstTime && user.isEmailValid) return navigation.replace('Disclaimer')
     }
 
     isFirstTime()
