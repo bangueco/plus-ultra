@@ -33,7 +33,7 @@ const register = async (request: Request, response: Response, next: NextFunction
     const hashedPassword = await hashPassword(password)
     const emailToken = generateEmailToken(email)
 
-    emailService.sendVerificationEmail(email, emailToken)
+    emailService.sendVerificationEmail(email, emailToken, username)
 
     const user = await userService.createUser(username, email, hashedPassword, birthDate, false, emailToken)
     return response.status(HttpStatusCode.CREATED).json(user)
