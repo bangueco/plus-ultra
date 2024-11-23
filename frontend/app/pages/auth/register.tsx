@@ -162,23 +162,6 @@ export default function Register () {
           textStyle={{fontSize: 18, color: 'white'}}
           onPress={onPressRegister}
         />
-        <Text style={{color: colors.text}}>or</Text>
-        <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>
-          <CustomBtn
-            iconName="facebook-square"
-            iconSize={25}
-            text="Sign Up with Facebook"
-            buttonStyle={{backgroundColor: '#3C66C4', width: '80%'}}
-            textStyle={{fontSize: 14, color: 'white'}}
-          />
-          <CustomBtn
-            iconName="google"
-            iconSize={25}
-            text="Sign Up With Google"
-            buttonStyle={{backgroundColor: '#CF4332', width: '80%'}}
-            textStyle={{fontSize: 14, color: 'white'}}
-          />
-        </View>
         <View style={{paddingBottom: 10}}>
           <Text style={{color: colors.text}}>
             Already have account? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Login')}>Login</Text> here

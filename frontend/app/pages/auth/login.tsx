@@ -126,23 +126,6 @@ export default function Login () {
           textStyle={{fontSize: 18, color: 'white'}}
           onPress={onPressLogin}
         />
-        <Text style={{color: colors.text}}>or</Text>
-        <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', gap: 10, width: '100%', padding: 10}}>
-          <CustomBtn
-            iconName="facebook-square"
-            iconSize={25}
-            text="Login with Facebook"
-            buttonStyle={{backgroundColor: '#3C66C4', width: '80%'}}
-            textStyle={{fontSize: 14, color: 'white'}}
-          />
-          <CustomBtn
-            iconName="google"
-            iconSize={25}
-            text="Login With Google"
-            buttonStyle={{backgroundColor: '#CF4332', width: '80%'}}
-            textStyle={{fontSize: 14, color: 'white'}}
-          />
-        </View>
         <View style={{paddingBottom: 10}}>
           <Text style={{color: colors.text}}>
             Don't have account yet? <Text style={{color: 'skyblue', textDecorationLine: 'underline'}} onPress={() => navigation.replace('Register')}>Register</Text> here
