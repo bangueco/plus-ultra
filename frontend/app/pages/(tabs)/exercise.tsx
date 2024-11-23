@@ -131,8 +131,13 @@ const Exercise = () => {
         </Dialog>
       </Portal>
       <SectionList
-        extraData={exercise}
-        sections={sortByMuscleGroup(exercise)}
+        extraData={searchQuery}
+        sections={sortByMuscleGroup(exercise).map(section => ({
+          ...section,
+          data: section.data.filter(item => 
+            item.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        }))}
         renderItem={({item}) => (
           <CustomPressable 
             key={item.id} 
