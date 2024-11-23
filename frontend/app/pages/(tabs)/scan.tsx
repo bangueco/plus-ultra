@@ -15,6 +15,8 @@ import { ExerciseInfo } from '@/types/exercise';
 import asyncStore from '@/lib/asyncStore';
 import { Image } from 'expo-image';
 import { equipmentImages } from '@/constants/equipmentImages';
+import { SecureStore } from '@/lib/secureStore';
+import { User } from '@/types/user';
 
 type Preferences = {
   firstTime: boolean,
@@ -90,6 +92,13 @@ export default function Scan() {
   }
 
   const uploadImage = async () => {
+
+    const user = SecureStore.getItem('user')
+
+    if (!user) return
+
+    const parsedUser : User = JSON.parse(user)
+
     if (photo) {
       const formData = new FormData
       // Attach image to form
@@ -107,7 +116,8 @@ export default function Scan() {
       try {
         const response: AxiosResponse<{equipment: string}> = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/equipment/identify`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${parsedUser.accessToken}`
           }
         })
 
