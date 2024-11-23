@@ -19,6 +19,7 @@ import { useHistoryStore } from '@/store/useHistoryStore';
 import { useExerciseStore } from '@/store/useExerciseStore';
 import { useUserStore } from '@/store/useUserStore';
 import asyncStore from '@/lib/asyncStore';
+import { User } from '@/types/user';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -40,8 +41,10 @@ export default function TabsLayout() {
   useEffect(() => {
     const userAuth = SecureStore.getItem('user')
     if (!userAuth) return navigation.replace('Login')
+    const parsedUserAuth: User = JSON.parse(userAuth)
+    if (!parsedUserAuth) return navigation.replace('Login')
 
-    if (!user.isEmailValid) return navigation.replace('Verification')
+    if (!parsedUserAuth.isEmailValid) return navigation.replace('Verification')
   }, [])
 
   useEffect(() => {

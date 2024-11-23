@@ -1,7 +1,6 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { ParamListBase, useNavigation, useTheme } from "@react-navigation/native";
 
-import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
 import ErrorMessage from "@/components/custom/ErrorMessage";
@@ -13,15 +12,7 @@ import { TextInput } from 'react-native-paper';
 
 import * as SecureStore from 'expo-secure-store';
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
-
-type UserInfo = {
-  id: number,
-  username: string,
-  email: string,
-  accessToken: string,
-  refreshToken: string,
-  age: number
-}
+import { User } from "@/types/user";
 
 export default function Login () {
   const { colors } = useTheme();
@@ -34,8 +25,8 @@ export default function Login () {
   const [passwordErrorMessage, setPasswordErrorMessage] =  useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
 
-  const saveUserInfo = async (id: number, email: string, username: string, accessToken: string, refreshToken: string, age: number) => {
-    return await SecureStore.setItemAsync('user', JSON.stringify({id, username, email, accessToken, refreshToken, age}))
+  const saveUserInfo = async (id: number, email: string, username: string, accessToken: string, refreshToken: string, birthdate: Date, isEmailValid: boolean) => {
+    return await SecureStore.setItemAsync('user', JSON.stringify({id, username, email, accessToken, refreshToken, birthdate, isEmailValid}))
   }
 
   const clearErrorMessage = () => {
@@ -72,8 +63,8 @@ export default function Login () {
   const onPressLogin = async () => {
     try {
       clearErrorMessage()
-      const user: UserInfo = await authService.login(username, password)
-      await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken, user.age)
+      const user: User = await authService.login(username, password)
+      await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken, user.birthdate, user.isEmailValid)
       return navigation.replace('Tabs')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)

@@ -7,13 +7,20 @@ import { User } from "@/types/user";
 import { StackActions } from "@react-navigation/native";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { Icon, Text } from "react-native-paper";
+import { Button, Icon, Text } from "react-native-paper";
 
 export default function Verification () {
 
   const { colors } = useSystemTheme()
 
-  const { user, getUserInfo } = useUserStore()
+  const { user, getUserInfo, logout } = useUserStore()
+
+  const logoutUser = async () => {
+    logout()
+    if (useRootNavigation.isReady()) {
+      return useRootNavigation.dispatch(StackActions.replace('Login'))
+    }
+  }
 
   useEffect(() => {
 
@@ -66,7 +73,12 @@ export default function Verification () {
         color={colors.primary}
         size={60}
       />
-      <Text style={{textAlign: 'center'}}>A verification link has been sent to {user.email}. Please confirm your email in-order to continue.</Text>
+      <View>
+        <Text style={{textAlign: 'center'}}>A verification link has been sent to {user.email}. Please confirm your email in-order to continue.</Text>
+      </View>
+      <View style={{flexDirection: 'row'}}>
+        <Button icon="logout" onPress={logoutUser}>Logout</Button>
+      </View>
     </View>
   )
 }
