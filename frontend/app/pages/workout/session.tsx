@@ -61,6 +61,8 @@ export default function WorkoutSession({route}: RootProps) {
 
     const history = await addHistory(templateName, hours, minutes, seconds)
 
+    if (!history) return null;
+
     const results = await Promise.allSettled(
       performedWorkout.map(async (workout) => {
         await historyExerciseService.createHistoryExercise(

@@ -1,18 +1,26 @@
-import CustomBtn from "@/components/custom/CustomBtn"
 import { FontAwesome } from "@expo/vector-icons"
 import { useState } from "react"
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native"
+import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native"
 import { StackActions } from "@react-navigation/native"
 import useSystemTheme from "@/hooks/useSystemTheme"
-import { Searchbar } from "react-native-paper"
+import { Button, Searchbar, TextInput } from "react-native-paper"
 import { useRootNavigation } from "@/hooks/useRootNavigation";
 import { useUserStore } from "@/store/useUserStore";
+import personalRecordService from "@/services/personalRecord.service"
 
 const Profile = () => {
   const systemTheme = useSystemTheme()
   const [visibleProfile, setVisibleProfile] = useState<boolean>(false)
+  const [visibleAddWorkout, setVisibleAddWorkout] = useState<boolean>(false)
+
+  const [exerciseName, setExerciseName] = useState<string>()
+  const [exerciseSet, setExerciseSet] = useState<string>()
+  const [exerciseReps, setExerciseReps] = useState<string>()
+  const [exerciseWeight, setExerciseWeight] = useState<string>()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
+
+  const { user } = useUserStore()
 
   const {logout} = useUserStore()
 
@@ -25,6 +33,27 @@ const Profile = () => {
     logout()
     if (useRootNavigation.isReady()) {
       return useRootNavigation.navigate('Login')
+    }
+  }
+
+  const onPressNewRecord = async () => {
+    if (!exerciseName || !exerciseSet || !exerciseReps || !exerciseWeight) {
+      return Alert.alert("Error: make sure all fields are filled.")
+    }
+
+    if (isNaN(Number(exerciseSet)) || isNaN(Number(exerciseReps)) || isNaN(Number(exerciseWeight))) {
+      return Alert.alert("Error: make sure fields that require integer input are valid numbers!");
+    }
+
+    try {
+      await personalRecordService.newRecord(exerciseName, Number(exerciseSet), Number(exerciseWeight), Number(exerciseReps), user.id)
+      setExerciseName('')
+      setExerciseSet('')
+      setExerciseReps('')
+      setExerciseWeight('')
+      setVisibleAddWorkout(false)
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -53,10 +82,54 @@ const Profile = () => {
                 </View>
               </View>
             </Modal>
+            <Modal
+              visible={visibleAddWorkout}
+              animationType="fade"
+              transparent={true}
+              style={{position: 'relative'}}
+            >
+              <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(52, 52, 52, 0.7)'}}>
+                <View style={[styles.modalStyle, {backgroundColor: systemTheme.colors.background, padding: 15, borderRadius: 15}]}>
+                  <Text style={{textAlign: 'center', fontSize: 20, padding: 10, color: 'white'}}>Add personal record</Text>
+                  <View>
+                    <TextInput
+                      mode="outlined"
+                      label="Exercise Name"
+                      onChangeText={(e) => setExerciseName(e)}
+                    />
+                    <TextInput
+                      mode="outlined"
+                      label="Sets"
+                      onChangeText={(e) => setExerciseSet(e)}
+                    />
+                    <TextInput
+                      mode="outlined"
+                      label="Reps"
+                      onChangeText={(e) => setExerciseReps(e)}
+                    />
+                    <TextInput
+                      mode="outlined"
+                      label="Weight (kg)"
+                      onChangeText={(e) => setExerciseWeight(e)}
+                    />
+                  </View>
+                  <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: 20, paddingTop: 20}}>
+                    <Pressable
+                      onPress={onPressNewRecord}>
+                      <Text style={{fontSize: 15, color: systemTheme.colors.primary}}>Create</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => setVisibleAddWorkout(false)}>
+                      <Text style={{fontSize: 15, color: 'red'}}>Exit</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </View>
+            </Modal>
           </View>
           <View style={{flex: 1, justifyContent: 'center', padding: 5}}>
           <Searchbar
-          placeholder="Search"
+          placeholder="Search for user id"
           onChangeText={(e) => setSearchQuery(e)}
           value={searchQuery}
         />
@@ -64,14 +137,11 @@ const Profile = () => {
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
           <Text style={{color: systemTheme.colors.primary, fontSize: 16}}>Your Personal Record</Text>
-          <CustomBtn
-            buttonStyle={{backgroundColor: 'none', gap: 5}}
-            iconName="plus"
-            iconSize={20}
-            iconColor={systemTheme.colors.primary}
-            textStyle={{fontSize: 16, color: systemTheme.colors.primary, flex: 0}}
-            text="Add Workout"
-          />
+          <Button icon="plus"
+            onPress={() => setVisibleAddWorkout(true)}
+          >
+            Add Workout
+          </Button>
         </View>
       </View>
     </View>
@@ -81,7 +151,11 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     height: '100%'
-  }
+  },
+  modalStyle: {
+    width: '70%',
+    borderRadius: 15,
+  },
 })
 
 export default Profile
