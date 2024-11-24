@@ -1,6 +1,6 @@
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
-import { ActivityIndicator, Alert, FlatList, Image, Pressable, SafeAreaView, SectionList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, SectionList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, AntDesign} from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -13,6 +13,10 @@ import sortByMuscleGroup from '@/hooks/sortByMuscleGroup';
 import CustomPressable from '@/components/custom/CustomPressable';
 import { ExerciseInfo } from '@/types/exercise';
 import asyncStore from '@/lib/asyncStore';
+import { Image } from 'expo-image';
+import { equipmentImages } from '@/constants/equipmentImages';
+import { SecureStore } from '@/lib/secureStore';
+import { User } from '@/types/user';
 
 type Preferences = {
   firstTime: boolean,
@@ -88,6 +92,13 @@ export default function Scan() {
   }
 
   const uploadImage = async () => {
+
+    const user = SecureStore.getItem('user')
+
+    if (!user) return
+
+    const parsedUser : User = JSON.parse(user)
+
     if (photo) {
       const formData = new FormData
       // Attach image to form
@@ -105,7 +116,8 @@ export default function Scan() {
       try {
         const response: AxiosResponse<{equipment: string}> = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/equipment/identify`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${parsedUser.accessToken}`
           }
         })
 
@@ -158,6 +170,10 @@ export default function Scan() {
     return (
       <View style={{paddingTop: '15%', justifyContent: 'center', alignItems: 'center', gap: 10, paddingBottom: '15%'}}>
         <Text style={{color: systemTheme.colors.text}}>{equipmentExercises.equipment_name.toUpperCase()}</Text>
+        <Image
+          source={equipmentImages[equipmentExercises.equipment_name] ?? require('@/assets/images/equipments/no-image.jpg')}
+          style={{height: 350, width: 350}}
+        />
         <SegmentedButtons
         value={currentSelected}
         onValueChange={(e) => setCurrentSelected(e)}
@@ -228,7 +244,7 @@ export default function Scan() {
     return (
       <View style={styles.photoContainer}>
         <View style={{alignItems: 'center', flexDirection: 'column', gap: 30, width: '100%'}}>
-          <Image style={{height: 350, width: 350}} resizeMethod='resize' source={{uri: photo.uri}} />
+          <Image style={{height: 350, width: 350}} source={{uri: photo.uri}} />
           <View style={{flexDirection: 'row', gap: 20}}>
             <Pressable style={{flexDirection: 'row', alignItems: 'center', backgroundColor: systemTheme.colors.primary, padding: 5, borderRadius: 10}} onPress={uploadImage}>
               <AntDesign name="check" size={30} color="white" />

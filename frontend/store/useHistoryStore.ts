@@ -1,8 +1,18 @@
+import asyncStore from '@/lib/asyncStore'
 import historyService from '@/services/history.service'
+import historyExerciseService from '@/services/historyExercise.service'
 import { SQLiteRunResult } from 'expo-sqlite'
 import { create } from 'zustand'
 
-type HistoryExercise = {
+type Preferences = {
+  firstTime: boolean,
+  darkMode: boolean,
+  userFitnessLevel: string,
+  height: number,
+  weight: number
+}
+
+type History = {
   history_id: number,
   template_name: string,
   elapsed_time: string,
@@ -10,26 +20,47 @@ type HistoryExercise = {
   date: string
 }
 
+type HistoryExercise = {
+  history_exercise_id: number,
+  history_id: number,
+  template_item_id: number,
+  template_id: number,
+  reps: number,
+  weight: number,
+  exercise_name: string
+}
+
 type State = {
-  history: Array<HistoryExercise>
+  history: Array<History>
+  historyExercise: Array<HistoryExercise>
 }
 
 type Action = {
-  fetchHistory: () => void,
+  fetchHistory: () => Promise<void>,
+  fetchHistoryExercise: () => Promise<void>,
   addHistory: (
     templateName: string,
     hours: number,
     minutes: number,
     seconds: number
-  ) => Promise<SQLiteRunResult>
+  ) => Promise<SQLiteRunResult | null>
 }
 
 export const useHistoryStore = create<State & Action>((set) => ({
   history: [],
+  historyExercise: [],
   fetchHistory: async () => {
     try {
       const data = await historyService.getAllHistory()
       set({history: data})
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  fetchHistoryExercise: async () => {
+    try {
+      const data = await historyExerciseService.getAllExerciseHistory()
+      set({historyExercise: data})
     } catch (error) {
       console.error(error)
     }
@@ -44,12 +75,21 @@ export const useHistoryStore = create<State & Action>((set) => ({
 
     const currentDate = new Date()
 
+    const preference = await asyncStore.getItem('preferences')
+
+    if (!preference) return null
+
+    const parsedPreference: Preferences = JSON.parse(preference)
+
+    let totalTimeInHours = hours + (minutes / 60) + (seconds / 3600);
+    let caloriesBurned = 5 * parsedPreference.weight * totalTimeInHours;
+
     const workoutDate = `${days[currentDate.getDay()]}, ${months[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`
 
     const newHistory = await historyService.createHistory(
       templateName,
       `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
-      1000,
+      caloriesBurned,
       workoutDate
     )
 

@@ -2,9 +2,10 @@ export type User = {
   id: number,
   username: string,
   email: string,
-  age: number,
+  birthdate: Date,
   accessToken: string,
-  refreshToken: string
+  refreshToken: string,
+  isEmailValid: boolean
 }
 
 export type UserPreferences = {

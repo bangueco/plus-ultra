@@ -9,7 +9,7 @@ import Exercise from './exercise';
 import Scan from './scan';
 
 import * as SecureStore from "expo-secure-store";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { TabsParamList } from '@/types/navigation';
 import useSystemTheme from '@/hooks/useSystemTheme';
@@ -19,13 +19,16 @@ import { useHistoryStore } from '@/store/useHistoryStore';
 import { useExerciseStore } from '@/store/useExerciseStore';
 import { useUserStore } from '@/store/useUserStore';
 import asyncStore from '@/lib/asyncStore';
+import { User } from '@/types/user';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 type Preferences = {
   firstTime: boolean,
   darkMode: boolean,
-  userFitnessLevel: string
+  userFitnessLevel: string,
+  height: number,
+  weight: number
 }
 
 export default function TabsLayout() {
@@ -35,28 +38,52 @@ export default function TabsLayout() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { fetchHistory } = useHistoryStore()
   const { fetchExercise } = useExerciseStore()
-  const { getUserInfo } = useUserStore()
+  const { getUserInfo, user } = useUserStore()
 
   useEffect(() => {
-    const user = SecureStore.getItem('user')
-    if (!user) return navigation.replace('Login')
+    const userAuth = SecureStore.getItem('user')
+    if (!userAuth) return navigation.replace('Login')
+    const parsedUserAuth: User = JSON.parse(userAuth)
+    if (!parsedUserAuth) return navigation.replace('Login')
+
+    if (!parsedUserAuth.isEmailValid) return navigation.replace('Verification')
   }, [])
 
   useEffect(() => {
-    const isFirstTime = async () => {
+    const checkFirstTime = async () => {
+      try {
+        const firstTimeData = await asyncStore.getItem('preferences');
+        
+        if (!firstTimeData) {
+          // Initialize preferences if not found
+          const defaultPreferences = {
+            firstTime: false,
+            darkMode: false,
+            fitnessLevel: 'Beginner',
+            height: 172,
+            weight: 70
+          };
+          await asyncStore.setItem('preferences', defaultPreferences);
+          return;
+        }
+        
+        const preferences: Preferences = JSON.parse(firstTimeData);
 
-      const firstTime = await asyncStore.getItem('preferences')
-      if (!firstTime) {
-        return await asyncStore.setItem('preferences', {firstTime: false, darkMode: false, fitnessLevel: 'Beginner'})
+        if (user.isEmailValid) {
+          if (preferences.firstTime) {
+            return navigation.replace('Disclaimer');
+          } else {
+            return navigation.replace('Tabs');
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching or processing preferences:", error);
       }
-      const parsed: Preferences = JSON.parse(firstTime)
-
-      if (parsed.firstTime) return navigation.replace('Disclaimer')
-    }
-
-    isFirstTime()
-
+    };
+  
+    checkFirstTime()
   }, [])
+  
 
   useEffect(() => {
     fetchHistory()

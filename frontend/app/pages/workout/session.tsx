@@ -31,7 +31,8 @@ export default function WorkoutSession({route}: RootProps) {
     template_item_id: number
     template_id: number,
     reps: number,
-    weight: number
+    weight: number,
+    exercise_name: string
   }>>([])
 
   const fetchData = async () => {
@@ -60,6 +61,8 @@ export default function WorkoutSession({route}: RootProps) {
 
     const history = await addHistory(templateName, hours, minutes, seconds)
 
+    if (!history) return null;
+
     const results = await Promise.allSettled(
       performedWorkout.map(async (workout) => {
         await historyExerciseService.createHistoryExercise(
@@ -67,7 +70,9 @@ export default function WorkoutSession({route}: RootProps) {
           workout.template_item_id,
           workout.template_id,
           workout.reps,
-          workout.weight)
+          workout.weight,
+          workout.exercise_name
+        )
       })
     )
 
@@ -78,7 +83,7 @@ export default function WorkoutSession({route}: RootProps) {
 
   console.log(performedWorkout)
 
-  const onPressCheckSet = async (setId: number, templateItemId: number, templateId: number) => {
+  const onPressCheckSet = async (setId: number, templateItemId: number, templateId: number, exerciseName: string) => {
     if (performedWorkout.some(workout => workout.set_id === setId)) {
       const filter = performedWorkout.filter(item => item.set_id !== setId)
       return setPerformedWorkout(filter)
@@ -91,7 +96,8 @@ export default function WorkoutSession({route}: RootProps) {
       template_item_id: templateItemId,
       template_id: templateId,
       reps: exerciseSetInfo[0].reps,
-      weight: exerciseSetInfo[0].weight
+      weight: exerciseSetInfo[0].weight,
+      exercise_name: exerciseName
     }])
   }
 
@@ -271,7 +277,7 @@ export default function WorkoutSession({route}: RootProps) {
                                   : "checkbox-blank-circle-outline"
                                 }
                                 size={18}
-                                onPress={() => onPressCheckSet(set.exercise_set_id, set.template_item_id, set.template_id)}
+                                onPress={() => onPressCheckSet(set.exercise_set_id, set.template_item_id, set.template_id, exercise.template_item_name)}
                                 iconColor={systemTheme.colors.primary}
                               />
                             </DataTable.Cell>

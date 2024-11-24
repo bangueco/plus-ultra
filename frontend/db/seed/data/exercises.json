@@ -6,7 +6,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a flat dumbbell bench press, lie back on a flat bench with a dumbbell in each hand, press the weights up above your chest with your arms fully extended, then lower the dumbbells slowly until your elbows are at a 90-degree angle before pressing them back up.",
-    "createdBy": "seed"
+    "createdBy": 0 
   },
   {
     "name": "Incline Dumbbell Bench Press",
@@ -15,7 +15,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform an incline dumbbell bench press, lie back on an inclined bench with dumbbells in hand, press the weights up above your chest, and then lower them slowly until your elbows are at a 90-degree angle before pressing them back up.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Decline Dumbbell Bench Press",
@@ -24,7 +24,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a decline dumbbell bench press, lie back on a decline bench with dumbbells in hand, press the weights up above your chest, then lower them slowly until your elbows are at a 90-degree angle before pressing them back up.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Flat Barbell Bench Press",
@@ -33,7 +33,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a flat barbell bench press, lie back on a flat bench with the barbell held above your chest, lower the barbell slowly until it touches your chest, and then press it back up to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Incline Barbell Bench Press",
@@ -42,7 +42,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform an incline barbell bench press, lie back on an inclined bench with the barbell held above your chest, lower the barbell slowly until it touches your upper chest, and then press it back up to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Decline Barbell Bench Press",
@@ -51,7 +51,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a decline barbell bench press, lie back on a decline bench with the barbell held above your chest, lower the barbell slowly until it touches your lower chest, and then press it back up to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "High to Low Cable Fly",
@@ -60,7 +60,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a high to low cable fly, set the pulleys at the highest point. Stand in the middle with a handle in each hand, arms slightly bent, and step forward. Pull the cables down and together in front of your hips while squeezing your chest, then slowly return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Low to High Cable Fly",
@@ -69,7 +69,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a low to high cable fly, set the pulleys at the lowest point. Stand in the middle with a handle in each hand, arms slightly bent, and step forward. Pull the cables up and together in front of your chest, squeezing your chest muscles, then slowly return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Pec Deck Fly",
@@ -78,7 +78,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a pec deck fly, sit on the pec deck machine with your back against the pad, place your arms on the pads with your elbows slightly bent, and bring the pads together in front of your chest. Slowly return to the starting position to complete the rep.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Incline Chest Press (Smith)",
@@ -87,7 +87,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a Smith machine incline chest press, set the bench to an incline position and adjust the bar to a suitable height. Sit on the bench with your back against it, grasp the bar with a grip slightly wider than shoulder-width, and lift it off the hooks. Lower the bar slowly to your upper chest, then press it back up to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Flat Chest Press (Smith)",
@@ -96,7 +96,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a Smith machine flat chest press, set the bench to a flat position and adjust the bar to a suitable height. Sit on the bench with your back flat against it, grasp the bar with a grip slightly wider than shoulder-width, and lift it off the hooks. Lower the bar slowly to your chest, then press it back up to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Smith Machine Row",
@@ -105,7 +105,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a Smith machine row, set the bar at an appropriate height and stand facing the machine. Bend at the hips and knees to lower your torso, grasp the bar with an overhand grip, and pull the bar towards your lower chest while squeezing your shoulder blades together. Slowly lower the bar back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Seated Row Machine",
@@ -114,7 +114,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform the seated row machine exercise, sit down on the machine with your feet placed firmly on the footrests and your knees slightly bent. Grasp the handles with an overhand grip and pull them towards your torso while keeping your back straight. Squeeze your shoulder blades together at the peak of the movement, then slowly return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Seated Cable Row",
@@ -123,7 +123,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a seated cable row, sit on the machine with your feet placed on the footrests and your knees slightly bent. Grasp the handle with both hands and pull it towards your torso while keeping your back straight and your elbows close to your body. Squeeze your shoulder blades together at the peak of the movement, then slowly return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Wide Grip Seated Cable Row",
@@ -132,7 +132,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a wide grip seated cable row, sit on the cable row machine with your feet placed on the footrests and your knees slightly bent. Grasp the wide grip handle with both hands and pull it towards your chest while keeping your back straight. Focus on squeezing your shoulder blades together at the peak of the movement, then slowly return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Lat Pulldown",
@@ -141,7 +141,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a lat pulldown, sit at the machine with your thighs secured under the pad. Grasp the bar with a grip slightly wider than shoulder-width, lean back slightly, and pull the bar down towards your chest while squeezing your shoulder blades together. Slowly return the bar to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Close Grip Lat Pulldown",
@@ -150,7 +150,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a close grip lat pulldown, sit at the machine with your thighs secured under the pad. Grasp the bar with a close grip, palms facing each other, and pull the bar down towards your chest while keeping your elbows close to your body. Slowly return the bar to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Reverse Grip Lat Pulldown",
@@ -159,7 +159,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a reverse grip lat pulldown, sit at the machine with your thighs secured under the pad. Grasp the bar with an underhand grip, slightly wider than shoulder-width, and pull the bar down towards your chest while keeping your elbows close to your body. Slowly return the bar to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Wide Grip Lat Pulldown",
@@ -168,7 +168,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a wide grip lat pulldown, sit at the machine with your thighs secured under the pad. Grasp the bar with a wide grip and pull it down towards your upper chest while squeezing your shoulder blades together. Slowly return the bar to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Bent-Over Barbell Row",
@@ -177,7 +177,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a bent-over barbell row, stand with your feet shoulder-width apart and hold a barbell with an overhand grip. Bend at your hips and knees until your torso is almost parallel to the ground. Pull the barbell towards your lower chest, squeezing your shoulder blades together, then lower the barbell back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Underhand Barbell Row",
@@ -186,7 +186,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform an underhand barbell row, stand with your feet shoulder-width apart and hold the barbell with an underhand grip. Bend at your hips and knees until your torso is nearly parallel to the ground. Pull the barbell towards your abdomen, squeezing your shoulder blades together, then lower it back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Single-Arm Dumbbell Row",
@@ -195,7 +195,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a single-arm dumbbell row, place one knee and hand on a bench for support, keeping your back flat. With the other hand, hold a dumbbell and pull it towards your torso, squeezing your shoulder blade at the top of the movement. Lower the dumbbell back to the starting position and repeat for the desired number of reps before switching sides.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Bent-Over Dumbbell Row",
@@ -204,7 +204,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a bent-over dumbbell row, stand with your feet shoulder-width apart and hold a dumbbell in each hand. Bend at your hips and knees until your torso is nearly parallel to the ground. Pull the dumbbells towards your lower chest, squeezing your shoulder blades together, then lower them back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Push-Ups",
@@ -213,7 +213,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a push-up, start in a plank position with your hands slightly wider than shoulder-width apart. Lower your body toward the ground by bending your elbows, keeping your body straight. Push back up to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Shoulder Press",
@@ -222,7 +222,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a barbell shoulder press, stand with your feet shoulder-width apart and grasp the barbell with an overhand grip slightly wider than shoulder-width. Lift the barbell to shoulder height, keeping your elbows below the bar. Press the barbell overhead until your arms are fully extended, then lower it back to shoulder height.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Dumbbell Shoulder Press",
@@ -231,7 +231,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a dumbbell shoulder press, sit or stand with a dumbbell in each hand at shoulder height, palms facing forward. Press the dumbbells overhead until your arms are fully extended, keeping your core engaged and back straight. Lower the dumbbells back to shoulder height and repeat.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Lateral Raise",
@@ -240,7 +240,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a lateral raise, stand with your feet shoulder-width apart and hold a dumbbell in each hand at your sides. With a slight bend in your elbows, raise the dumbbells out to the sides until they reach shoulder height. Lower the dumbbells back to the starting position and repeat.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Reverse Pec Deck Fly",
@@ -249,7 +249,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a reverse pec deck fly, sit on the pec deck machine facing the pads with your chest against the pad. Grasp the handles with your arms extended in front of you, then pull the handles back and out to the sides, squeezing your shoulder blades together. Return to the starting position and repeat.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Chest Fly (Multi-Flight Machine)",
@@ -258,7 +258,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a chest fly on a multi-flight machine, adjust the pulleys to shoulder height. Stand in the center, grasp the handles with your arms slightly bent, and pull the handles together in front of your chest. Slowly return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Lateral Raise (Multi-Flight Machine)",
@@ -267,7 +267,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a cable lateral raise, adjust the pulley to the lowest setting. Stand with your side facing the machine and grasp the handle with the hand farthest from the machine. With a slight bend in your elbow, raise your arm to the side until it's parallel to the ground, then lower it back down.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Dumbbell Bicep Curl",
@@ -276,7 +276,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a dumbbell bicep curl, stand with a dumbbell in each hand at your sides. Keeping your elbows close to your body, curl the dumbbells up towards your shoulders. Squeeze your biceps at the top, then lower the dumbbells back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Hammer Curl (Dumbbell)",
@@ -285,7 +285,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a hammer curl, stand with a dumbbell in each hand at your sides, palms facing each other. Curl the dumbbells up towards your shoulders while keeping your elbows close to your body. Lower the dumbbells back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Overhead Tricep Extension (Dumbbell)",
@@ -294,7 +294,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform an overhead tricep extension, stand or sit holding a dumbbell with both hands above your head, arms extended. Slowly lower the dumbbell behind your head by bending your elbows, then raise it back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Bicep Curl",
@@ -303,7 +303,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a barbell bicep curl, stand with your feet shoulder-width apart and hold a barbell with an underhand grip. Keeping your elbows close to your body, curl the barbell up towards your shoulders, squeezing your biceps at the top. Lower the barbell back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Tricep Extension",
@@ -312,7 +312,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a barbell tricep extension, stand or sit with a barbell held overhead with both hands. Lower the barbell behind your head by bending your elbows, then raise it back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Skull Crusher",
@@ -321,7 +321,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a barbell skull crusher, lie on a flat bench and hold a barbell with an overhand grip, arms extended above your chest. Lower the barbell towards your forehead by bending your elbows, then extend your arms back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Wrist Curl",
@@ -330,7 +330,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a barbell wrist curl, sit on a bench with your forearms resting on your thighs, holding a barbell with an underhand grip. Allow the barbell to roll down to your fingers, then curl it back up by flexing your wrists.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Cable Lateral Raise",
@@ -339,7 +339,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a cable lateral raise, adjust the pulley to the lowest setting. Stand with the cable on your side and grasp the handle with the hand farthest from the machine. Raise your arm to the side until it's parallel to the ground, then lower it back down.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Single Arm Cable Tricep Pushdown",
@@ -348,7 +348,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a single arm cable tricep pushdown, adjust the pulley to a high position. Stand facing the machine and grasp the handle with one hand. Keeping your elbow close to your body, push the handle down towards your thigh until your arm is fully extended. Slowly return to the starting position and repeat.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Rope Tricep Pushdown",
@@ -357,7 +357,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a rope tricep pushdown, adjust the pulley to a high position and attach a rope handle. Stand facing the machine and grasp the rope with both hands. Keeping your elbows close to your body, push the rope down until your arms are fully extended, spreading the rope at the bottom for a full contraction. Slowly return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Rope Tricep Overhead Extension",
@@ -366,7 +366,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a rope tricep overhead extension, adjust the pulley to a low position and attach a rope handle. Stand with your back to the machine and grasp the rope with both hands, arms extended overhead. Keeping your elbows close to your head, lower the rope behind your head by bending your elbows, then extend your arms back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Cable Face Pull",
@@ -375,7 +375,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a cable face pull, adjust the pulley to a high position. Stand facing the machine and grasp the handle with both hands. Pull the handle towards your face, keeping your elbows high and squeezing your shoulder blades together. Return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Smith Machine Squat",
@@ -384,7 +384,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a Smith machine squat, set the barbell at shoulder height and position yourself under the bar with it resting on your upper traps. Stand with your feet shoulder-width apart. Lower your body into a squat by bending your knees and hips, keeping your chest up and back straight. Push through your heels to return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Smith Machine Deadlift",
@@ -393,7 +393,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a Smith machine deadlift, set the barbell to knee height and stand with your feet shoulder-width apart. Position the barbell over your midfoot. Bend at the hips and knees to grasp the bar with an overhand grip. Stand up by pushing through your heels, keeping your back straight, then lower the bar back to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Smith Machine Front Squat",
@@ -402,7 +402,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a front squat on the Smith machine, set the barbell at shoulder height. Position the barbell across the front of your shoulders, with your elbows up and hands under the bar. Squat down by bending your knees, keeping your chest up and back straight. Push through your heels to return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Smith Machine Calf Raises",
@@ -411,7 +411,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform calf raises on the Smith machine, set the barbell at shoulder height and position it on your upper back. Stand with the balls of your feet on an elevated platform, allowing your heels to hang off. Raise your heels as high as possible, then lower them back down to stretch your calves.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Smith Machine Hip Thrust",
@@ -420,7 +420,7 @@
     "difficulty": "Advanced",
     "custom": 0,
     "instructions": "To perform hip thrusts on the Smith machine, set the bar at hip height. Sit on the ground with your upper back against a bench, rolling the barbell over your hips. Push through your heels to lift your hips towards the ceiling, squeezing your glutes at the top. Lower back down and repeat.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Back Squat",
@@ -429,7 +429,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a barbell back squat, place the barbell on your upper traps and stand with your feet shoulder-width apart. Lower your body by bending your knees and hips, keeping your chest up and back straight. Push through your heels to return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Front Squat",
@@ -438,7 +438,7 @@
     "difficulty": "Advanced",
     "custom": 0,
     "instructions": "To perform a barbell front squat, place the barbell on your shoulders in front of your neck with your elbows high. Stand with your feet shoulder-width apart. Lower your body into a squat, keeping your chest up and back straight. Push through your heels to return to standing.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Deadlift",
@@ -447,7 +447,7 @@
     "difficulty": "Advanced",
     "custom": 0,
     "instructions": "To perform a barbell deadlift, stand with your feet hip-width apart and the barbell over your midfoot. Bend at the hips and knees to grasp the bar with an overhand grip. Stand up by pushing through your heels and extending your hips and knees. Lower the bar back to the ground with control.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Lunges",
@@ -456,7 +456,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform barbell lunges, place the barbell on your upper back. Step forward with one leg and lower your body until your back knee is close to the ground. Push through your front heel to return to standing, then repeat on the other side.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Dumbbell Squats",
@@ -465,7 +465,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform dumbbell squats, hold a dumbbell in each hand at your sides or at shoulder level. Stand with your feet shoulder-width apart. Lower your body by bending your knees and hips, keeping your chest up and back straight. Push through your heels to return to standing.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Dumbbell Lunges",
@@ -474,7 +474,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform dumbbell lunges, hold a dumbbell in each hand at your sides. Step forward with one leg and lower your body until your back knee is close to the ground. Push through your front heel to return to standing, then repeat on the other side.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Dumbbell Bulgarian Split Squats",
@@ -483,7 +483,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform dumbbell Bulgarian split squats, hold a dumbbell in each hand and place one foot on a bench behind you. Lower your body by bending your front knee until your back knee nearly touches the ground. Push through your front heel to return to standing.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Dumbbell Calf Raises",
@@ -492,7 +492,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform dumbbell calf raises, hold a dumbbell in each hand at your sides. Stand with the balls of your feet on an elevated surface, allowing your heels to hang off. Raise your heels as high as possible, then lower them back down to stretch your calves.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Dumbbell Romanian Deadlift",
@@ -501,7 +501,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a dumbbell Romanian deadlift, stand with your feet shoulder-width apart while holding a dumbbell in each hand at your thighs. Keep a slight bend in your knees and hinge at your hips, lowering the dumbbells along your legs while maintaining a flat back. Lower the dumbbells until you feel a stretch in your hamstrings, then push through your hips to return to the starting position.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Barbell Romanian Deadlift",
@@ -510,7 +510,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a barbell Romanian deadlift, stand with your feet shoulder-width apart and hold the barbell in front of your thighs. Keeping a slight bend in your knees, hinge at your hips and lower the barbell along your legs until you feel a stretch in your hamstrings. Return to the starting position by pushing through your hips.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Rope Pullover",
@@ -519,7 +519,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a rope pullover, attach a rope to the high pulley of a cable machine. Stand with your feet shoulder-width apart and grasp the rope with both hands, palms facing each other. Keeping your arms straight, pull the rope down and towards your hips while squeezing your back muscles. Slowly return to the starting position with control.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Reverse Pec Deck Fly",
@@ -528,7 +528,7 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a reverse pec deck fly, sit on the pec deck machine facing the pads. Adjust the seat height so that your shoulders are level with the handles. Grasp the handles with your palms facing inwards. Keeping a slight bend in your elbows, pull the handles apart and backward, squeezing your shoulder blades together. Slowly return to the starting position with control.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Leg Press",
@@ -537,7 +537,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a leg press, sit on the leg press machine and place your feet shoulder-width apart on the platform. Adjust the seat and backrest if necessary. Push the platform away from you by extending your legs, but avoid locking your knees. Slowly bend your knees and lower the platform back to the starting position, ensuring your back remains flat against the seat and your knees align with your toes.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Leg Curl",
@@ -546,7 +546,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a leg curl, adjust the leg curl machine to fit your body size and lie face down on the bench. Place your legs under the padded lever, just above your ankles. Grasp the handles for stability. Curl your legs upward by flexing your knees, bringing your heels as close to your buttocks as possible. Slowly lower the weight back to the starting position with control, keeping tension on your hamstrings throughout the movement.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Seated Leg Curl",
@@ -555,7 +555,7 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a seated leg curl, adjust the seat and backrest of the seated leg curl machine to fit your body size. Sit down and position your legs under the padded lever, just above your ankles. Secure the thigh pad above your knees. Grasp the handles for stability. Curl your legs downward by flexing your knees, bringing your heels as close to your buttocks as possible. Slowly return to the starting position with control, keeping tension on your hamstrings throughout the movement.",
-    "createdBy": "seed"
+    "createdBy": 0
   },
   {
     "name": "Seated Calf Raise",
@@ -564,6 +564,6 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a seated calf raise, sit on the seated calf raise machine and place the balls of your feet on the platform with your heels hanging off. Adjust the knee pad so that it rests comfortably on your thighs. Release the safety bar and lower your heels as far as possible to feel a stretch in your calves. Push through the balls of your feet to raise your heels as high as you can, squeezing your calf muscles at the top of the movement. Slowly lower your heels back to the starting position with control.",
-    "createdBy": "seed"
+    "createdBy": 0
   }
 ]

@@ -14,7 +14,7 @@ const userRegistration = (request: Request, _response: Response, next: NextFunct
   const userCredentials = z.object({
     username: UserSchema.username,
     email: UserSchema.email,
-    age: UserSchema.age,
+    birthdate: UserSchema.birthdate,
     password: UserSchema.password.regex(passwordRegex, {message: 'Password must contain atleast 8 characters, one uppercase letter, a number and a special character.'})
   })
 

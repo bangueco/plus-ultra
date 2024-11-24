@@ -1,12 +1,32 @@
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { useHistoryStore } from "@/store/useHistoryStore"
+import { useEffect } from "react"
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Icon } from "react-native-paper"
+
+interface ExerciseSummary {
+  exercise_name: string;
+  setsCount: number;
+  reps: number;
+}
+
+interface ExerciseMax extends ExerciseSummary {
+  maxWeight: number
+}
 
 const History = () => {
 
   const systemTheme = useSystemTheme()
-  const { history } = useHistoryStore();
+  const { history, historyExercise, fetchHistory, fetchHistoryExercise } = useHistoryStore();
+
+  useEffect(() => {
+    async function getAllHistory() {
+      await fetchHistory()
+      await fetchHistoryExercise()
+    }
+
+    getAllHistory()
+  },[])
 
   return (
     <View style={styles.container}>
@@ -48,10 +68,74 @@ const History = () => {
                   </View>
                   <View style={styles.historyResultsContainer}>
                     <View style={{width: 120}}>
-                      <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Exercises</Text>
+                      <Text style={{color: systemTheme.colors.primary, fontSize: 18}}>Exercises</Text>
+                      {
+                        historyExercise
+                        .filter(itemExe => itemExe.history_id === item.history_id) // Filter by the history_id
+                        .map(exe => exe.exercise_name) // Extract the exercise_name values
+                        .filter((value, index, self) => self.indexOf(value) === index) // Filter out duplicates
+                        .map(uniqueExerciseName => (
+                          <Text style={{color: systemTheme.colors.text}} numberOfLines={1} key={uniqueExerciseName}>{uniqueExerciseName}</Text>
+                        ))
+                      }
                     </View>
                     <View style={{marginLeft: 20}}>
-                      <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Best Set</Text>
+                      <Text style={{color: systemTheme.colors.primary, fontSize: 18}}>Sets</Text>
+                      {
+                        historyExercise
+                        .filter(itemExe => itemExe.history_id === item.history_id) // Filter by history_id
+                        .reduce<ExerciseSummary[]>((acc, exe) => {
+                          // Find if the exercise is already in the accumulator
+                          const existing = acc.find(item => item.exercise_name === exe.exercise_name);
+                          if (existing) {
+                            // Increment the set count and update reps if necessary (get max reps)
+                            existing.setsCount += 1;
+                            existing.reps = Math.max(existing.reps, exe.reps); // Keep the maximum reps
+                          } else {
+                            // If it's the first occurrence, add the exercise to the accumulator
+                            acc.push({
+                              exercise_name: exe.exercise_name,
+                              setsCount: 1,
+                              reps: exe.reps
+                            });
+                          }
+                          return acc;
+                        }, []) // Initialize accumulator as an empty array
+                        .map(exe => (
+                          <Text style={{color: systemTheme.colors.text}} key={exe.exercise_name}>
+                            {exe.setsCount} x {exe.reps} {/* Display sets count and max reps */}
+                          </Text>
+                        ))
+                      }
+                    </View>
+                    <View style={{marginLeft: 30}}>
+                      <Text style={{color: systemTheme.colors.primary, fontSize: 18}}>Weight</Text>
+                      {
+                        historyExercise
+                          .filter(itemExe => itemExe.history_id === item.history_id) // Filter by history_id
+                          .reduce<ExerciseMax[]>((acc, exe) => {
+                            // Find if the exercise is already in the accumulator
+                            const existing = acc.find(item => item.exercise_name === exe.exercise_name);
+                            if (existing) {
+                              // Update maxWeight if necessary
+                              existing.maxWeight = Math.max(existing.maxWeight, exe.weight); // Keep the maximum weight
+                            } else {
+                              // If it's the first occurrence, add the exercise to the accumulator
+                              acc.push({
+                                exercise_name: exe.exercise_name,
+                                setsCount: 1,
+                                reps: exe.reps,
+                                maxWeight: exe.weight
+                              });
+                            }
+                            return acc;
+                          }, []) // Initialize accumulator as an empty array
+                          .map(exe => (
+                            <Text style={{color: systemTheme.colors.text}} key={exe.exercise_name}>
+                              {exe.maxWeight} {/* Display max weight for each exercise */}
+                            </Text>
+                          ))
+                      }
                     </View>
                   </View>
                   <View
@@ -63,7 +147,7 @@ const History = () => {
                       size={20}
                     />
                     <Text style={{color: "orange"}}>Calories Burned:</Text>
-                    <Text style={{color: "orange"}}>{item.calories_burned}200</Text>
+                    <Text style={{color: "orange"}}>{item.calories_burned}</Text>
                   </View>
                 </View>
               ))
