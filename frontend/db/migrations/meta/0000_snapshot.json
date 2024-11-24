@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "7aa99427-fcd1-4332-99bf-38e1775210e3",
+  "id": "bce379fd-91ab-42bf-8bc7-86834d4f556b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Exercise": {
@@ -59,7 +59,7 @@
         },
         "created_by": {
           "name": "created_by",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -198,6 +198,13 @@
         "history_id": {
           "name": "history_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "exercise_name": {
+          "name": "exercise_name",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

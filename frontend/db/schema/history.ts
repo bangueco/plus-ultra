@@ -13,6 +13,7 @@ export const history = sqliteTable("History", {
 export const historyExercise = sqliteTable("HistoryExercise", {
   history_exercise_id: integer('history_exercise_id', {mode: 'number'}).primaryKey().notNull(),
   history_id: integer('history_id', {mode: 'number'}).notNull().references(() => history.history_id),
+  exercise_name: text('exercise_name', {mode: "text"}).notNull(),
   template_item_id: integer('template_item_id', {mode: 'number'}).notNull().references(() => templateItem.template_item_id),
   template_id: integer('template_id', {mode: 'number'}).notNull().references(() => template.template_id),
   reps: integer('reps', {mode: 'number'}).notNull(),
