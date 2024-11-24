@@ -1,8 +1,9 @@
 import historyService from '@/services/history.service'
+import historyExerciseService from '@/services/historyExercise.service'
 import { SQLiteRunResult } from 'expo-sqlite'
 import { create } from 'zustand'
 
-type HistoryExercise = {
+type History = {
   history_id: number,
   template_name: string,
   elapsed_time: string,
@@ -10,12 +11,24 @@ type HistoryExercise = {
   date: string
 }
 
+type HistoryExercise = {
+  history_exercise_id: number,
+  history_id: number,
+  template_item_id: number,
+  template_id: number,
+  reps: number,
+  weight: number,
+  exercise_name: string
+}
+
 type State = {
-  history: Array<HistoryExercise>
+  history: Array<History>
+  historyExercise: Array<HistoryExercise>
 }
 
 type Action = {
-  fetchHistory: () => void,
+  fetchHistory: () => Promise<void>,
+  fetchHistoryExercise: () => Promise<void>,
   addHistory: (
     templateName: string,
     hours: number,
@@ -26,10 +39,19 @@ type Action = {
 
 export const useHistoryStore = create<State & Action>((set) => ({
   history: [],
+  historyExercise: [],
   fetchHistory: async () => {
     try {
       const data = await historyService.getAllHistory()
       set({history: data})
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  fetchHistoryExercise: async () => {
+    try {
+      const data = await historyExerciseService.getAllExerciseHistory()
+      set({historyExercise: data})
     } catch (error) {
       console.error(error)
     }
