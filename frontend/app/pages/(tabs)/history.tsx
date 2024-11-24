@@ -147,7 +147,7 @@ const History = () => {
                       size={20}
                     />
                     <Text style={{color: "orange"}}>Calories Burned:</Text>
-                    <Text style={{color: "orange"}}>{item.calories_burned}200</Text>
+                    <Text style={{color: "orange"}}>{item.calories_burned}</Text>
                   </View>
                 </View>
               ))

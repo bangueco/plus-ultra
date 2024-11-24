@@ -1,7 +1,16 @@
+import asyncStore from '@/lib/asyncStore'
 import historyService from '@/services/history.service'
 import historyExerciseService from '@/services/historyExercise.service'
 import { SQLiteRunResult } from 'expo-sqlite'
 import { create } from 'zustand'
+
+type Preferences = {
+  firstTime: boolean,
+  darkMode: boolean,
+  userFitnessLevel: string,
+  height: number,
+  weight: number
+}
 
 type History = {
   history_id: number,
@@ -34,7 +43,7 @@ type Action = {
     hours: number,
     minutes: number,
     seconds: number
-  ) => Promise<SQLiteRunResult>
+  ) => Promise<SQLiteRunResult | null>
 }
 
 export const useHistoryStore = create<State & Action>((set) => ({
@@ -66,12 +75,21 @@ export const useHistoryStore = create<State & Action>((set) => ({
 
     const currentDate = new Date()
 
+    const preference = await asyncStore.getItem('preferences')
+
+    if (!preference) return null
+
+    const parsedPreference: Preferences = JSON.parse(preference)
+
+    let totalTimeInHours = hours + (minutes / 60) + (seconds / 3600);
+    let caloriesBurned = 5 * parsedPreference.weight * totalTimeInHours;
+
     const workoutDate = `${days[currentDate.getDay()]}, ${months[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`
 
     const newHistory = await historyService.createHistory(
       templateName,
       `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
-      1000,
+      caloriesBurned,
       workoutDate
     )
 

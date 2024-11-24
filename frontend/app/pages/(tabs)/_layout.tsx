@@ -40,8 +40,6 @@ export default function TabsLayout() {
   const { fetchExercise } = useExerciseStore()
   const { getUserInfo, user } = useUserStore()
 
-  const [loaded, setLoaded] = useState<boolean>(false)
-
   useEffect(() => {
     const userAuth = SecureStore.getItem('user')
     if (!userAuth) return navigation.replace('Login')
@@ -83,7 +81,7 @@ export default function TabsLayout() {
       }
     };
   
-    checkFirstTime().then(() => setLoaded(true))
+    checkFirstTime()
   }, [])
   
 
