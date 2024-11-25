@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import useSystemTheme from '@/hooks/useSystemTheme';
 import { getExercisesFromEquipment } from '@/services/equipment.service';
 import { EquipmentExercises } from '@/types/equipment';
-import { Button, SegmentedButtons } from 'react-native-paper';
+import { Button, Dialog, Portal, SegmentedButtons } from 'react-native-paper';
 import sortByMuscleGroup from '@/hooks/sortByMuscleGroup';
 import CustomPressable from '@/components/custom/CustomPressable';
 import { ExerciseInfo } from '@/types/exercise';
@@ -17,6 +17,7 @@ import { Image } from 'expo-image';
 import { equipmentImages } from '@/constants/equipmentImages';
 import { SecureStore } from '@/lib/secureStore';
 import { User } from '@/types/user';
+import exerciseService from '@/services/exercise.service';
 
 type Preferences = {
   firstTime: boolean,
@@ -37,6 +38,22 @@ export default function Scan() {
   const [permission, requestPermission] = useCameraPermissions()
 
   const [currentSelected, setCurrentSelected] = useState<string>('all')
+
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string }>({ name: '', instructions: '' });
+  const [visible, setVisible] = useState<boolean>(false)
+
+  const onPressSelectExercise = async (id: number) => {
+    const getExercise = await exerciseService.getExerciseById(id)
+
+    if (getExercise[0]?.custom === 1) return Alert.alert('This exercise is custom, you cannot view it.')
+
+    setCurrentSelectedExercise({
+      name: getExercise[0].name,
+      instructions: getExercise[0].instructions ?? '',
+    })
+
+    setVisible(true)
+  }
 
   const filterByDifficulty = async (exercise: Array<ExerciseInfo>): Promise<Array<ExerciseInfo> | undefined> => {
     const preference = await asyncStore.getItem('preferences')
@@ -169,6 +186,9 @@ export default function Scan() {
   if (equipmentExercises) {
     return (
       <View style={{paddingTop: '15%', justifyContent: 'center', alignItems: 'center', gap: 10, paddingBottom: '15%'}}>
+        <Pressable onPress={() => setEquipmentExercises(undefined)}>
+          <Text style={{color: systemTheme.colors.primary, paddingLeft: 10, fontSize: 15}}>Exit Result Page</Text>
+        </Pressable>
         <Text style={{color: systemTheme.colors.text}}>{equipmentExercises.equipment_name.toUpperCase()}</Text>
         <Image
           source={equipmentImages[equipmentExercises.equipment_name] ?? require('@/assets/images/equipments/no-image.jpg')}
@@ -188,6 +208,17 @@ export default function Scan() {
           },
         ]}
         />
+        <Portal>
+          <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+            <Dialog.Title style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>{currentSelectedExercise?.name}</Dialog.Title>
+            <Dialog.Content style={{gap: 10}}>
+              <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={() => setVisible(false)}>OK</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
         {
           currentSelected === 'all' && (
             <SectionList
@@ -199,7 +230,7 @@ export default function Scan() {
                   text={item.name} 
                   textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
                   buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
-                  onPress={() => console.log("TODO: Add view exercise info here")}
+                  onPress={() => onPressSelectExercise(item.id)}
                 />
               )}
               renderSectionHeader={({section: {title}}) => (
@@ -223,7 +254,7 @@ export default function Scan() {
                   text={item.name} 
                   textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
                   buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
-                  onPress={() => console.log("TODO: Add view exercise info here")}
+                  onPress={() => onPressSelectExercise(item.id)}
                 />
               )}
               renderSectionHeader={({section: {title}}) => (
