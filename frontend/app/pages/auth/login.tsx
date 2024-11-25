@@ -107,9 +107,9 @@ export default function Login () {
             />
             {(passwordErrorMessage || errorMessage) && <ErrorMessage style={{marginTop: 3}} text={passwordErrorMessage || errorMessage} />}
           </View>
-          <View style={{padding: 3, marginTop: 20}}>
+          {/* <View style={{padding: 3, marginTop: 20}}>
             <Text style={{textAlign: 'right', color: colors.text}}>Forgot password?</Text>
-          </View>
+          </View> */}
         </View>
         <CustomPressable
           text="Login"
