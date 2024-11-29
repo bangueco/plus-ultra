@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/error";
 import userService from "../services/user.service";
 import { HttpStatusCode } from "../utils/http";
-import personalRecordService from "../services/personalRecord.service";
-import { PersonalRecord } from "@prisma/client";
 
 const isEmailVerified = async (request: Request, response: Response, next: NextFunction) => {
 
@@ -48,43 +46,6 @@ const verifyEmail = async (request: Request, response: Response, next: NextFunct
   }
 }
 
-const getPersonalRecord = async (request: Request, response: Response, next: NextFunction) => {
-  const userId = request.query.userId
-
-  try {
-    if (!userId) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Invalid user id!")
-
-    const user = await userService.findById(Number(userId))
-
-    if (!user) throw new ApiError(HttpStatusCode.BAD_REQUEST, "User not found!")
-
-    const userPersonalRecords = await personalRecordService.findByUserId(user.id)
-
-    return response.status(HttpStatusCode.OK).json(userPersonalRecords)
-  } catch (error) {
-    return next(error)
-  }
-}
-
-const newPersonalRecord = async (request: Request, response: Response, next: NextFunction) => {
-
-  const { exercise_name, set, reps, weight, userId } = request.body as PersonalRecord
-
-  try {
-    if (!exercise_name || !set || !reps || !weight || !userId) {
-      throw new ApiError(HttpStatusCode.BAD_REQUEST, "Some fields are required.")
-    }
-
-    const newRecord = personalRecordService.createNewRecord(userId, exercise_name, reps, set, weight)
-
-    return response.status(HttpStatusCode.OK).json(newRecord)
-
-  } catch (error) {
-    return next(error)
-  }
-
-}
-
 export default {
-  isEmailVerified, verifyEmail, getPersonalRecord, newPersonalRecord
+  isEmailVerified, verifyEmail
 }

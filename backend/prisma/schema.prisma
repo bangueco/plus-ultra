@@ -21,27 +21,4 @@ model User {
   password String
   birthdate DateTime
   isEmailValid Boolean
-  personalRecords PersonalRecord[]
-}
-
-model Exercise {
-  id Int @id @default(autoincrement())
-  exercise_id Int?
-  name String
-  muscle_group String
-  equipment String
-  custom Int
-  difficulty String?
-  instructions String?
-  created_by Int
-}
-
-model PersonalRecord {
-  id Int @id @default(autoincrement())
-  exercise_name String
-  set Int
-  reps Int
-  weight Int
-  userId Int
-  user User @relation(fields: [userId], references: [id])
 }
