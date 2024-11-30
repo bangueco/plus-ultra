@@ -3,7 +3,6 @@ import config from '../utils/config';
 
 const sendVerificationEmail = (email: string, emailToken: string, username: string) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
     host: "smtp.gmail.com",
     port: 587, 
     secure: false, 

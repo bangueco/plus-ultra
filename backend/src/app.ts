@@ -6,7 +6,6 @@ import authRouter from './routes/auth.routes'
 import errorHandler from './middlewares/errorHandler'
 import equipmentRouter from './routes/equipment.routes'
 import userRouter from './routes/user.routes'
-import exerciseRouter from './routes/exercise.routes'
 
 const app = express()
 
@@ -19,7 +18,6 @@ app.use(helmet())
 app.use('/api/auth', authRouter)
 app.use('/api/equipment', equipmentRouter)
 app.use('/api/user', userRouter)
-app.use('/api/exercise', exerciseRouter)
 
 // Middlewares
 app.use(errorHandler)
