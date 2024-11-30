@@ -6,5 +6,6 @@ export type ExerciseInfo = {
     difficulty?: string | null,
     custom: number | null,
     instructions?: string | null,
-    created_by: number
+    created_by: number,
+    video_id?: string | null
 }

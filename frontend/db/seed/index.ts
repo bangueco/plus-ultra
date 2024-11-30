@@ -31,7 +31,8 @@ export default async function seed() {
         difficulty: e.difficulty,
         equipment: e.equipment,
         instructions: e.instructions,
-        created_by: e.createdBy
+        created_by: e.createdBy,
+        video_id: e.videoId
       });
     }));
 

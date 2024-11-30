@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "bce379fd-91ab-42bf-8bc7-86834d4f556b",
+  "id": "8bd80ef9-94d8-44b1-98c2-9525164442af",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Exercise": {
@@ -62,6 +62,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "video_id": {
+          "name": "video_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         }
       },

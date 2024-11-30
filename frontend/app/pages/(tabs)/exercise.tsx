@@ -10,6 +10,7 @@ import sortByMuscleGroup from "@/hooks/sortByMuscleGroup";
 import exerciseService from "@/services/exercise.service"
 import { useExerciseStore } from "@/store/useExerciseStore"
 import { useUserStore } from "@/store/useUserStore"
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
@@ -18,7 +19,7 @@ const Exercise = () => {
   const { user } = useUserStore()
 
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string }>({ name: '', instructions: '' });
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, video_id: string }>({ name: '', instructions: '', video_id: '' });
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
 
@@ -42,6 +43,7 @@ const Exercise = () => {
     setCurrentSelectedExercise({
       name: getExercise[0].name,
       instructions: getExercise[0].instructions ?? '',
+      video_id: getExercise[0].video_id ?? ''
     })
 
     setVisible(true)
@@ -122,7 +124,10 @@ const Exercise = () => {
       <Portal>
         <Dialog visible={visible} onDismiss={() => setVisible(false)}>
           <Dialog.Title style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>{currentSelectedExercise?.name}</Dialog.Title>
-          <Dialog.Content style={{gap: 10}}>
+          <Dialog.Content style={{gap: 5}}>
+            {
+              currentSelectedExercise.video_id && <YoutubePlayer height={150} videoId={currentSelectedExercise.video_id} />
+            }
             <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
           </Dialog.Content>
           <Dialog.Actions>

@@ -6,7 +6,8 @@ CREATE TABLE `Exercise` (
 	`custom` integer DEFAULT 0 NOT NULL,
 	`difficulty` text,
 	`instructions` text,
-	`created_by` integer NOT NULL
+	`created_by` integer NOT NULL,
+	`video_id` text
 );
 --> statement-breakpoint
 CREATE TABLE `ExerciseSet` (

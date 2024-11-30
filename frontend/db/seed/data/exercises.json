@@ -6,7 +6,8 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a flat dumbbell bench press, lie back on a flat bench with a dumbbell in each hand, press the weights up above your chest with your arms fully extended, then lower the dumbbells slowly until your elbows are at a 90-degree angle before pressing them back up.",
-    "createdBy": 0 
+    "createdBy": 0,
+    "videoId": "AduT4Eq-iP0"
   },
   {
     "name": "Incline Dumbbell Bench Press",
@@ -15,7 +16,8 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform an incline dumbbell bench press, lie back on an inclined bench with dumbbells in hand, press the weights up above your chest, and then lower them slowly until your elbows are at a 90-degree angle before pressing them back up.",
-    "createdBy": 0
+    "createdBy": 0,
+    "videoId": "oZVCBM9f8Eo"
   },
   {
     "name": "Decline Dumbbell Bench Press",
@@ -24,7 +26,8 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a decline dumbbell bench press, lie back on a decline bench with dumbbells in hand, press the weights up above your chest, then lower them slowly until your elbows are at a 90-degree angle before pressing them back up.",
-    "createdBy": 0
+    "createdBy": 0,
+    "videoId": "4R_GwRhG0rY"
   },
   {
     "name": "Flat Barbell Bench Press",
@@ -33,7 +36,8 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a flat barbell bench press, lie back on a flat bench with the barbell held above your chest, lower the barbell slowly until it touches your chest, and then press it back up to the starting position.",
-    "createdBy": 0
+    "createdBy": 0,
+    "videoId": "CjHIKDQ4RQo"
   },
   {
     "name": "Incline Barbell Bench Press",
@@ -42,7 +46,8 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform an incline barbell bench press, lie back on an inclined bench with the barbell held above your chest, lower the barbell slowly until it touches your upper chest, and then press it back up to the starting position.",
-    "createdBy": 0
+    "createdBy": 0,
+    "videoId": "2jFFCy8JBU8"
   },
   {
     "name": "Decline Barbell Bench Press",
@@ -51,7 +56,8 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a decline barbell bench press, lie back on a decline bench with the barbell held above your chest, lower the barbell slowly until it touches your lower chest, and then press it back up to the starting position.",
-    "createdBy": 0
+    "createdBy": 0,
+    "videoId": "JUPLH3zp7KI"
   },
   {
     "name": "High to Low Cable Fly",
@@ -60,7 +66,8 @@
     "difficulty": "Beginner",
     "custom": 0,
     "instructions": "To perform a high to low cable fly, set the pulleys at the highest point. Stand in the middle with a handle in each hand, arms slightly bent, and step forward. Pull the cables down and together in front of your hips while squeezing your chest, then slowly return to the starting position.",
-    "createdBy": 0
+    "createdBy": 0,
+    "videoId": "hhruLxo9yZU"
   },
   {
     "name": "Low to High Cable Fly",
@@ -69,7 +76,8 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a low to high cable fly, set the pulleys at the lowest point. Stand in the middle with a handle in each hand, arms slightly bent, and step forward. Pull the cables up and together in front of your chest, squeezing your chest muscles, then slowly return to the starting position.",
-    "createdBy": 0
+    "createdBy": 0,
+    "videoId": "aJZ3PZiO2xE"
   },
   {
     "name": "Pec Deck Fly",

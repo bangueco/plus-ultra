@@ -8,5 +8,6 @@ export const exercise = sqliteTable('Exercise', {
   custom: integer('custom', {mode: "number"}).default(0).notNull(),
   difficulty: text('difficulty', {mode: "text"}),
   instructions: text('instructions', {mode: "text"}),
-  created_by: integer('created_by', {mode: "number"}).notNull()
+  created_by: integer('created_by', {mode: "number"}).notNull(),
+  video_id: text('video_id', {mode: "text"})
 })

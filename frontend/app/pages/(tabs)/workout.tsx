@@ -13,6 +13,7 @@ import templateItemService from "@/services/templateItem.service"
 import exerciseService from "@/services/exercise.service"
 import ViewExerciseInfo from "@/components/ViewExerciseInfo"
 import { useExerciseStore } from "@/store/useExerciseStore"
+import YoutubePlayer from "react-native-youtube-iframe";
 
 
 const Workout = () => {
@@ -33,7 +34,7 @@ const Workout = () => {
     template_name: '',
     exercises: []
   })
-  const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string}>()
+  const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string, video_id?: string | null}>({name: '', instructions: '', video_id: ''})
 
   const fetchTemplates = async () => {
     try {
@@ -126,7 +127,7 @@ const Workout = () => {
       const exercise = await exerciseService.getExerciseById(id)
 
       if (exercise && exercise[0].instructions) {
-        return setCurrentGuide({name: exercise[0].name, instructions: exercise[0].instructions})
+        return setCurrentGuide({name: exercise[0].name, instructions: exercise[0].instructions, video_id: exercise[0].video_id})
       }
 
       if (exercise && exercise[0].name) {
@@ -217,6 +218,9 @@ const Workout = () => {
           <Dialog visible={guideVisible} onDismiss={handleGuideDismiss}>
             <Dialog.Title style={{textAlign: 'center'}}>{currentGuide?.name}</Dialog.Title>
             <Dialog.Content>
+              {
+                currentGuide.video_id && <YoutubePlayer height={150} videoId={currentGuide.video_id} />
+              }
               <Text style={{textAlign: 'justify', color: systemTheme.colors.text}}>{currentGuide?.instructions}</Text>
             </Dialog.Content>
             <Dialog.Actions>
