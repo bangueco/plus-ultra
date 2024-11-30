@@ -1,3 +1,8 @@
+export enum Role {
+  USER,
+  TRAINER
+}
+
 export type User = {
   id: number,
   username: string,
@@ -6,6 +11,7 @@ export type User = {
   accessToken: string,
   refreshToken: string,
   isEmailValid: boolean
+  role: Role
 }
 
 export type UserPreferences = {

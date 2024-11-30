@@ -11,7 +11,8 @@ const UserSchema = {
   password: z.string({ message: 'Password is required.' })
     .min(8, {message: 'Password must contain atleast 8 characters or more.'}),
   email: z.string({ message: 'Email is required.' }).email({ message: 'Invalid email format.' }),
-  birthdate: z.string().datetime()
+  birthdate: z.string().datetime(),
+  role: z.enum(['USER', 'TRAINER'])
 };
 
 export {

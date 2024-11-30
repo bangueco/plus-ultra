@@ -21,4 +21,10 @@ model User {
   password String
   birthdate DateTime
   isEmailValid Boolean
+  role Role @default(USER)
+}
+
+enum Role {
+  USER
+  TRAINER
 }

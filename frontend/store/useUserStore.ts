@@ -1,4 +1,4 @@
-import { User } from "@/types/user";
+import { Role, User } from "@/types/user";
 import { create } from "zustand";
 import * as SecureStore from "expo-secure-store"
 
@@ -12,7 +12,7 @@ type Action = {
 }
 
 export const useUserStore = create<State & Action>((set) => ({
-  user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false},
+  user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: Role.USER},
   getUserInfo: () => {
     const userJson = SecureStore.getItem('user')
 
@@ -24,6 +24,6 @@ export const useUserStore = create<State & Action>((set) => ({
   },
   logout: async () => {
     await SecureStore.deleteItemAsync('user')
-    return set({user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false}})
+    return set({user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: Role.USER}})
   }
 }))

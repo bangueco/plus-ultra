@@ -4,7 +4,6 @@ import { ParamListBase, useNavigation, useTheme } from "@react-navigation/native
 
 import authService from "@/services/auth.service";
 
-import CustomBtn from "@/components/custom/CustomBtn";
 import CustomPressable from "@/components/custom/CustomPressable";
 
 import { AxiosError } from "axios";
@@ -16,8 +15,9 @@ import * as SecureStore from 'expo-secure-store'
 import asyncStore from "@/lib/asyncStore";
 import { useRootNavigation } from "@/hooks/useRootNavigation";
 import { DatePickerInput } from "react-native-paper-dates";
-import { User } from "@/types/user";
+import { Role, User } from "@/types/user";
 import { useUserStore } from "@/store/useUserStore";
+import RNPickerSelect from 'react-native-picker-select';
 
 export default function Register () {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -30,12 +30,19 @@ export default function Register () {
   const [password, setPassword] = useState<string | undefined>(undefined)
   const [confirmPassword, setConfirmPassword] = useState<string | undefined>(undefined)
   const [birthdate, setBirthDate] = useState<Date | undefined>(undefined)
+  const [role, setRole] = useState<Role | undefined>(undefined)
 
   const [usernameErrorMessage, setUsernameErrorMessage] = useState<string>('')
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>('')
   const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('')
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState<string>('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('')
+  const [roleErrorMessage, setRoleErrorMessage] = useState<string>('')
+
+  const userRole = [
+    {label: "user", value: "USER"},
+    {label: "trainer", value: "TRAINER"}
+  ]
 
   const clearErrorMessage = () => {
     setUsernameErrorMessage('')
@@ -57,6 +64,8 @@ export default function Register () {
           setPasswordErrorMessage(data.message)
         } else if (data.field === 'birthdate') {
           setBirthDateErrorMessage(data.message)
+        } else if (data.field === 'role') {
+          setRoleErrorMessage(data.message)
         }
       })
     } else if (error instanceof AxiosError && error.response?.data) {
@@ -67,6 +76,8 @@ export default function Register () {
         setEmailErrorMessage(error.response.data.message)
       } else if (error.response.data.field === 'birthdate') {
         setBirthDateErrorMessage(error.response.data.message)
+      } else if (error.response.data.field === 'role') {
+        setRoleErrorMessage(error.response.data.message)
       }
     } else if (error instanceof AxiosError) {
       Alert.alert(error.message)
@@ -79,7 +90,7 @@ export default function Register () {
     try {
       clearErrorMessage()
       if (password !== confirmPassword) return setConfirmPasswordErrorMessage('Passwords must be identical to each other.')
-      await authService.register(username, email, password, birthdate)
+      await authService.register(username, email, password, birthdate, role)
       // TODO: Automatic login when registered user, but before that, navigate to setup page.
       const userInfo: User = await authService.login(username, password)
       await SecureStore.setItemAsync('user', JSON.stringify(userInfo))
@@ -94,6 +105,10 @@ export default function Register () {
   const handleChangeText = (setter: React.Dispatch<React.SetStateAction<string | undefined>>) => (text: string) => {
     setter(text === '' ? undefined : text);
   };
+
+  const onValueChangeRole = (value: Role) => {
+    return setRole(value)
+  }
 
   return(
     <View style={styles.container}>
@@ -135,6 +150,15 @@ export default function Register () {
             />
           </View>
           {birthDateErrorMessage && <ErrorMessage text={birthDateErrorMessage} />}
+          <View>
+            <RNPickerSelect
+              style={{inputAndroid: {color: colors.text}}}
+              onValueChange={onValueChangeRole}
+              items={userRole}
+              placeholder={{label: 'What is your role?'}}
+            />
+          </View>
+          {roleErrorMessage && <ErrorMessage text={roleErrorMessage} />}
           <View>
             <TextInput
               mode="outlined"

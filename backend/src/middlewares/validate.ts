@@ -15,7 +15,8 @@ const userRegistration = (request: Request, _response: Response, next: NextFunct
     username: UserSchema.username,
     email: UserSchema.email,
     birthdate: UserSchema.birthdate,
-    password: UserSchema.password.regex(passwordRegex, {message: 'Password must contain atleast 8 characters, one uppercase letter, a number and a special character.'})
+    password: UserSchema.password.regex(passwordRegex, {message: 'Password must contain atleast 8 characters, one uppercase letter, a number and a special character.'}),
+    role: UserSchema.role
   })
 
   try {

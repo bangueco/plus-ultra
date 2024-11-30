@@ -5,10 +5,11 @@ import { ValidationError } from "../utils/error"
 import { hashPassword, verifyPassword } from "../utils/lib/hashing"
 import { generateAccessToken, generateEmailToken, generateRefreshToken } from "../utils/lib/token"
 import emailService from "../services/email.service"
+import { User } from "@prisma/client"
 
 const register = async (request: Request, response: Response, next: NextFunction) => {
   try {
-    const {username, email, password, birthdate} = request.body
+    const {username, email, password, birthdate, role} = request.body as User
 
     const isUsernameExist = await userService.findByUsername(username)
     const isEmailExist = await userService.findByEmail(email)
@@ -35,7 +36,7 @@ const register = async (request: Request, response: Response, next: NextFunction
 
     emailService.sendVerificationEmail(email, emailToken, username)
 
-    const user = await userService.createUser(username, email, hashedPassword, birthDate, false, emailToken)
+    const user = await userService.createUser(username, email, hashedPassword, birthDate, false, emailToken, role)
     return response.status(HttpStatusCode.CREATED).json(user)
   } catch (error) {
     return next(error)
@@ -64,7 +65,8 @@ const login = async (request: Request, response: Response, next: NextFunction) =
       accessToken,
       refreshToken,
       birthdate: isUsernameExist.birthdate,
-      isEmailValid: isUsernameExist.isEmailValid
+      isEmailValid: isUsernameExist.isEmailValid,
+      role: isUsernameExist.role
     })
   } catch (error) {
     return next(error)

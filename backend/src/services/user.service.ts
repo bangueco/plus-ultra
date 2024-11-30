@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client'
 import prisma from '../utils/lib/prismaClient'
 
 const findById = async (id: number) => {
@@ -12,8 +13,8 @@ const findByEmail = async (email: string) => {
   return await prisma.user.findUnique({where: {email}})
 }
 
-const createUser = async (username: string, email: string, password: string, birthdate: Date, isEmailValid: boolean, emailToken: string) => {
-  return await prisma.user.create({data: {username, email, password, birthdate, isEmailValid, emailToken}})
+const createUser = async (username: string, email: string, password: string, birthdate: Date, isEmailValid: boolean, emailToken: string, role: Role) => {
+  return await prisma.user.create({data: {username, email, password, birthdate, isEmailValid, emailToken, role}})
 }
 
 const updateUser = async (id: number, data: Record<string, any>) => {
