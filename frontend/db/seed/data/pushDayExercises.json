@@ -1,32 +1,32 @@
 [
   {
-    "exercise_id": 4,
+    "exercise_id": 2,
     "item_name": "Incline Dumbbell Bench Press",
     "muscleGroup": "Chest"
   },
   {
-    "exercise_id": 5,
+    "exercise_id": 1,
     "item_name": "Flat Dumbbell Bench Press",
     "muscleGroup": "Chest"
   },
   {
-    "exercise_id": 6,
-    "item_name": "Dumbbell Flyes",
+    "exercise_id": 9,
+    "item_name": "Pec Deck Fly",
     "muscleGroup": "Chest"
   },
   {
-    "exercise_id": 14,
-    "item_name": "Shoulder Press",
+    "exercise_id": 26,
+    "item_name": "Dumbbell Shoulder Press",
     "muscleGroup": "Shoulders"
   },
   {
-    "exercise_id": 15,
+    "exercise_id": 27,
     "item_name": "Lateral Raise",
     "muscleGroup": "Shoulders"
   },
   {
-    "exercise_id": 21,
-    "item_name": "Overhead Tricep Extension",
+    "exercise_id": 33,
+    "item_name": "Overhead Tricep Extension (Dumbbell)",
     "muscleGroup": "Arms"
   },
   {
