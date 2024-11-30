@@ -46,6 +46,15 @@ const verifyEmail = async (request: Request, response: Response, next: NextFunct
   }
 }
 
+const getTrainers = async (_request: Request, response: Response, next: NextFunction) => {
+  try {
+    const trainers = await userService.findAllTrainer()
+    return response.status(HttpStatusCode.OK).json(trainers)
+  } catch (error) {
+    return next(error)
+  }
+}
+
 export default {
-  isEmailVerified, verifyEmail
+  isEmailVerified, verifyEmail, getTrainers
 }

@@ -9,7 +9,7 @@ type State = {
 
 type Action = {
   fetchExercise: () => Promise<void>,
-  addExercise: (exerciseName: string, muscleGroup: string, equipmentName: string, createdBy: string) => Promise<SQLiteRunResult>,
+  addExercise: (exerciseName: string, muscleGroup: string, equipmentName: string, createdBy: number) => Promise<SQLiteRunResult>,
 }
 
 export const useExerciseStore = create<State & Action>((set) => ({

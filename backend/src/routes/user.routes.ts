@@ -5,5 +5,6 @@ const userRouter = express.Router()
 
 userRouter.get('/email/status', userController.isEmailVerified)
 userRouter.get('/email/verify', userController.verifyEmail)
+userRouter.get('/trainers', userController.getTrainers)
 
 export default userRouter

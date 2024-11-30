@@ -8,6 +8,8 @@ import { useUserStore } from "@/store/useUserStore";
 import { fitnessLevel } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import asyncStore from "@/lib/asyncStore"
+import { useTrainerStore } from "@/store/useTrainerStore"
+import { Role } from "@/types/user"
 
 type PreferencesProps = {
   firstTime: boolean,
@@ -25,7 +27,8 @@ const Profile = () => {
   const [userWeight, setUserWeight] = useState<string>()
   const [userHeight, setUserHeight] = useState<string>()
 
-  const {logout} = useUserStore()
+  const {logout, user} = useUserStore()
+  const {fetchTrainers, trainer} = useTrainerStore()
 
   const toggleProfileVisibility = async () => {
     const pref = await asyncStore.getItem('preferences')
@@ -67,6 +70,10 @@ const Profile = () => {
 
     return await asyncStore.setItem('preferences', {firstTime: false, darkMode: false, fitnessLevel: userFitnessLevel, weight: userWeight, height: userHeight})
   }
+
+  useEffect(() => {
+    fetchTrainers().then(() => console.log("Trainers fetched!"))
+  }, [])
 
   return(
     <View style={styles.container}>
@@ -129,11 +136,31 @@ const Profile = () => {
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
           <Text style={{color: systemTheme.colors.primary, fontSize: 16}}>Available Trainers</Text>
           <Button icon="reload"
-            onPress={() => console.log("TODO: Implement refresh")}
+            onPress={async () => await fetchTrainers()}
           >
-            Refresh trainer
+            Refresh trainers
           </Button>
         </View>
+        <FlatList
+          data={trainer}
+          renderItem={({item}) => (
+            <View key={item.id} style={{
+                padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'row',
+                justifyContent: 'space-around', alignItems: 'center', borderRadius: 10
+              }}>
+              <View>
+                <Text style={{color: systemTheme.colors.text}}>Trainer name: {item.username}</Text>
+                <Text style={{color: systemTheme.colors.text}}>Trainer email: {item.email}</Text>
+                <Text style={{color: systemTheme.colors.text}}>Clients: {item.clients.length}</Text>
+              </View>
+              <View>
+                {
+                  item.clients.find((e) => e.id === user.id) ? <Button>Leave</Button> : <Button>Join</Button>
+                }
+              </View>
+            </View>
+          )}
+        />
       </View>
     </View>
   )

@@ -29,7 +29,7 @@ const Exercise = () => {
 
   const onPressNewExercise = async () => {
     try {
-      return await addExercise(exerciseName, muscleGroup, equipmentName, `${user.username}`)
+      return await addExercise(exerciseName, muscleGroup, equipmentName, user.id)
     } catch (error) {
       console.error(error)
     }

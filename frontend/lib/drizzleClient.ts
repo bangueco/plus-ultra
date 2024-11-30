@@ -5,7 +5,7 @@ import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 
 import migrations from '@/db/migrations/migrations';
 
-const expoDb = openDatabaseSync("ihatejs");
+const expoDb = openDatabaseSync("nigga.db");
 export const db = drizzle(expoDb)
 
 export const useDrizzleStudioHelper = () => {

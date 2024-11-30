@@ -22,6 +22,9 @@ model User {
   birthdate DateTime
   isEmailValid Boolean
   role Role @default(USER)
+  trainerId Int?
+  trainer User? @relation("UserTrainer", fields: [trainerId], references: [id])
+  clients User[] @relation("UserTrainer")
 }
 
 enum Role {

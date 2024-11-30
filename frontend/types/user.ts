@@ -14,6 +14,15 @@ export type User = {
   role: Role
 }
 
+export type Trainer = {
+  id: number,
+  username: string
+  email: string,
+  isEmailvalid: boolean,
+  role: Role,
+  clients: Array<User>
+}
+
 export type UserPreferences = {
   darkMode: boolean,
   fitnessLevel: string,

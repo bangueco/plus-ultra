@@ -5,6 +5,18 @@ const findById = async (id: number) => {
   return await prisma.user.findUnique({where: {id}})
 }
 
+const findAllTrainer = async () => {
+  return await prisma.user.findMany({select: {
+    id: true,
+    username: true,
+    email: true,
+    password: false,
+    isEmailValid: true,
+    role: true,
+    clients: true
+  }, where: {role: "TRAINER"}})
+}
+
 const findByUsername = async (username: string) => {
   return await prisma.user.findUnique({where: {username}})
 }
@@ -25,9 +37,5 @@ const updateUser = async (id: number, data: Record<string, any>) => {
 }
 
 export default {
-  findById,
-  findByUsername,
-  findByEmail,
-  createUser,
-  updateUser
+  findById, findAllTrainer, findByUsername, findByEmail, createUser, updateUser
 }
