@@ -9,7 +9,10 @@ import { fitnessLevel } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import asyncStore from "@/lib/asyncStore"
 import { useTrainerStore } from "@/store/useTrainerStore"
-import { Role } from "@/types/user"
+import { Role, User, UserTrainer } from "@/types/user"
+import { AxiosError } from "axios"
+import trainerService from "@/services/trainer.service"
+import { SecureStore } from "@/lib/secureStore"
 
 type PreferencesProps = {
   firstTime: boolean,
@@ -27,7 +30,7 @@ const Profile = () => {
   const [userWeight, setUserWeight] = useState<string>()
   const [userHeight, setUserHeight] = useState<string>()
 
-  const {logout, user} = useUserStore()
+  const {logout, user, getUserInfo} = useUserStore()
   const {fetchTrainers, trainer} = useTrainerStore()
 
   const toggleProfileVisibility = async () => {
@@ -69,6 +72,56 @@ const Profile = () => {
     setVisibleProfile(!visibleProfile)
 
     return await asyncStore.setItem('preferences', {firstTime: false, darkMode: false, fitnessLevel: userFitnessLevel, weight: userWeight, height: userHeight})
+  }
+
+  const onPressLeaveTrainer = async (userId: number) => {
+    try {
+      const req = await trainerService.leaveTrainer(userId)
+
+      const userInfo = await SecureStore.getItemAsync('user')
+      
+      if (!userInfo) return Alert.alert("User info not found!")
+
+      const userInfoTrainer: UserTrainer = req.data
+      const parsedUserInfo: User = JSON.parse(userInfo)
+
+      parsedUserInfo.trainerId = userInfoTrainer.trainerId
+
+      await SecureStore.setItemAsync('user', JSON.stringify(parsedUserInfo))
+
+      getUserInfo()
+
+      return await fetchTrainers()
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Alert.alert(error.response?.data.message)
+      }
+    }
+  }
+
+  const onPressJoinTrainer = async (userId: number, trainerId: number) => {
+    try {
+      const req = await trainerService.joinTrainer(userId, trainerId)
+
+      const userInfo = await SecureStore.getItemAsync('user')
+      
+      if (!userInfo) return Alert.alert("User info not found!")
+
+      const userInfoTrainer: UserTrainer = req.data
+      const parsedUserInfo: User = JSON.parse(userInfo)
+
+      parsedUserInfo.trainerId = userInfoTrainer.trainerId
+
+      await SecureStore.setItemAsync('user', JSON.stringify(parsedUserInfo))
+
+      getUserInfo()
+
+      return await fetchTrainers()
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Alert.alert(error.response?.data.message)
+      }
+    }
   }
 
   useEffect(() => {
@@ -155,7 +208,7 @@ const Profile = () => {
               </View>
               <View>
                 {
-                  item.clients.find((e) => e.id === user.id) ? <Button>Leave</Button> : <Button>Join</Button>
+                  item.clients.find((e) => e.id === user.id) ? <Button mode="contained" onPress={async () => await onPressLeaveTrainer(user.id)}>Leave</Button> : <Button mode="contained" onPress={async () => await onPressJoinTrainer(user.id, item.id)} >Join</Button>
                 }
               </View>
             </View>

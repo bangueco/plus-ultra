@@ -2,7 +2,15 @@ import { Role } from '@prisma/client'
 import prisma from '../utils/lib/prismaClient'
 
 const findById = async (id: number) => {
-  return await prisma.user.findUnique({where: {id}})
+  return await prisma.user.findUnique({select: {
+    id: true,
+    username: true,
+    email: true,
+    password: false,
+    isEmailValid: true,
+    role: true,
+    trainerId: true
+  }, where: {id}})
 }
 
 const findAllTrainer = async () => {
@@ -36,6 +44,10 @@ const updateUser = async (id: number, data: Record<string, any>) => {
   })
 }
 
+const setTrainerId = async (userId: number, trainerId: number | null) => {
+  return await prisma.user.update({data: {trainerId}, where: {id: userId}})
+}
+
 export default {
-  findById, findAllTrainer, findByUsername, findByEmail, createUser, updateUser
+  findById, findAllTrainer, findByUsername, findByEmail, createUser, updateUser, setTrainerId
 }

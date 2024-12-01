@@ -66,7 +66,8 @@ const login = async (request: Request, response: Response, next: NextFunction) =
       refreshToken,
       birthdate: isUsernameExist.birthdate,
       isEmailValid: isUsernameExist.isEmailValid,
-      role: isUsernameExist.role
+      role: isUsernameExist.role,
+      trainerId: isUsernameExist.trainerId
     })
   } catch (error) {
     return next(error)

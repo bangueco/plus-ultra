@@ -12,6 +12,7 @@ export type User = {
   refreshToken: string,
   isEmailValid: boolean
   role: Role
+  trainerId: number | null
 }
 
 export type Trainer = {
@@ -27,4 +28,11 @@ export type UserPreferences = {
   darkMode: boolean,
   fitnessLevel: string,
   firstTime: boolean
+}
+
+export type UserTrainer = {
+  id: number,
+  username: string,
+  role: Role,
+  trainerId: number | null
 }

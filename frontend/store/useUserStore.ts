@@ -12,7 +12,7 @@ type Action = {
 }
 
 export const useUserStore = create<State & Action>((set) => ({
-  user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: Role.USER},
+  user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: Role.USER, trainerId: null},
   getUserInfo: () => {
     const userJson = SecureStore.getItem('user')
 
@@ -24,6 +24,6 @@ export const useUserStore = create<State & Action>((set) => ({
   },
   logout: async () => {
     await SecureStore.deleteItemAsync('user')
-    return set({user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: Role.USER}})
+    return set({user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: Role.USER, trainerId: null}})
   }
 }))

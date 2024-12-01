@@ -7,6 +7,16 @@ const getAllTrainers = async () => {
   return request.data
 }
 
+const joinTrainer = async (userId: number, trainerId: number | null) => {
+  const request = await axios.post(`${baseURL}/user/trainers/join`, {userId, trainerId})
+  return request
+}
+
+const leaveTrainer = async (userId: number) => {
+  const request = await axios.post(`${baseURL}/user/trainers/leave`, {userId})
+  return request
+}
+
 export default {
-  getAllTrainers
+  getAllTrainers, joinTrainer, leaveTrainer
 }

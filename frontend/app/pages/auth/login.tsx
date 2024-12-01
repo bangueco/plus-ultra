@@ -12,7 +12,7 @@ import { TextInput } from 'react-native-paper';
 
 import * as SecureStore from 'expo-secure-store';
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
-import { User } from "@/types/user";
+import { Role, User } from "@/types/user";
 
 export default function Login () {
   const { colors } = useTheme();
@@ -25,8 +25,8 @@ export default function Login () {
   const [passwordErrorMessage, setPasswordErrorMessage] =  useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
 
-  const saveUserInfo = async (id: number, email: string, username: string, accessToken: string, refreshToken: string, birthdate: Date, isEmailValid: boolean) => {
-    return await SecureStore.setItemAsync('user', JSON.stringify({id, username, email, accessToken, refreshToken, birthdate, isEmailValid}))
+  const saveUserInfo = async (id: number, email: string, username: string, accessToken: string, refreshToken: string, birthdate: Date, isEmailValid: boolean, role: Role, trainerId: number | null) => {
+    return await SecureStore.setItemAsync('user', JSON.stringify({id, username, email, accessToken, refreshToken, birthdate, isEmailValid, role, trainerId}))
   }
 
   const clearErrorMessage = () => {
@@ -64,7 +64,7 @@ export default function Login () {
     try {
       clearErrorMessage()
       const user: User = await authService.login(username, password)
-      await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken, user.birthdate, user.isEmailValid)
+      await saveUserInfo(user.id, user.email, user.username, user.accessToken, user.refreshToken, user.birthdate, user.isEmailValid, user.role, user.trainerId)
       return navigation.replace('Tabs')
     } catch (error: unknown) {
       if (error instanceof AxiosError) handleErrorMessage(error)
