@@ -1,5 +1,5 @@
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ActivityIndicator, Alert, Pressable, SectionList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, AntDesign} from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
@@ -22,7 +22,7 @@ import exerciseService from '@/services/exercise.service';
 type Preferences = {
   firstTime: boolean,
   darkMode: boolean,
-  userFitnessLevel: string
+  fitnessLevel: string
 }
 
 export default function Scan() {
@@ -30,6 +30,7 @@ export default function Scan() {
   
   const systemTheme = useSystemTheme()
 
+  const [preferences, setPreferences] = useState<Preferences>({darkMode: false, firstTime:false, fitnessLevel:""})
   const [cameraActive, setCameraActive] = useState<Boolean>(false)
   const [equipmentExercises, setEquipmentExercises] = useState<EquipmentExercises>()
   const [loading, setLoading] = useState<Boolean>(false)
@@ -55,17 +56,27 @@ export default function Scan() {
     setVisible(true)
   }
 
-  const filterByDifficulty = async (exercise: Array<ExerciseInfo>): Promise<Array<ExerciseInfo> | undefined> => {
+  const setUserPreferences = async () => {
     const preference = await asyncStore.getItem('preferences')
 
     if (!preference) return
 
     const parsedPreference: Preferences = JSON.parse(preference)
+    setPreferences(parsedPreference)
+  }
 
-    if (parsedPreference.userFitnessLevel === 'Beginner') {
+  useEffect(() => {
+    setUserPreferences().then(() => console.log("Preferences set successfully!"))
+  }, [])
+
+  const filterByDifficulty = (exercise: Array<ExerciseInfo>) => {
+
+    if (!preferences) return exercise
+
+    if (preferences.fitnessLevel === 'Beginner') {
       return exercise.filter(diff => diff.difficulty === 'Beginner')
-    } else if (parsedPreference.userFitnessLevel === 'Intermediate') {
-      return exercise.filter(diff => diff.difficulty === 'Intermediate')
+    } else if (preferences.fitnessLevel === 'Intermediate') {
+      return exercise.filter(diff => diff.difficulty !== 'Advanced')
     } else {
       return exercise
     }
@@ -222,7 +233,7 @@ export default function Scan() {
         {
           currentSelected === 'all' && (
             <SectionList
-              extraData={filterByDifficulty(equipmentExercises.exercises)}
+              extraData={equipmentExercises.exercises}
               sections={sortByMuscleGroup(equipmentExercises.exercises)}
               renderItem={({item}) => (
                 <CustomPressable
@@ -246,8 +257,8 @@ export default function Scan() {
         {
           currentSelected === 'recommended' && (
             <SectionList
-              extraData={filterByDifficulty(equipmentExercises.exercises)}
-              sections={sortByMuscleGroup(equipmentExercises.exercises)}
+              extraData={equipmentExercises.exercises}
+              sections={sortByMuscleGroup(filterByDifficulty(equipmentExercises.exercises))}
               renderItem={({item}) => (
                 <CustomPressable
                   key={item.id} 
