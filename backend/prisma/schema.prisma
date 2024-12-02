@@ -25,9 +25,35 @@ model User {
   trainerId Int?
   trainer User? @relation("UserTrainer", fields: [trainerId], references: [id])
   clients User[] @relation("UserTrainer")
+  templates Template[] @relation("UserTemplate")
+}
+
+model Template {
+  template_id Int @id @default(autoincrement())
+  template_name String
+  custom Int
+  difficulty Difficulty
+  creatorId Int
+  user User @relation("UserTemplate", fields: [creatorId], references: [id])
+  items TemplateItem[] @relation("TemplateItems")
+}
+
+model TemplateItem {
+  template_item_id Int @id @default(autoincrement())
+  template_item_name String
+  muscle_group String
+  template_id Int
+  exercise_id Int
+  template Template @relation("TemplateItems", fields: [template_id], references: [template_id])
 }
 
 enum Role {
   USER
   TRAINER
+}
+
+enum Difficulty {
+  Beginner
+  Intermediate
+  Advance
 }
