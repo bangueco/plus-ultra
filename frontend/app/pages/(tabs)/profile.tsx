@@ -31,7 +31,7 @@ const Profile = () => {
   const [userHeight, setUserHeight] = useState<string>()
 
   const {logout, user, getUserInfo} = useUserStore()
-  const {fetchTrainers, trainer} = useTrainerStore()
+  const {fetchTrainers, trainer, fetchTrainerTemplates} = useTrainerStore()
 
   const toggleProfileVisibility = async () => {
     const pref = await asyncStore.getItem('preferences')
@@ -91,7 +91,8 @@ const Profile = () => {
 
       getUserInfo()
 
-      return await fetchTrainers()
+      await fetchTrainers()
+      return await fetchTrainerTemplates(0)
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)
@@ -116,7 +117,8 @@ const Profile = () => {
 
       getUserInfo()
 
-      return await fetchTrainers()
+      await fetchTrainers()
+      return await fetchTrainerTemplates(parsedUserInfo.trainerId ?? 0)
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)
