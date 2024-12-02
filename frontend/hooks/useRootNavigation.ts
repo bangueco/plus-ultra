@@ -5,8 +5,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 const useRootNavigation = createNavigationContainerRef<RootNativeStackParamList>();
 
 type RootProps = NativeStackScreenProps<RootNativeStackParamList, 'WorkoutSession'>
+type TrainerSessionProps = NativeStackScreenProps<RootNativeStackParamList, 'TrainerSession'>
 
 export {
   useRootNavigation,
-  RootProps
+  RootProps,
+  TrainerSessionProps
 }

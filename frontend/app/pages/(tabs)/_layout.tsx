@@ -73,7 +73,7 @@ export default function TabsLayout() {
           if (preferences.firstTime) {
             return navigation.replace('Disclaimer');
           } else {
-            return navigation.replace('Tabs');
+            return navigation.navigate('Tabs');
           }
         }
       } catch (error) {

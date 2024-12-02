@@ -34,3 +34,11 @@ export type TemplateItemProps = {
   muscleGroup: string
   exercise_id: number
 }
+
+export type TemplateTrainerProps = {
+  template_id: number,
+  template_name: string,
+  custom: number,
+  difficulty: string,
+  creatorId: number
+}

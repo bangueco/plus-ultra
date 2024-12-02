@@ -3,6 +3,12 @@ export enum Role {
   TRAINER
 }
 
+export enum Difficulty {
+  Beginner,
+  Intermediate,
+  Advanced
+}
+
 export type User = {
   id: number,
   username: string,

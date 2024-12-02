@@ -18,17 +18,49 @@ type TemplateProps = {
   templateItems: Array<TemplateItemProps>
 }
 
-const findTemplatesByCreator = async (request: Request, response: Response, next: NextFunction) => {
-  const { creatorId } = request.params
+const findTemplateById = async (request: Request, response: Response, next: NextFunction) => {
+  const { id } = request.params
 
   try {
-    if (!creatorId) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Creator id is not specified!")
+    if (!id) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Template id is not specified!")
 
-    const templateCreator = await templateService.findTemplatesByCreatorId(Number(creatorId))
+    const template = await templateService.findTemplateById(Number(id))
+
+    if (!template) throw new ApiError(HttpStatusCode.NOT_FOUND, "Template not found!")
+
+      return response.status(HttpStatusCode.OK).json(template)
+  } catch (error) {
+    return next(error)
+  }
+}
+
+const findTemplatesByCreator = async (request: Request, response: Response, next: NextFunction) => {
+  const { id } = request.params
+
+  try {
+    if (!id) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Creator id is not specified!")
+
+    const templateCreator = await templateService.findTemplatesByCreatorId(Number(id))
 
     if (!templateCreator) throw new ApiError(HttpStatusCode.NOT_FOUND, "Creator not found!")
 
     return response.status(HttpStatusCode.OK).json(templateCreator)
+  } catch (error) {
+    return next(error)
+  }
+}
+
+const findTemplateItemByTemplateId = async (request: Request, response: Response, next: NextFunction) => {
+  const { id } = request.params
+
+  try {
+    if (!id) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Template id is not specified!")
+
+    const templateItems = await templateService.findTemplateItemsByTemplateId(Number(id))
+
+    if (!templateItems) throw new ApiError(HttpStatusCode.NOT_FOUND, "Creator not found!")
+
+      return response.status(HttpStatusCode.OK).json(templateItems)
   } catch (error) {
     return next(error)
   }
@@ -55,5 +87,5 @@ const createTemplate = async (request: Request, response: Response, next: NextFu
 }
 
 export default {
-  findTemplatesByCreator, createTemplate
+  findTemplateById, findTemplatesByCreator, findTemplateItemByTemplateId, createTemplate
 }

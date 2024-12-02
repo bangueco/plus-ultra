@@ -6,6 +6,7 @@ import Login from './pages/auth/login';
 import Register from './pages/auth/register';
 import TabsLayout from './pages/(tabs)/_layout';
 import WorkoutSession from './pages/workout/session';
+import TrainerSession from './pages/workout/trainersession';
 
 import Disclaimer from './pages/setup/disclaimer';
 import UserInfo from './pages/setup/user-info';
@@ -39,6 +40,7 @@ export default function RootLayout() {
             component={WorkoutSession}
             initialParams={{templateId: 0}}
           />
+          <Stack.Screen name='TrainerSession' component={TrainerSession} initialParams={{templateId: 0}} />
           <Stack.Screen name="Verification" component={Verification} />
           <Stack.Screen name="Disclaimer" component={Disclaimer}/>
           <Stack.Screen name="UserInfo" component={UserInfo} />

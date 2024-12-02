@@ -19,12 +19,14 @@ import { AxiosError } from "axios"
 
 import RNPickerSelect from 'react-native-picker-select';
 import { fitnessLevel } from "@/constants/exercise"
+import { useTrainerStore } from "@/store/useTrainerStore"
 
 
 const Workout = () => {
   const systemTheme = useSystemTheme()
   const { exercise } = useExerciseStore()
   const { user } = useUserStore()
+  const { trainerTemplate, fetchTrainerTemplates } = useTrainerStore()
 
   const [selectedExercises, setSelectedExercises] = useState<Array<{exercise_id: number, item_name: string, muscleGroup: string}>>([])
 
@@ -34,6 +36,7 @@ const Workout = () => {
   const [newTemplate, setNewTemplate] = useState<NewTemplateItem>({template_name: '', exercises: []})
   const [exerciseListVisible, setExerciseListVisible] = useState<boolean>(false)
   const [templateVisible, setTemplateVisible] = useState<boolean>(false)
+  const [templateTrainerVisible, setTemplateTrainerVisible] = useState<boolean>(false)
   const [guideVisible, setGuideVisible] = useState<boolean>(false)
   const [workoutTemplates, setWorkoutTemplates] = useState<Array<TemplatesType>>([])
   const [currentTemplate, setCurrentTemplate] = useState<{
@@ -67,9 +70,28 @@ const Workout = () => {
     }
   }
 
+  const onPressViewTrainerTemplate = async (id: number) => {
+    try {
+      setTemplateTrainerVisible(true)
+      const template_name = await templateService.findTrainerTemplateById(id)
+      const item = await templateService.findTrainerTemplateItemById(id)
+      setCurrentTemplate({
+        template_name: template_name.data.template_name,
+        exercises: item.data
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const onDismissTemplate = () => {
     setTemplateVisible(false)
     setCurrentTemplate({template_name: '', exercises: []})
+
+    if (templateTrainerVisible) {
+      setTemplateTrainerVisible(false)
+      setCurrentTemplate({template_name: '', exercises: []})
+    }
   }
 
   const onPressCreateTemplate = async () => {
@@ -93,12 +115,14 @@ const Workout = () => {
 
   const onPressCreateTrainerTemplate = async () => {
     try {
-      
-      const initTemplate = await templateService.createTrainerTemplate(newTemplate.template_name, 1, difficulty, user.id, newTemplate.exercises)
-      console.log(initTemplate.data)
+
+      if (!difficulty) return Alert.alert("Difficulty field is required!")
+      await templateService.createTrainerTemplate(newTemplate.template_name, 1, difficulty, user.id, newTemplate.exercises)
       setNewTemplate({...newTemplate, template_name: '', exercises: []})
 
-      return setNewClientTemplateVisible(false)
+      setNewClientTemplateVisible(false)
+
+      return await fetchTrainerTemplates(user.id)
 
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -170,6 +194,14 @@ const Workout = () => {
     }
   }
 
+  const onPressStartTrainerWorkout = () => {
+    setTemplateTrainerVisible(false)
+
+    if (useRootNavigation.isReady()) {
+      return useRootNavigation.navigate('TrainerSession', {templateId: currentTemplate.exercises[0].template_id})
+    }
+  }
+
   const handleGuideShow = () => {
     // if guide has been clicked, hide the template and show guide.
     setTemplateVisible(false)
@@ -192,6 +224,14 @@ const Workout = () => {
 
   useEffect(() => {
     fetchTemplates().catch((error) => console.error(error))
+
+    if (user.role === "TRAINER") {
+      fetchTrainerTemplates(user.id).catch(error => console.error(error.data.message))
+    }
+
+    if (user.role === "USER" && user.trainerId) {
+      fetchTrainerTemplates(user.trainerId).catch(error => console.error(error.data.message))
+    }
   }, [])
 
   return (
@@ -240,6 +280,50 @@ const Workout = () => {
             </Dialog.ScrollArea>
             <Dialog.Actions>
               <Button onPress={onPressStartWorkout}>Start Workout</Button>
+            </Dialog.Actions>
+          </Dialog>
+          {/* Show dialog for viewing trainer template */}
+          <Dialog visible={templateTrainerVisible} onDismiss={onDismissTemplate}>
+            <Dialog.Title style={{textAlign: 'center'}}>{currentTemplate.template_name}</Dialog.Title>
+            <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
+              <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 25, marginTop: 5, maxHeight: 400}}>
+                {
+                  currentTemplate && currentTemplate.exercises.map(item => (
+                    <View
+                      style={[styles.templateItem]}
+                      key={item.template_item_id}
+                    >
+                      <View style={{
+                        justifyContent: 'flex-end'
+                      }}>
+                        <Text 
+                        style={{
+                            fontSize: 15, 
+                            fontWeight: 'bold', 
+                            color: systemTheme.colors.text,
+                            width: 200
+                          }}
+                        numberOfLines={1}
+                        >
+                          {item.template_item_name}
+                        </Text>
+                        <Text style={{color: systemTheme.colors.primary}}>{item.muscle_group}</Text>
+                      </View>
+                      <View>
+                        <IconButton
+                          icon="information"
+                          size={23}
+                          iconColor={systemTheme.colors.primary}
+                          onPress={() => onPressShowGuide(item.exercise_id)}
+                        />
+                      </View>
+                    </View>
+                  ))
+                }
+              </ScrollView>
+            </Dialog.ScrollArea>
+            <Dialog.Actions>
+              <Button onPress={onPressStartTrainerWorkout}>Start Workout</Button>
             </Dialog.Actions>
           </Dialog>
           {/* Show pop up dialog for viewing exercise guides */}
@@ -447,23 +531,36 @@ const Workout = () => {
             user.role === "USER"
             ?
             <View style={{gap: 5, flexGrow: 1}}>
-              <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+              <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', paddingBottom: 20}}>
                 <Text style={{color: systemTheme.colors.text, fontSize: 20, textAlign: 'center'}}># Your trainer templates</Text>
                 <Button
                   mode="contained"
                   icon="reload"
-                  onPress={async () => {}}
+                  onPress={async () => await fetchTrainerTemplates(user.trainerId ?? 0)}
                 >
                   Refresh
                 </Button>
               </View>
               <View style={styles.templates}>
-
+                {
+                  trainerTemplate && trainerTemplate.map((template) => (
+                    <Pressable
+                      key={template.template_id}
+                      style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
+                      onPress={() => onPressViewTrainerTemplate(template.template_id)}
+                  >
+                    <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
+                  </Pressable>
+                  ))
+                }
+                {
+                  trainerTemplate.length === 0 && <Text style={{color: systemTheme.colors.text}}>No trainer templates</Text>
+                }
               </View>
             </View>
             :
             <View style={{gap: 5, flexGrow: 1}}>
-              <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', gap: 10}}>
+              <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', gap: 10, paddingBottom: 20}}>
                 <Text style={{color: systemTheme.colors.text, fontSize: 20}}>Template for clients</Text>
                 <CustomPressable
                   buttonStyle={{backgroundColor: systemTheme.colors.primary, borderRadius: 5, width: '90%'}}
@@ -471,6 +568,27 @@ const Workout = () => {
                   text="Add new template for clients"
                   onPress={() => setNewClientTemplateVisible(true)}
                 />
+              </View>
+              <View style={styles.templates}>
+                {
+                  trainerTemplate && trainerTemplate.map((template) => (
+                    <Pressable
+                      key={template.template_id}
+                      style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
+                      onPress={() => onPressViewTrainerTemplate(template.template_id)}
+                  >
+                    <View
+                      style={{position: 'absolute', top: -15, right: -10}}
+                    >
+                      <TemplateMenu
+                        editTemplate={() => {}}
+                        deleteTemplate={() => onPressDeleteTemplate(template.template_id)}
+                      />
+                    </View>
+                    <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
+                  </Pressable>
+                  ))
+                }
               </View>
             </View>
           }
@@ -494,7 +612,8 @@ const styles = StyleSheet.create({
   templates: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    rowGap: 10
   },
   templateItem: {
     padding: 10,

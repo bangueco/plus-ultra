@@ -20,8 +20,18 @@ const createTemplate = async (templateName: string, custom: boolean) => {
   })
 }
 
+const findTrainerTemplateById = async (id: number) => {
+  const request = await axios.get(`${baseURL}/template/${id}`)
+  return request
+}
+
+const findTrainerTemplateItemById = async (id: number) => {
+  const request = await axios.get(`${baseURL}/template/item/${id}`)
+  return request
+}
+
 const findTemplatesByCreator = async (creatorId: number) => {
-  const request = await axios.post(`${baseURL}/template/creator/${creatorId}`)
+  const request = await axios.get(`${baseURL}/template/creator/${creatorId}`)
   return request
 }
 
@@ -52,5 +62,7 @@ export default {
   createTrainerTemplate,
   updateTemplate,
   deleteTemplate,
-  deleteAllTemplate
+  deleteAllTemplate,
+  findTrainerTemplateById,
+  findTrainerTemplateItemById
 }
