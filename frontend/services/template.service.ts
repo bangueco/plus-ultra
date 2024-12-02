@@ -1,6 +1,9 @@
 import { template, } from "@/db/schema/template";
 import { db } from "@/lib/drizzleClient";
+import { TemplateItemProps } from "@/types/templates";
 import { eq } from "drizzle-orm";
+import axios from "axios";
+const baseURL = process.env.EXPO_PUBLIC_API_URL
 
 const getAllTemplate = async () => {
   return await db.select().from(template)
@@ -15,6 +18,16 @@ const createTemplate = async (templateName: string, custom: boolean) => {
     template_name: templateName,
     custom: custom ? 1 : 0
   })
+}
+
+const findTemplatesByCreator = async (creatorId: number) => {
+  const request = await axios.post(`${baseURL}/template/creator/${creatorId}`)
+  return request
+}
+
+const createTrainerTemplate = async (templateName: string, custom: number, difficulty: string, creatorId: number, templateItems: Array<TemplateItemProps>) => {
+  const request = await axios.post(`${baseURL}/template/create`, {template_name: templateName, custom, difficulty, creatorId, templateItems})
+  return request
 }
 
 const updateTemplate = async (templateId: number, templateName: string) => {
@@ -35,6 +48,8 @@ export default {
   getAllTemplate,
   getTemplateById,
   createTemplate,
+  findTemplatesByCreator,
+  createTrainerTemplate,
   updateTemplate,
   deleteTemplate,
   deleteAllTemplate

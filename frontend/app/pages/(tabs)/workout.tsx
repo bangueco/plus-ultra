@@ -14,15 +14,23 @@ import exerciseService from "@/services/exercise.service"
 import ViewExerciseInfo from "@/components/ViewExerciseInfo"
 import { useExerciseStore } from "@/store/useExerciseStore"
 import YoutubePlayer from "react-native-youtube-iframe";
+import { useUserStore } from "@/store/useUserStore"
+import { AxiosError } from "axios"
+
+import RNPickerSelect from 'react-native-picker-select';
+import { fitnessLevel } from "@/constants/exercise"
 
 
 const Workout = () => {
   const systemTheme = useSystemTheme()
   const { exercise } = useExerciseStore()
+  const { user } = useUserStore()
 
   const [selectedExercises, setSelectedExercises] = useState<Array<{exercise_id: number, item_name: string, muscleGroup: string}>>([])
 
   const [newTemplateVisible, setNewTemplateVisible] = useState<boolean>(false)
+  const [newClientTemplateVisible, setNewClientTemplateVisible] = useState<boolean>(false)
+  const [difficulty, setDifficulty] = useState<string>('')
   const [newTemplate, setNewTemplate] = useState<NewTemplateItem>({template_name: '', exercises: []})
   const [exerciseListVisible, setExerciseListVisible] = useState<boolean>(false)
   const [templateVisible, setTemplateVisible] = useState<boolean>(false)
@@ -80,6 +88,22 @@ const Workout = () => {
       return setNewTemplateVisible(false)
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const onPressCreateTrainerTemplate = async () => {
+    try {
+      
+      const initTemplate = await templateService.createTrainerTemplate(newTemplate.template_name, 1, difficulty, user.id, newTemplate.exercises)
+      console.log(initTemplate.data)
+      setNewTemplate({...newTemplate, template_name: '', exercises: []})
+
+      return setNewClientTemplateVisible(false)
+
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data)
+      }
     }
   }
 
@@ -160,6 +184,10 @@ const Workout = () => {
 
   const handleTemplateName = (e: string) => {
     setNewTemplate({...newTemplate, template_name: e})
+  }
+
+  const onValueChangeFitnessLevel = (value: string) => {
+    return setDifficulty(value)
   }
 
   useEffect(() => {
@@ -261,6 +289,48 @@ const Workout = () => {
                 Create
               </Button>
               <Button onPress={() => {setNewTemplateVisible(false); setNewTemplate({...newTemplate, template_name: '', exercises: []})}}>Cancel</Button>
+            </Dialog.Actions>
+          </Dialog>
+          {/* Pop up dialog for creating new template for clients */}
+          <Dialog visible={newClientTemplateVisible}>
+            <Dialog.Title style={{textAlign: 'center', fontSize: 18}}>Add new template for clients</Dialog.Title>
+            <Dialog.Content style={{gap: 10}}>
+              <TextInput label="Template Name" style={{backgroundColor: 'transparent'}} onChangeText={handleTemplateName} />
+              <Button icon="plus" mode="outlined" onPress={() => setExerciseListVisible(true)}>Add new exercises</Button>
+              <RNPickerSelect
+                style={{inputAndroid: {color: systemTheme.colors.text}}}
+                onValueChange={onValueChangeFitnessLevel}
+                items={fitnessLevel}
+                placeholder={{label: 'Workout template difficulty'}}
+              />
+              <ScrollView
+                style={{height: 200}}
+              >
+                {
+                  newTemplate.exercises && newTemplate.exercises.map((exercise, index) => (
+                      <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+                        <Text style={{fontSize: 15, color: systemTheme.colors.text}}>
+                          {exercise.item_name}
+                        </Text>
+                        <MaterialIcons
+                            onPress={() => onPressDeleteExercise(index)}
+                            name="delete"
+                            size={20}
+                            color="red"
+                        />
+                      </View>
+                    ))
+                }
+              </ScrollView>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                disabled={newTemplate.exercises.length === 0 || newTemplate.template_name.length === 0}
+                onPress={onPressCreateTrainerTemplate}
+              >
+                Create
+              </Button>
+              <Button onPress={() => {setNewClientTemplateVisible(false); setNewTemplate({...newTemplate, template_name: '', exercises: []})}}>Cancel</Button>
             </Dialog.Actions>
           </Dialog>
           {/* Show pop up dialog list of exercises that need to be selected */}
@@ -373,6 +443,37 @@ const Workout = () => {
               }
             </View>
           </View>
+          {
+            user.role === "USER"
+            ?
+            <View style={{gap: 5, flexGrow: 1}}>
+              <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                <Text style={{color: systemTheme.colors.text, fontSize: 20, textAlign: 'center'}}># Your trainer templates</Text>
+                <Button
+                  mode="contained"
+                  icon="reload"
+                  onPress={async () => {}}
+                >
+                  Refresh
+                </Button>
+              </View>
+              <View style={styles.templates}>
+
+              </View>
+            </View>
+            :
+            <View style={{gap: 5, flexGrow: 1}}>
+              <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', gap: 10}}>
+                <Text style={{color: systemTheme.colors.text, fontSize: 20}}>Template for clients</Text>
+                <CustomPressable
+                  buttonStyle={{backgroundColor: systemTheme.colors.primary, borderRadius: 5, width: '90%'}}
+                  textStyle={{fontSize: 20, color: 'white'}}
+                  text="Add new template for clients"
+                  onPress={() => setNewClientTemplateVisible(true)}
+                />
+              </View>
+            </View>
+          }
         </ScrollView>
       </View>
     </View>

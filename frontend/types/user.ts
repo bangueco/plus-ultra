@@ -11,7 +11,7 @@ export type User = {
   accessToken: string,
   refreshToken: string,
   isEmailValid: boolean
-  role: Role
+  role: string
   trainerId: number | null
 }
 

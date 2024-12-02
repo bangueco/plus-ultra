@@ -89,6 +89,7 @@ const joinTrainer = async (request: Request, response: Response, next: NextFunct
     if (!user) throw new ApiError(HttpStatusCode.BAD_REQUEST, "User not found!")
 
     if (user.trainerId) throw new ApiError(HttpStatusCode.BAD_REQUEST, "You already have a trainer!")
+    if (user.role === Role.TRAINER) throw new ApiError(HttpStatusCode.BAD_REQUEST, "You are a trainer and you cant join another trainer!")
     if (trainer.role === Role.USER) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Trainer id does not have a trainer role!")
 
     const assignTrainerToUser = await userService.setTrainerId(userId, trainerId)

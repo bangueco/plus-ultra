@@ -28,3 +28,9 @@ export type NewTemplateItem = {
     muscleGroup: string
   }>
 }
+
+export type TemplateItemProps = {
+  item_name: string
+  muscleGroup: string
+  exercise_id: number
+}

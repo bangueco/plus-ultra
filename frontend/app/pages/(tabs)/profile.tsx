@@ -186,34 +186,51 @@ const Profile = () => {
         />
           </View>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
-          <Text style={{color: systemTheme.colors.primary, fontSize: 16}}>Available Trainers</Text>
-          <Button icon="reload"
-            onPress={async () => await fetchTrainers()}
-          >
-            Refresh trainers
-          </Button>
-        </View>
-        <FlatList
-          data={trainer}
-          renderItem={({item}) => (
-            <View key={item.id} style={{
-                padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'row',
-                justifyContent: 'space-around', alignItems: 'center', borderRadius: 10
-              }}>
-              <View>
-                <Text style={{color: systemTheme.colors.text}}>Trainer name: {item.username}</Text>
-                <Text style={{color: systemTheme.colors.text}}>Trainer email: {item.email}</Text>
-                <Text style={{color: systemTheme.colors.text}}>Clients: {item.clients.length}</Text>
-              </View>
-              <View>
-                {
-                  item.clients.find((e) => e.id === user.id) ? <Button mode="contained" onPress={async () => await onPressLeaveTrainer(user.id)}>Leave</Button> : <Button mode="contained" onPress={async () => await onPressJoinTrainer(user.id, item.id)} >Join</Button>
-                }
-              </View>
+        {
+          user.role === 'USER'
+          ?
+          <View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
+              <Text style={{color: systemTheme.colors.primary, fontSize: 16}}>Available Trainers</Text>
+              <Button icon="reload"
+                onPress={async () => await fetchTrainers()}
+              >
+                Refresh trainers
+              </Button>
             </View>
-          )}
-        />
+            <FlatList
+              data={trainer}
+              renderItem={({item}) => (
+                <View key={item.id} style={{
+                    padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'row',
+                    justifyContent: 'space-around', alignItems: 'center', borderRadius: 10
+                  }}>
+                  <View>
+                    <Text style={{color: systemTheme.colors.text}}>Trainer name: {item.username}</Text>
+                    <Text style={{color: systemTheme.colors.text}}>Trainer email: {item.email}</Text>
+                    <Text style={{color: systemTheme.colors.text}}>Clients: {item.clients.length}</Text>
+                  </View>
+                  <View>
+                    {
+                      item.clients.find((e) => e.id === user.id) ? <Button disabled={item.id === user.id} mode="contained" onPress={async () => await onPressLeaveTrainer(user.id)}>Leave</Button> : <Button disabled={item.id === user.id || user.role === "TRAINER"} mode="contained" onPress={async () => await onPressJoinTrainer(user.id, item.id)} >Join</Button>
+                    }
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+          :
+          <View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
+              <Text style={{color: systemTheme.colors.primary, fontSize: 16}}>Your clients</Text>
+              <Button icon="reload"
+                onPress={async () => await fetchTrainers()}
+              >
+                Refresh clients
+              </Button>
+            </View>
+          </View>
+        }
       </View>
     </View>
   )
