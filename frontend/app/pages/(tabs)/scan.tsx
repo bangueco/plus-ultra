@@ -18,6 +18,7 @@ import { equipmentImages } from '@/constants/equipmentImages';
 import { SecureStore } from '@/lib/secureStore';
 import { User } from '@/types/user';
 import exerciseService from '@/services/exercise.service';
+import YoutubePlayer from "react-native-youtube-iframe";
 
 type Preferences = {
   firstTime: boolean,
@@ -40,7 +41,7 @@ export default function Scan() {
 
   const [currentSelected, setCurrentSelected] = useState<string>('all')
 
-  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string }>({ name: '', instructions: '' });
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, video_id: string }>({ name: '', instructions: '', video_id: '' });
   const [visible, setVisible] = useState<boolean>(false)
 
   const onPressSelectExercise = async (id: number) => {
@@ -51,6 +52,7 @@ export default function Scan() {
     setCurrentSelectedExercise({
       name: getExercise[0].name,
       instructions: getExercise[0].instructions ?? '',
+      video_id: getExercise[0].video_id ?? ''
     })
 
     setVisible(true)
@@ -223,6 +225,9 @@ export default function Scan() {
           <Dialog visible={visible} onDismiss={() => setVisible(false)}>
             <Dialog.Title style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>{currentSelectedExercise?.name}</Dialog.Title>
             <Dialog.Content style={{gap: 10}}>
+              {
+                currentSelectedExercise.video_id && <YoutubePlayer height={150} videoId={currentSelectedExercise.video_id} />
+              }
               <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
             </Dialog.Content>
             <Dialog.Actions>
