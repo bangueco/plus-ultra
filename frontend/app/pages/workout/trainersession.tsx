@@ -4,7 +4,7 @@ import { ExerciseSets, TemplateItem } from "@/types/templates";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import { StyleSheet } from "react-native";
-import { Button, Dialog, IconButton, Portal } from 'react-native-paper';
+import { Button, Dialog, IconButton, Portal, TextInput as TextInputRnp } from 'react-native-paper';
 import { DataTable } from 'react-native-paper';
 import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
 
@@ -13,12 +13,17 @@ import exerciseSetService from "@/services/exerciseSet.service";
 import { useTabNavigation } from "@/hooks/useTabsNavigation";
 import historyExerciseService from "@/services/historyExercise.service";
 import { useHistoryStore } from "@/store/useHistoryStore";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 
 export default function TrainerSession({route}: TrainerSessionProps) {
 
   const systemTheme = useSystemTheme()
   const { addHistory, addHistoryExercise } = useHistoryStore()
 
+  const [remainingTimeVisible, setRemainingTimeVisible] = useState<boolean>(false)
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
+  const [restTimer, setRestTimer] = useState<string>('60')
+  const [restTimerVisible, setRestTimerVisible] = useState<boolean>(false)
   const [time, setTime] = useState(0);
   const [workoutStarted, setWorkoutStarted] = useState<boolean>(false)
   const [cancelWorkoutVisible, setCancelWorkoutVisible] = useState<boolean>(false)
@@ -174,6 +179,50 @@ export default function TrainerSession({route}: TrainerSessionProps) {
             <Button onPress={() => setCancelWorkoutVisible(false)}>No</Button>
           </Dialog.Actions>
         </Dialog>
+        <Dialog visible={restTimerVisible}>
+          <Dialog.Content>
+            <TextInputRnp
+              mode="outlined"
+              label="Rest timer (seconds)"
+              left={<TextInputRnp.Icon icon="clock" />}
+              onChangeText={setRestTimer}
+              value={restTimer}
+              inputMode="numeric"
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setRestTimerVisible(false)}>OK</Button>
+          </Dialog.Actions>
+        </Dialog>
+        <Dialog visible={remainingTimeVisible} style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Dialog.Title>
+            <Text>Remaining rest time</Text>
+          </Dialog.Title>
+          <Dialog.Content>
+            <CountdownCircleTimer
+              isPlaying={isPlaying}
+              duration={Number(restTimer)}
+              colors={['#28A745', '#FFC107', '#DC3545', '#DC3545']}
+              colorsTime={[7, 5, 2, 0]}
+              onComplete={() => {
+                setRemainingTimeVisible(false)
+                setIsPlaying(false)
+              }}
+            >
+              {({ remainingTime, color }) => (
+                <Text style={{ color, fontSize: 25 }}>
+                  {remainingTime}s
+                </Text>
+              )}
+            </CountdownCircleTimer>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => {
+              setRemainingTimeVisible(false)
+              setIsPlaying(false)
+            }}>Skip Rest</Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
       <View style={styles.buttonsContainer}>
         <View>
@@ -184,7 +233,7 @@ export default function TrainerSession({route}: TrainerSessionProps) {
               icon="clock"
               iconColor={systemTheme.colors.text}
               size={30}
-              onPress={() => console.log('Pressed')}
+              onPress={() => setRestTimerVisible(true)}
             />
             :
             <IconButton
@@ -233,6 +282,7 @@ export default function TrainerSession({route}: TrainerSessionProps) {
                           renderRightActions={() => (
                             <View>
                               <IconButton
+                                disabled={!workoutStarted}
                                 mode="contained"
                                 icon="trash-can"
                                 onPress={() => onPressDeleteSet(set.exercise_set_id)}
