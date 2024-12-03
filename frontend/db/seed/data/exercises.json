@@ -236,7 +236,7 @@
     "name": "Dumbbell Shoulder Press",
     "equipment": "dumbbell",
     "muscleGroup": "Shoulders",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a dumbbell shoulder press, sit or stand with a dumbbell in each hand at shoulder height, palms facing forward. Press the dumbbells overhead until your arms are fully extended, keeping your core engaged and back straight. Lower the dumbbells back to shoulder height and repeat.",
     "createdBy": 0
@@ -488,7 +488,7 @@
     "name": "Dumbbell Bulgarian Split Squats",
     "equipment": "dumbbell",
     "muscleGroup": "Legs",
-    "difficulty": "Intermediate",
+    "difficulty": "Advanced",
     "custom": 0,
     "instructions": "To perform dumbbell Bulgarian split squats, hold a dumbbell in each hand and place one foot on a bench behind you. Lower your body by bending your front knee until your back knee nearly touches the ground. Push through your front heel to return to standing.",
     "createdBy": 0
@@ -506,7 +506,7 @@
     "name": "Dumbbell Romanian Deadlift",
     "equipment": "dumbbell",
     "muscleGroup": "Legs",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a dumbbell Romanian deadlift, stand with your feet shoulder-width apart while holding a dumbbell in each hand at your thighs. Keep a slight bend in your knees and hinge at your hips, lowering the dumbbells along your legs while maintaining a flat back. Lower the dumbbells until you feel a stretch in your hamstrings, then push through your hips to return to the starting position.",
     "createdBy": 0
@@ -572,6 +572,123 @@
     "difficulty": "Intermediate",
     "custom": 0,
     "instructions": "To perform a seated calf raise, sit on the seated calf raise machine and place the balls of your feet on the platform with your heels hanging off. Adjust the knee pad so that it rests comfortably on your thighs. Release the safety bar and lower your heels as far as possible to feel a stretch in your calves. Push through the balls of your feet to raise your heels as high as you can, squeezing your calf muscles at the top of the movement. Slowly lower your heels back to the starting position with control.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Pullover",
+    "equipment": "dumbbells",
+    "muscleGroup": "Chest",
+    "difficulty": "Advanced",
+    "custom": 0,
+    "instructions": "Lie perpendicular to a bench with only your upper back supported and your feet flat on the floor. Hold a dumbbell with both hands above your chest. Keeping your arms slightly bent, lower the dumbbell behind your head in an arc motion until you feel a stretch in your chest. Bring the dumbbell back to the starting position using your chest muscles.",
+    "createdBy": 0
+  },
+  {
+    "name": "Single-Arm Dumbbell Press",
+    "equipment": "dumbbells",
+    "muscleGroup": "Chest",
+    "difficulty": "Advanced",
+    "custom": 0,
+    "instructions": "Lie flat on a bench with a dumbbell in one hand. Hold the dumbbell at shoulder height with your palm facing forward. Press the dumbbell upward until your arm is fully extended, squeezing your chest muscles at the top. Slowly lower the dumbbell back to the starting position with control. Complete all reps on one side before switching to the other arm.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Bent-Over Reverse Fly",
+    "equipment": "dumbbells",
+    "muscleGroup": "Back",
+    "difficulty": "Advanced",
+    "custom": 0,
+    "instructions": "Stand with a dumbbell in each hand and hinge at the hips until your torso is almost parallel to the ground. With a slight bend in your elbows, lift the dumbbells out to the sides until your arms are in line with your shoulders. Lower them back with control.",
+    "createdBy": 0
+  },
+  {
+    "name": "Z-Press",
+    "equipment": "dumbbells",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Advanced",
+    "custom": 0,
+    "instructions": "Sit on the floor with your legs straight in front of you, holding a dumbbell in each hand. Press the dumbbells overhead while keeping your core tight. Lower them back with control. The lack of back support increases core activation.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Goblet Squat",
+    "equipment": "dumbbell",
+    "muscleGroup": "Legs",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "Hold a dumbbell vertically in front of your chest with both hands. Squat down by bending at the hips and knees until your thighs are parallel to the ground. Push through your heels to return to the standing position.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Single-Arm Row",
+    "equipment": "dumbbell, bench",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "Place one knee and hand on a bench for support. Hold a dumbbell in the other hand, arm extended. Row the dumbbell to your waist, then slowly lower it. Perform all reps on one side before switching.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Front Raise",
+    "equipment": "dumbbells",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Beginner",
+    "custom": 0,
+    "instructions": "Hold a dumbbell in each hand at your thighs. Lift one dumbbell in front of you to shoulder height, keeping your arm straight, then lower it back. Alternate arms or lift both simultaneously.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Triceps Kickback",
+    "equipment": "dumbbells",
+    "muscleGroup": "Arms",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "Hold a dumbbell in each hand and hinge forward at the hips. Bend your elbows so your upper arms are parallel to your torso. Extend your forearms backward until your arms are straight, then return to the starting position.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Arnold Press",
+    "equipment": "dumbbells",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "Hold the dumbbells at shoulder height with your palms facing you. Rotate your palms outward as you press the dumbbells overhead, then reverse the movement to return to the starting position.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Dead Row",
+    "equipment": "dumbbells",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "Stand with your feet shoulder-width apart, holding a dumbbell in each hand. Slightly bend your knees and hinge forward at the hips. Row the dumbbells towards your waist, squeezing your shoulder blades together. Lower back down with control.",
+    "createdBy": 0
+  },
+  {
+    "name": "Dumbbell Renegade Row",
+    "equipment": "dumbbells",
+    "muscleGroup": "Back",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "Start in a push-up position with a dumbbell in each hand. Row one dumbbell towards your hip while maintaining a stable core and push-up form. Alternate between arms while keeping your body as stable as possible.",
+    "createdBy": 0
+  },
+  {
+    "name": "Barbell Overhead Press",
+    "equipment": "barbell",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "Stand with your feet shoulder-width apart and grip the barbell just wider than shoulder-width. Press the barbell overhead until your arms are fully extended, then lower it back down to your shoulders with control.",
+    "createdBy": 0
+  },
+  {
+    "name": "Barbell Front Raise",
+    "equipment": "barbell",
+    "muscleGroup": "Shoulders",
+    "difficulty": "Intermediate",
+    "custom": 0,
+    "instructions": "Hold a barbell with a shoulder-width grip in front of your thighs. Raise the barbell to shoulder height, keeping your arms straight. Slowly lower it back down.",
     "createdBy": 0
   }
 ]
