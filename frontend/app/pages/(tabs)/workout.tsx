@@ -1,6 +1,6 @@
 import CustomPressable from "@/components/custom/CustomPressable"
 import useSystemTheme from "@/hooks/useSystemTheme"
-import { NewTemplateItem, TemplateItem, TemplatesType } from "@/types/templates"
+import { NewTemplateItem, TemplateItem, TemplatesType, TemplateTrainerProps } from "@/types/templates"
 import { useEffect, useState } from "react"
 import { Alert, Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
 import { Button, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
@@ -21,11 +21,16 @@ import RNPickerSelect from 'react-native-picker-select';
 import { fitnessLevel } from "@/constants/exercise"
 import { useTrainerStore } from "@/store/useTrainerStore"
 
+type Preferences = {
+  firstTime: boolean,
+  darkMode: boolean,
+  fitnessLevel: string
+}
 
 const Workout = () => {
   const systemTheme = useSystemTheme()
   const { exercise } = useExerciseStore()
-  const { user } = useUserStore()
+  const { user, preferences, getUserPreferences } = useUserStore()
   const { trainerTemplate, fetchTrainerTemplates } = useTrainerStore()
 
   const [selectedExercises, setSelectedExercises] = useState<Array<{exercise_id: number, item_name: string, muscleGroup: string}>>([])
@@ -40,10 +45,11 @@ const Workout = () => {
   const [guideVisible, setGuideVisible] = useState<boolean>(false)
   const [workoutTemplates, setWorkoutTemplates] = useState<Array<TemplatesType>>([])
   const [currentTemplate, setCurrentTemplate] = useState<{
-    template_name: string, exercises: Array<TemplateItem>
+    template_name: string, exercises: Array<TemplateItem>, difficulty: string | null
   }>({
     template_name: '',
-    exercises: []
+    exercises: [],
+    difficulty: null
   })
   const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string, video_id?: string | null}>({name: '', instructions: '', video_id: ''})
 
@@ -63,7 +69,8 @@ const Workout = () => {
       const item = await templateItemService.getAllTemplateItemsById(id)
       setCurrentTemplate({
         template_name: template_name[0].template_name,
-        exercises: item
+        exercises: item,
+        difficulty: null
       })
     } catch (error) {
       console.error(error)
@@ -77,7 +84,8 @@ const Workout = () => {
       const item = await templateService.findTrainerTemplateItemById(id)
       setCurrentTemplate({
         template_name: template_name.data.template_name,
-        exercises: item.data
+        exercises: item.data,
+        difficulty: template_name.data.difficulty
       })
     } catch (error) {
       console.error(error)
@@ -86,11 +94,11 @@ const Workout = () => {
 
   const onDismissTemplate = () => {
     setTemplateVisible(false)
-    setCurrentTemplate({template_name: '', exercises: []})
+    setCurrentTemplate({template_name: '', exercises: [], difficulty: null})
 
     if (templateTrainerVisible) {
       setTemplateTrainerVisible(false)
-      setCurrentTemplate({template_name: '', exercises: []})
+      setCurrentTemplate({template_name: '', exercises: [], difficulty: null})
     }
   }
 
@@ -222,6 +230,24 @@ const Workout = () => {
     return setDifficulty(value)
   }
 
+  const filterByDifficulty = (exercise: Array<TemplateTrainerProps>) => {
+
+    if (!preferences) return exercise
+
+    if (preferences.fitnessLevel === 'Beginner') {
+      return exercise.filter(diff => diff.difficulty === 'Beginner')
+    } else if (preferences.fitnessLevel === 'Intermediate') {
+      return exercise.filter(diff => diff.difficulty !== 'Advanced')
+    } else {
+      return exercise
+    }
+  }
+
+  const onPressRefreshTrainerTemplates = async () => {
+    await fetchTrainerTemplates(user.trainerId ?? 0)
+    await getUserPreferences()
+  }
+
   useEffect(() => {
     fetchTemplates().catch((error) => console.error(error))
 
@@ -283,8 +309,10 @@ const Workout = () => {
             </Dialog.Actions>
           </Dialog>
           {/* Show dialog for viewing trainer template */}
-          <Dialog visible={templateTrainerVisible} onDismiss={onDismissTemplate}>
-            <Dialog.Title style={{textAlign: 'center'}}>{currentTemplate.template_name}</Dialog.Title>
+          <Dialog style={{position: 'relative'}} visible={templateTrainerVisible} onDismiss={onDismissTemplate}>
+            <Dialog.Title style={{textAlign: 'center'}}>
+              <Text>{currentTemplate.template_name}</Text>
+            </Dialog.Title>
             <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
               <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 25, marginTop: 5, maxHeight: 400}}>
                 {
@@ -322,6 +350,32 @@ const Workout = () => {
                 }
               </ScrollView>
             </Dialog.ScrollArea>
+            {
+              currentTemplate.difficulty && <View style={{
+                position: 'absolute',
+                bottom: 60,
+                left: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 3
+              }}>
+                <Text style={{fontSize: 15, color: systemTheme.colors.text,}}>
+                  Difficulty:
+                </Text>
+                <Text style={{fontSize: 15, color:
+                    currentTemplate.difficulty === 'Beginner'
+                    ? 'green' 
+                    : currentTemplate.difficulty === 'Intermediate'
+                    ? 'orange'
+                    : currentTemplate.difficulty === 'Advanced'
+                    ? 'red'
+                    : 'black'}
+                  }>
+                  {currentTemplate.difficulty}
+                </Text>
+              </View>
+            }
             <Dialog.Actions>
               <Button onPress={onPressStartTrainerWorkout}>Start Workout</Button>
             </Dialog.Actions>
@@ -536,18 +590,18 @@ const Workout = () => {
                 <Button
                   mode="contained"
                   icon="reload"
-                  onPress={async () => await fetchTrainerTemplates(user.trainerId ?? 0)}
+                  onPress={async () => await onPressRefreshTrainerTemplates()}
                 >
                   Refresh
                 </Button>
               </View>
               <View style={styles.templates}>
                 {
-                  trainerTemplate && trainerTemplate.map((template) => (
+                  trainerTemplate && filterByDifficulty(trainerTemplate).map((template) => (
                     <Pressable
                       key={template.template_id}
                       style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
-                      onPress={() => onPressViewTrainerTemplate(template.template_id)}
+                      onPress={async () => await onPressViewTrainerTemplate(template.template_id)}
                   >
                     <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
                   </Pressable>
