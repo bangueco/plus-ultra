@@ -30,7 +30,7 @@ const Profile = () => {
   const [userWeight, setUserWeight] = useState<string>()
   const [userHeight, setUserHeight] = useState<string>()
 
-  const {logout, user, getUserInfo} = useUserStore()
+  const {logout, user, getUserInfo, getUserPreferences} = useUserStore()
   const {fetchTrainers, trainer, fetchTrainerTemplates} = useTrainerStore()
 
   const toggleProfileVisibility = async () => {
@@ -71,7 +71,9 @@ const Profile = () => {
 
     setVisibleProfile(!visibleProfile)
 
-    return await asyncStore.setItem('preferences', {firstTime: false, darkMode: false, fitnessLevel: userFitnessLevel, weight: userWeight, height: userHeight})
+    await asyncStore.setItem('preferences', {firstTime: false, darkMode: false, fitnessLevel: userFitnessLevel, weight: userWeight, height: userHeight})
+
+    return await getUserPreferences()
   }
 
   const onPressLeaveTrainer = async (userId: number) => {
