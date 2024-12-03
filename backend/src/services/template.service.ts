@@ -34,6 +34,7 @@ const createTemplateItem = async (templateItemName: string, muscleGroup: string,
 }
 
 const deleteTemplate = async (id: number) => {
+  await prisma.templateItem.deleteMany({where: {template_id: id}})
   return await prisma.template.delete({where: {template_id: id}})
 }
 

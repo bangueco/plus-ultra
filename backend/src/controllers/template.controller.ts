@@ -86,6 +86,20 @@ const createTemplate = async (request: Request, response: Response, next: NextFu
   }
 }
 
+const deleteTemplateById = async (request: Request, response: Response, next: NextFunction) => {
+  const { id } = request.params
+
+  try {
+    if (!id) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Template id is not specified!")
+
+    const removeTemplate = await templateService.deleteTemplate(Number(id))
+
+    return response.status(HttpStatusCode.OK).json(removeTemplate)
+  } catch (error) {
+    return next(error)
+  }
+}
+
 export default {
-  findTemplateById, findTemplatesByCreator, findTemplateItemByTemplateId, createTemplate
+  findTemplateById, findTemplatesByCreator, findTemplateItemByTemplateId, createTemplate, deleteTemplateById
 }

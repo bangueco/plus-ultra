@@ -50,6 +50,11 @@ const deleteTemplate = async (templateId: number) => {
   return await db.delete(template).where(eq(template.template_id, templateId))
 }
 
+const deleteTrainerTemplate = async (templateId: number) => {
+  const request = await axios.delete(`${baseURL}/template/${templateId}`)
+  return request
+}
+
 const deleteAllTemplate = async () => {
   return await db.delete(template)
 }
@@ -62,6 +67,7 @@ export default {
   createTrainerTemplate,
   updateTemplate,
   deleteTemplate,
+  deleteTrainerTemplate,
   deleteAllTemplate,
   findTrainerTemplateById,
   findTrainerTemplateItemById

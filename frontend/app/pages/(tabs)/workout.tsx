@@ -155,6 +155,15 @@ const Workout = () => {
     }
   }
 
+  const onPressDeleteTrainerTemplate = async (id: number) => {
+    try {
+      await templateService.deleteTrainerTemplate(id)
+      await fetchTrainerTemplates(user.id)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const onPressAddExercise = () => {
     setExerciseListVisible(false)
     setNewTemplate({...newTemplate, exercises: [...newTemplate.exercises, ...selectedExercises]})
@@ -636,7 +645,7 @@ const Workout = () => {
                     >
                       <TemplateMenu
                         editTemplate={() => {}}
-                        deleteTemplate={() => onPressDeleteTemplate(template.template_id)}
+                        deleteTemplate={() => onPressDeleteTrainerTemplate(template.template_id)}
                       />
                     </View>
                     <Text style={{color: systemTheme.colors.primary, fontSize: 12, fontWeight: 'bold', textAlign: 'center'}}>{template.template_name}</Text>
