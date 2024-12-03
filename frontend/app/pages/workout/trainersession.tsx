@@ -17,7 +17,7 @@ import { useHistoryStore } from "@/store/useHistoryStore";
 export default function TrainerSession({route}: TrainerSessionProps) {
 
   const systemTheme = useSystemTheme()
-  const { addHistory } = useHistoryStore()
+  const { addHistory, addHistoryExercise } = useHistoryStore()
 
   const [time, setTime] = useState(0);
   const [workoutStarted, setWorkoutStarted] = useState<boolean>(false)
@@ -72,6 +72,7 @@ export default function TrainerSession({route}: TrainerSessionProps) {
           workout.weight,
           workout.exercise_name
         )
+        addHistoryExercise(history.lastInsertRowId, workout.template_item_id, workout.template_id, workout.reps, workout.weight, workout.exercise_name)
       })
     )
 

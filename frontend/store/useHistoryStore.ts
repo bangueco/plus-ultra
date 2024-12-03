@@ -21,7 +21,6 @@ type History = {
 }
 
 type HistoryExercise = {
-  history_exercise_id: number,
   history_id: number,
   template_item_id: number,
   template_id: number,
@@ -43,7 +42,15 @@ type Action = {
     hours: number,
     minutes: number,
     seconds: number
-  ) => Promise<SQLiteRunResult | null>
+  ) => Promise<SQLiteRunResult | null>,
+  addHistoryExercise: (
+    lastInsertRowId: number,
+    template_item_id: number,
+    template_id: number,
+    reps: number,
+    weight: number,
+    exercise_name: string
+  ) => void
 }
 
 export const useHistoryStore = create<State & Action>((set) => ({
@@ -100,12 +107,29 @@ export const useHistoryStore = create<State & Action>((set) => ({
           history_id: newHistory.lastInsertRowId,
           template_name: templateName,
           elapsed_time: `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
-          calories_burned: 1000,
+          calories_burned: caloriesBurned,
           date: workoutDate,
         },
       ],
     }))
 
     return newHistory
-  }
+  },
+  addHistoryExercise: (lastInsertRowId, template_item_id, template_id, reps, weight, exercise_name) => {
+      set((state) => ({
+        historyExercise: [
+          ...state.historyExercise,
+          {
+            history_id: lastInsertRowId,
+            template_item_id,
+            template_id,
+            reps,
+            weight,
+            exercise_name
+          }
+        ]
+      }))
+
+      return
+  },
 }))
