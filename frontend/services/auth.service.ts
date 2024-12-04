@@ -19,7 +19,12 @@ const isEmailValid = async (username: string) => {
   return request.data
 }
 
+const getUser = async (userId: number) => {
+  const request = await axios.get(`${baseURL}/user?userId=${userId}`)
+  return request.data
+}
+
 export default {
   register,
-  login, isEmailValid
+  login, isEmailValid, getUser
 }

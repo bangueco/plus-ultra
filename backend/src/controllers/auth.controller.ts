@@ -67,6 +67,7 @@ const login = async (request: Request, response: Response, next: NextFunction) =
       birthdate: isUsernameExist.birthdate,
       isEmailValid: isUsernameExist.isEmailValid,
       role: isUsernameExist.role,
+      approved: isUsernameExist.approved,
       trainerId: isUsernameExist.trainerId
     })
   } catch (error) {

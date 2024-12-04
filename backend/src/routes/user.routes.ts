@@ -9,5 +9,7 @@ userRouter.get('/email/verify', userController.verifyEmail)
 userRouter.get('/trainers', userController.getTrainers)
 userRouter.post('/trainers/join', userController.joinTrainer)
 userRouter.post('/trainers/leave', userController.leaveTrainer)
+userRouter.post('/trainers/approve', userController.approveClient)
+userRouter.post('/trainers/cancel', userController.cancelClient)
 
 export default userRouter

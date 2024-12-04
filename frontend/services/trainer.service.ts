@@ -17,6 +17,16 @@ const leaveTrainer = async (userId: number) => {
   return request
 }
 
+const approveClient = async (userId: number) => {
+  const request = await axios.post(`${baseURL}/user/trainers/approve`, {userId})
+  return request
+}
+
+const cancelClient = async (userId: number) => {
+  const request = await axios.post(`${baseURL}/user/trainers/leave`, {userId})
+  return request
+}
+
 export default {
-  getAllTrainers, joinTrainer, leaveTrainer
+  getAllTrainers, joinTrainer, leaveTrainer, approveClient, cancelClient
 }

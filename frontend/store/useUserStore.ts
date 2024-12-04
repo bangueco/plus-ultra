@@ -23,7 +23,7 @@ type Action = {
 }
 
 export const useUserStore = create<State & Action>((set) => ({
-  user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: 'USER', trainerId: null},
+  user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: 'USER', approved: false, trainerId: null},
   preferences: {darkMode: false, firstTime: false, fitnessLevel: "Beginner", weight: 0, height: 0},
   getUserPreferences: async () => {
     const preference = await asyncStore.getItem('preferences')
@@ -44,6 +44,6 @@ export const useUserStore = create<State & Action>((set) => ({
   },
   logout: async () => {
     await SecureStore.deleteItemAsync('user')
-    return set({user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: 'USER', trainerId: null}})
+    return set({user: {id: 0, username: 'guest', email: '', accessToken: '', refreshToken: '', birthdate: new Date(), isEmailValid: false, role: 'USER', approved: false, trainerId: null}})
   }
 }))

@@ -262,10 +262,12 @@ const Workout = () => {
 
     if (user.role === "TRAINER") {
       fetchTrainerTemplates(user.id).catch(error => console.error(error.data.message))
+      getUserPreferences().catch(error => console.error(error.data.message))
     }
 
     if (user.role === "USER" && user.trainerId) {
       fetchTrainerTemplates(user.trainerId).catch(error => console.error(error.data.message))
+      getUserPreferences().catch(error => console.error(error.data.message))
     }
   }, [])
 
@@ -606,7 +608,7 @@ const Workout = () => {
               </View>
               <View style={styles.templates}>
                 {
-                  trainerTemplate && filterByDifficulty(trainerTemplate).map((template) => (
+                  trainerTemplate && user.approved && filterByDifficulty(trainerTemplate).map((template) => (
                     <Pressable
                       key={template.template_id}
                       style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
@@ -617,7 +619,7 @@ const Workout = () => {
                   ))
                 }
                 {
-                  trainerTemplate.length === 0 && <Text style={{color: systemTheme.colors.text}}>No trainer templates</Text>
+                  (trainerTemplate.length === 0 || !user.approved) && <Text style={{color: systemTheme.colors.text}}>No trainer templates</Text>
                 }
               </View>
             </View>

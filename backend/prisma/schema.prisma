@@ -22,6 +22,7 @@ model User {
   birthdate DateTime
   isEmailValid Boolean
   role Role @default(USER)
+  approved Boolean @default(false)
   trainerId Int?
   trainer User? @relation("UserTrainer", fields: [trainerId], references: [id])
   clients User[] @relation("UserTrainer")

@@ -20,6 +20,7 @@ import { useExerciseStore } from '@/store/useExerciseStore';
 import { useUserStore } from '@/store/useUserStore';
 import asyncStore from '@/lib/asyncStore';
 import { User } from '@/types/user';
+import { useTrainerStore } from '@/store/useTrainerStore';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -39,6 +40,7 @@ export default function TabsLayout() {
   const { fetchHistory } = useHistoryStore()
   const { fetchExercise } = useExerciseStore()
   const { getUserInfo, user } = useUserStore()
+  const { fetchTrainerTemplates } = useTrainerStore()
 
   useEffect(() => {
     const userAuth = SecureStore.getItem('user')

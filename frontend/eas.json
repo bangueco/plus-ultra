@@ -20,7 +20,7 @@
     "production": {
       "node": "20.15.1",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://plus-ultra-xmtd.onrender.com/api",
+        "EXPO_PUBLIC_API_URL": "https://plus-ultra-em80.onrender.com/api",
         "EXPO_PUBLIC_ENVIRONMENT": "production"
       },
       "android": {

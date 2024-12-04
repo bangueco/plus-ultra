@@ -9,10 +9,11 @@ import { fitnessLevel } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import asyncStore from "@/lib/asyncStore"
 import { useTrainerStore } from "@/store/useTrainerStore"
-import { Role, User, UserTrainer } from "@/types/user"
+import { Role, User, UserFetched, UserTrainer } from "@/types/user"
 import { AxiosError } from "axios"
 import trainerService from "@/services/trainer.service"
 import { SecureStore } from "@/lib/secureStore"
+import authService from "@/services/auth.service"
 
 type PreferencesProps = {
   firstTime: boolean,
@@ -128,6 +129,79 @@ const Profile = () => {
     }
   }
 
+  const onPressApproveClient = async (userId: number) => {
+    try {
+      const req = await trainerService.approveClient(userId)
+
+      const userInfo = await SecureStore.getItemAsync('user')
+      
+      if (!userInfo) return Alert.alert("User info not found!")
+
+      const parsedUserInfo: User = JSON.parse(userInfo)
+      
+      parsedUserInfo.approved = true
+      
+      await SecureStore.setItemAsync('user', JSON.stringify(parsedUserInfo))
+      
+      getUserInfo()
+      
+      await fetchTrainers()
+      Alert.alert(req.data.message)
+      return await fetchTrainerTemplates(parsedUserInfo.trainerId ?? 0)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Alert.alert(error.response?.data.message)
+      }
+    }
+  }
+
+  const onPressCancelClient = async (userId: number) => {
+    try {
+      const req = await trainerService.cancelClient(userId)
+
+      const userInfo = await SecureStore.getItemAsync('user')
+      
+      if (!userInfo) return Alert.alert("User info not found!")
+
+      const parsedUserInfo: User = JSON.parse(userInfo)
+      
+      parsedUserInfo.approved = false
+      parsedUserInfo.trainerId = null
+      
+      await SecureStore.setItemAsync('user', JSON.stringify(parsedUserInfo))
+      
+      getUserInfo()
+      
+      await fetchTrainers()
+      Alert.alert(req.data.message)
+      return await fetchTrainerTemplates(parsedUserInfo.trainerId ?? 0)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Alert.alert(error.response?.data.message)
+      }
+    }
+  }
+
+  const getUserApprovedStatus = async (userId: number) => {
+    try {
+      const req = await authService.getUser(userId)
+
+      const userStatus: UserFetched = req
+
+      const userJson = SecureStore.getItem('user')
+
+      if (!userJson) return
+
+      const userData: User = JSON.parse(userJson)
+      userData.approved = userStatus.approved
+      return SecureStore.setItem('user', JSON.stringify(userData))
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Alert.alert(error.response?.data.message)
+      }
+    }
+  }
+
   useEffect(() => {
     fetchTrainers().then(() => console.log("Trainers fetched!"))
   }, [])
@@ -197,7 +271,11 @@ const Profile = () => {
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
               <Text style={{color: systemTheme.colors.primary, fontSize: 16}}>Available Trainers</Text>
               <Button icon="reload"
-                onPress={async () => await fetchTrainers()}
+                onPress={async () => {
+                    await getUserApprovedStatus(user.id)
+                    await fetchTrainers()
+                  }
+                }
               >
                 Refresh trainers
               </Button>
@@ -206,17 +284,26 @@ const Profile = () => {
               data={trainer}
               renderItem={({item}) => (
                 <View key={item.id} style={{
-                    padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'row',
-                    justifyContent: 'space-around', alignItems: 'center', borderRadius: 10
+                    padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'column',
+                    alignItems: 'flex-start', borderRadius: 10, gap: 10, justifyContent: 'center'
                   }}>
                   <View>
-                    <Text style={{color: systemTheme.colors.text}}>Trainer name: {item.username}</Text>
-                    <Text style={{color: systemTheme.colors.text}}>Trainer email: {item.email}</Text>
-                    <Text style={{color: systemTheme.colors.text}}>Clients: {item.clients.length}</Text>
+                    <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Trainer name: {item.username}</Text>
+                    <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Trainer email: {item.email}</Text>
+                    <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Clients: {item.clients.filter(e => e.approved === true).length}</Text>
                   </View>
                   <View>
                     {
-                      item.clients.find((e) => e.id === user.id) ? <Button disabled={item.id === user.id} mode="contained" onPress={async () => await onPressLeaveTrainer(user.id)}>Leave</Button> : <Button disabled={item.id === user.id || user.role === "TRAINER"} mode="contained" onPress={async () => await onPressJoinTrainer(user.id, item.id)} >Join</Button>
+                      item.clients.find((e) => e.id === user.id)
+                      ?
+                      <Button disabled={item.id === user.id} mode="contained" onPress={async () => {
+                          await getUserApprovedStatus(user.id)
+                          await onPressLeaveTrainer(user.id)
+                        }}>
+                        {user.approved ? "Leave" : "Waiting for approval"}
+                      </Button>
+                      :
+                      <Button disabled={item.id === user.id || user.role === "TRAINER"} mode="contained" onPress={async () => await onPressJoinTrainer(user.id, item.id)} >Apply</Button>
                     }
                   </View>
                 </View>
@@ -233,6 +320,34 @@ const Profile = () => {
                 Refresh clients
               </Button>
             </View>
+            <FlatList
+              data={trainer.find(e => e.id === user.id)?.clients}
+              renderItem={({item}) => (
+                <View key={item.id} style={{
+                    padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'column',
+                    alignItems: 'flex-start', borderRadius: 10, gap: 10, justifyContent: 'center'
+                  }}>
+                  <View>
+                    <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Client name: {item.username}</Text>
+                    <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Client email: {item.email}</Text>
+                  </View>
+                  <View>
+                    {
+                      item.approved === true
+                      ?
+                      <Button mode="contained" onPress={async () => await onPressLeaveTrainer(item.id)}>
+                        Kick
+                      </Button>
+                      :
+                      <View style={{flexDirection: 'row', gap: 10}}>
+                        <Button mode="contained" onPress={async () => await onPressApproveClient(item.id)} >Approve</Button>
+                        <Button mode="contained" onPress={async () => await onPressCancelClient(item.id)} >Cancel</Button>
+                      </View>
+                    }
+                  </View>
+                </View>
+              )}
+            />
           </View>
         }
       </View>

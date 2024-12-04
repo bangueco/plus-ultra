@@ -18,6 +18,7 @@ export type User = {
   refreshToken: string,
   isEmailValid: boolean
   role: string
+  approved: boolean,
   trainerId: number | null
 }
 
@@ -42,3 +43,13 @@ export type UserTrainer = {
   role: Role,
   trainerId: number | null
 }
+
+export type UserFetched = {
+  id: number;
+  username: string;
+  email: string;
+  isEmailValid: boolean;
+  role: string;
+  approved: boolean;
+  trainerId: number | null;
+};

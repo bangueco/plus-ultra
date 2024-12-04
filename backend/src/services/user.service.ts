@@ -9,6 +9,7 @@ const findById = async (id: number) => {
     password: false,
     isEmailValid: true,
     role: true,
+    approved: true,
     trainerId: true
   }, where: {id}})
 }
@@ -48,6 +49,10 @@ const setTrainerId = async (userId: number, trainerId: number | null) => {
   return await prisma.user.update({data: {trainerId}, where: {id: userId}})
 }
 
+const setApprovedById = async (userId: number, approved: boolean) => {
+  return await prisma.user.update({data: {approved}, where: {id: userId}})
+}
+
 export default {
-  findById, findAllTrainer, findByUsername, findByEmail, createUser, updateUser, setTrainerId
+  findById, findAllTrainer, findByUsername, findByEmail, createUser, updateUser, setTrainerId, setApprovedById
 }

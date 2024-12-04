@@ -5,6 +5,7 @@ import { Trainer } from "@/types/user"
 import { create } from "zustand"
 import { useUserStore } from "./useUserStore"
 import { AxiosError } from "axios"
+import authService from "@/services/auth.service"
 
 type State = {
   trainer: Array<Trainer>

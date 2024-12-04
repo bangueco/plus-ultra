@@ -114,6 +114,7 @@ const leaveTrainer = async (request: Request, response: Response, next: NextFunc
 
     if (!user.trainerId) throw new ApiError(HttpStatusCode.BAD_REQUEST, "You are not assigned to any trainer!")
 
+    await userService.setApprovedById(userId, false)
     const removeTrainerToUser = await userService.setTrainerId(userId, null)
 
     return response.status(HttpStatusCode.OK).json({id: removeTrainerToUser.id, username: removeTrainerToUser.username, role: removeTrainerToUser.role, trainerId: removeTrainerToUser.trainerId})
@@ -123,6 +124,51 @@ const leaveTrainer = async (request: Request, response: Response, next: NextFunc
 
 }
 
+const approveClient = async (request: Request, response: Response, next: NextFunction) => {
+
+  const { userId } = request.body
+
+  try {
+
+    if (!userId) throw new ApiError(HttpStatusCode.BAD_REQUEST, "User id is not specified!")
+
+    const user = await userService.findById(userId)
+
+    if (!user) throw new ApiError(HttpStatusCode.BAD_REQUEST, "User not found!")
+
+    if (!user.trainerId) throw new ApiError(HttpStatusCode.BAD_REQUEST, "This user is not assigned to any trainer!")
+
+    await userService.setApprovedById(userId, true)
+
+    return response.status(HttpStatusCode.OK).json({message: "Approved client success!"})
+  } catch (error) {
+    return next(error)
+  }
+}
+
+const cancelClient = async (request: Request, response: Response, next: NextFunction) => {
+
+  const { userId } = request.body
+
+  try {
+
+    if (!userId) throw new ApiError(HttpStatusCode.BAD_REQUEST, "User id is not specified!")
+
+    const user = await userService.findById(userId)
+
+    if (!user) throw new ApiError(HttpStatusCode.BAD_REQUEST, "User not found!")
+
+    if (!user.trainerId) throw new ApiError(HttpStatusCode.BAD_REQUEST, "This user is not assigned to any trainer!")
+
+    await userService.setTrainerId(userId, null)
+    await userService.setApprovedById(userId, false)
+
+    return response.status(HttpStatusCode.OK).json({message: "Approved client success!"})
+  } catch (error) {
+    return next(error)
+  }
+}
+
 export default {
-  isEmailVerified, verifyEmail, getTrainers, findUser, joinTrainer, leaveTrainer
+  isEmailVerified, verifyEmail, getTrainers, findUser, joinTrainer, leaveTrainer, approveClient, cancelClient
 }
