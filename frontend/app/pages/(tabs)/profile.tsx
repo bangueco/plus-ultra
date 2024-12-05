@@ -257,11 +257,21 @@ const Profile = () => {
             </Modal>
           </View>
           <View style={{flex: 1, justifyContent: 'center', padding: 5}}>
-          <Searchbar
-          placeholder="Search for trainer"
-          onChangeText={setSearchQuery}
-          value={searchQuery}
-        />
+          {
+            user.role === 'USER'
+            ?
+            <Searchbar
+              placeholder="Search for trainer"
+              onChangeText={setSearchQuery}
+              value={searchQuery}
+            />
+            :
+            <Searchbar
+              placeholder="Search for clients"
+              onChangeText={setSearchQuery}
+              value={searchQuery}
+            />
+          }
           </View>
         </View>
         {
@@ -281,7 +291,7 @@ const Profile = () => {
               </Button>
             </View>
             <FlatList
-              data={trainer}
+              data={trainer.filter(item => item.username.toLowerCase().includes(searchQuery.toLowerCase()))}
               renderItem={({item}) => (
                 <View key={item.id} style={{
                     padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'column',
@@ -321,7 +331,7 @@ const Profile = () => {
               </Button>
             </View>
             <FlatList
-              data={trainer.find(e => e.id === user.id)?.clients}
+              data={trainer.find(e => e.id === user.id)?.clients.filter((client) => client.username.toLowerCase().includes(searchQuery.toLowerCase()))}
               renderItem={({item}) => (
                 <View key={item.id} style={{
                     padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'column',
