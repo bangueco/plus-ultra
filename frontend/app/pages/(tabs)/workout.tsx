@@ -1,6 +1,6 @@
 import CustomPressable from "@/components/custom/CustomPressable"
 import useSystemTheme from "@/hooks/useSystemTheme"
-import { NewTemplateItem, TemplateItem, TemplatesType, TemplateTrainerProps } from "@/types/templates"
+import { EditTemplateItem, NewTemplateItem, TemplateItem, TemplatesType, TemplateTrainerItemProps, TemplateTrainerProps } from "@/types/templates"
 import { useEffect, useState } from "react"
 import { Alert, Pressable, ScrollView, SectionList, StyleSheet, Text, View } from "react-native"
 import { Button, Dialog, Icon, IconButton, Portal, TextInput } from "react-native-paper"
@@ -39,8 +39,13 @@ const Workout = () => {
   const [newClientTemplateVisible, setNewClientTemplateVisible] = useState<boolean>(false)
   const [difficulty, setDifficulty] = useState<string>('')
   const [newTemplate, setNewTemplate] = useState<NewTemplateItem>({template_name: '', exercises: []})
+  const [editTemplate, setEditTemplate] = useState<EditTemplateItem>({template_id: 0, template_name: '', exercises: []})
   const [exerciseListVisible, setExerciseListVisible] = useState<boolean>(false)
+  const [exerciseEditListVisible, setExerciseEditListVisible] = useState<boolean>(false)
+  const [exerciseTrainerEditListVisible, setExerciseTrainerEditListVisible] = useState<boolean>(false)
   const [templateVisible, setTemplateVisible] = useState<boolean>(false)
+  const [editTemplateVisible, setEditTemplateVisible] = useState<boolean>(false)
+  const [editTrainerTemplateVisible, setEditTrainerTemplateVisible] = useState<boolean>(false)
   const [templateTrainerVisible, setTemplateTrainerVisible] = useState<boolean>(false)
   const [guideVisible, setGuideVisible] = useState<boolean>(false)
   const [workoutTemplates, setWorkoutTemplates] = useState<Array<TemplatesType>>([])
@@ -139,6 +144,54 @@ const Workout = () => {
     }
   }
 
+  const onPressEditTemplate = async (templateId: number) => {
+    try {
+      setEditTemplateVisible(true)
+      const template = await templateService.getTemplateById(templateId)
+      const getTemplateExercises = await templateItemService.getAllTemplateItemsById(templateId)
+
+      const templateExercises = getTemplateExercises.map(exercise => {
+        return {
+          template_item_id: exercise.template_item_id,
+          exercise_id: exercise.exercise_id,
+          item_name: exercise.template_item_name,
+          muscleGroup: exercise.muscle_group
+        }
+      })
+
+      setEditTemplate({template_id: template[0].template_id, template_name: template[0].template_name, exercises: templateExercises})
+      setSelectedExercises([])
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onPressEditTrainerTemplate = async (templateId: number) => {
+    try {
+      setEditTrainerTemplateVisible(true)
+      const template = await templateService.findTrainerTemplateById(templateId)
+      const getTemplateExercises = await templateService.findTrainerTemplateItemById(templateId)
+
+      const templateData: TemplateTrainerProps = template.data
+      const getTemplateExercisesData: Array<TemplateTrainerItemProps> = getTemplateExercises.data
+
+      const templateExercises = getTemplateExercisesData.map(exercise => {
+        return {
+          template_item_id: exercise.template_item_id,
+          exercise_id: exercise.exercise_id,
+          item_name: exercise.template_item_name,
+          muscleGroup: exercise.muscle_group
+        }
+      })
+
+      setDifficulty(template.data.difficulty)
+      setEditTemplate({template_id: templateData.template_id, template_name: templateData.template_name, exercises: templateExercises})
+      setSelectedExercises([])
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const onPressDeleteTemplate = async (id: number) => {
     try {
       await templateService.deleteTemplate(id)
@@ -170,9 +223,46 @@ const Workout = () => {
     return setSelectedExercises([])
   }
 
+  const onPressAddEditExercise = async () => {
+    setExerciseEditListVisible(false)
+
+    await templateItemService.createTemplateItem(editTemplate.template_id, ...selectedExercises)
+    const items = await templateItemService.getAllTemplateItemsById(editTemplate.template_id)
+
+    const exercisesItems = items.map(exe => {
+      return {
+        template_item_id: exe.template_item_id,
+        exercise_id: exe.exercise_id,
+        item_name: exe.template_item_name,
+        muscleGroup: exe.muscle_group
+      }
+    })
+
+    setEditTemplate({...editTemplate, exercises: [...exercisesItems]})
+  }
+
+  const onPressAddEditTrainerExercise = async () => {
+    setExerciseTrainerEditListVisible(false)
+
+    const item = await templateService.createTrainerItem(editTemplate.template_id, selectedExercises)
+    setEditTemplate({...editTemplate, exercises: [...editTemplate.exercises, ...item.data]})
+
+    setSelectedExercises([])
+  }
+
   const onPressDeleteExercise = (id: number) => {
     const filter = newTemplate.exercises.filter((exercise, index) => index !== id)
     return setNewTemplate({...newTemplate, exercises: filter})
+  }
+
+  const onPressEditDeleteExercise = async (id: number) => {
+    await templateItemService.deleteTemplateItem(id)
+    setEditTemplate({...editTemplate, exercises: editTemplate.exercises.filter(e => e.template_item_id !== id)})
+  }
+
+  const onPressEditDeleteTrainerExercise = async (id: number) => {
+    await templateService.deleteTrainerItemTemplate(id)
+    setEditTemplate({...editTemplate, exercises: editTemplate.exercises.filter(e => e.template_item_id !== id)})
   }
 
   const onPressSelectExercise = async (id: number, name: string) => {
@@ -440,6 +530,96 @@ const Workout = () => {
               <Button onPress={() => {setNewTemplateVisible(false); setNewTemplate({...newTemplate, template_name: '', exercises: []})}}>Cancel</Button>
             </Dialog.Actions>
           </Dialog>
+          {/* Show pop up dialog for editing template */}
+          <Dialog visible={editTemplateVisible}>
+            <Dialog.Title style={{textAlign: 'center'}}>Edit template</Dialog.Title>
+            <Dialog.Content style={{gap: 10}}>
+              <TextInput label="Template Name" style={{backgroundColor: 'transparent'}} onChangeText={(e) => setEditTemplate({...editTemplate, template_name: e})} value={editTemplate.template_name} />
+              <Button icon="plus" mode="outlined" onPress={() => setExerciseEditListVisible(true)}>Add exercises</Button>
+              <ScrollView
+                style={{height: 200}}
+              >
+                {
+                  editTemplate.exercises && editTemplate.exercises.map((exercise, index) => (
+                      <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+                        <Text style={{fontSize: 15, color: systemTheme.colors.text}}>
+                          {exercise.item_name}
+                        </Text>
+                        <MaterialIcons
+                            onPress={() => onPressEditDeleteExercise(exercise.template_item_id)}
+                            name="delete"
+                            size={20}
+                            color="red"
+                        />
+                      </View>
+                    ))
+                }
+              </ScrollView>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                onPress={async () => {
+                  if (editTemplate.template_id) {
+                    await templateService.updateTemplate(editTemplate.template_id, editTemplate.template_name)
+                  }
+                  setEditTemplateVisible(false)
+                  await fetchTemplates()
+                }}
+              >
+                OK
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+          {/* Show pop up dialog for editing trainer client templates */}
+          <Dialog visible={editTrainerTemplateVisible}>
+            <Dialog.Title style={{textAlign: 'center'}}>Edit client template</Dialog.Title>
+            <Dialog.Content style={{gap: 10}}>
+              <TextInput label="Template Name" style={{backgroundColor: 'transparent'}} onChangeText={(e) => setEditTemplate({...editTemplate, template_name: e})} value={editTemplate.template_name} />
+              <Button icon="plus" mode="outlined" onPress={() => setExerciseTrainerEditListVisible(true)}>Add exercises</Button>
+              <RNPickerSelect
+                style={{inputAndroid: {color: systemTheme.colors.text}}}
+                onValueChange={onValueChangeFitnessLevel}
+                items={fitnessLevel}
+                placeholder={{label: 'Workout template difficulty'}}
+                value={difficulty}
+              />
+              <ScrollView
+                style={{height: 200}}
+              >
+                {
+                  editTemplate.exercises && editTemplate.exercises.map((exercise, index) => (
+                      <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+                        <Text style={{fontSize: 15, color: systemTheme.colors.text}}>
+                          {exercise.item_name}
+                        </Text>
+                        <MaterialIcons
+                            onPress={() => onPressEditDeleteTrainerExercise(exercise.template_item_id)}
+                            name="delete"
+                            size={20}
+                            color="red"
+                        />
+                      </View>
+                    ))
+                }
+              </ScrollView>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                onPress={async () => {
+                  if (!difficulty) {
+                    return Alert.alert("Please select a proper difficulty level")
+                  }
+                  if (editTemplate.template_id) {
+                    await templateService.updateTrainerTemplate(editTemplate.template_id, editTemplate.template_name, 1, difficulty, user.id)
+                  }
+                  setEditTrainerTemplateVisible(false)
+                  await fetchTrainerTemplates(user.id)
+                }}
+              >
+                OK
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
           {/* Pop up dialog for creating new template for clients */}
           <Dialog visible={newClientTemplateVisible}>
             <Dialog.Title style={{textAlign: 'center', fontSize: 18}}>Add new template for clients</Dialog.Title>
@@ -451,6 +631,7 @@ const Workout = () => {
                 onValueChange={onValueChangeFitnessLevel}
                 items={fitnessLevel}
                 placeholder={{label: 'Workout template difficulty'}}
+                value={difficulty}
               />
               <ScrollView
                 style={{height: 200}}
@@ -536,6 +717,114 @@ const Workout = () => {
               <Button onPress={() => { setSelectedExercises([]); setExerciseListVisible(false)}}>Cancel</Button>
             </Dialog.Actions>
           </Dialog>
+          {/* Show pop up dialog for adding exercises for existing template */}
+          <Dialog visible={exerciseEditListVisible}>
+            <Dialog.Title style={{textAlign: 'center'}}>Add Exercises</Dialog.Title>
+            <Dialog.Content style={{height: 350}}>
+              <SectionList
+                extraData={exercise}
+                sections={sortByMuscleGroup(exercise)}
+                renderItem={({item}) => (
+                  <Pressable key={item.id} style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border,
+                        backgroundColor: 'transparent',
+                      }}
+                      onPress={() => onPressSelectExercise(item.id, item.name)}
+                    >
+                    <Text
+                      style={{color: systemTheme.colors.text, width: '80%'}}
+                      numberOfLines={1}
+                    >
+                      {item.name}
+                    </Text>
+                    {
+                      selectedExercises.some(exercise => exercise.exercise_id === item.id)
+                      ?
+                      <Icon
+                        source='check-circle'
+                        size={23}
+                        color={systemTheme.colors.primary}
+                      />
+                      :
+                      <ViewExerciseInfo id={item.id} />
+                    }
+                  </Pressable>
+                )}
+                renderSectionHeader={({section: {title}}) => (
+                  <View style={{padding: 5, marginTop: 30}}>
+                    <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
+                  </View>
+                )}
+                stickySectionHeadersEnabled={false}
+                showsVerticalScrollIndicator={false}
+              />
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                  onPress={onPressAddEditExercise}
+                  disabled={selectedExercises.length === 0}
+              >
+                Add
+              </Button>
+              <Button onPress={() => { setSelectedExercises([]); setExerciseEditListVisible(false)}}>Cancel</Button>
+            </Dialog.Actions>
+          </Dialog>
+          {/* Show pop up dialog for adding exercise on existing trainer template */}
+          <Dialog visible={exerciseTrainerEditListVisible}>
+            <Dialog.Title style={{textAlign: 'center'}}>Add Exercises</Dialog.Title>
+            <Dialog.Content style={{height: 350}}>
+              <SectionList
+                extraData={exercise}
+                sections={sortByMuscleGroup(exercise)}
+                renderItem={({item}) => (
+                  <Pressable key={item.id} style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border,
+                        backgroundColor: 'transparent',
+                      }}
+                      onPress={() => onPressSelectExercise(item.id, item.name)}
+                    >
+                    <Text
+                      style={{color: systemTheme.colors.text, width: '80%'}}
+                      numberOfLines={1}
+                    >
+                      {item.name}
+                    </Text>
+                    {
+                      selectedExercises.some(exercise => exercise.exercise_id === item.id)
+                      ?
+                      <Icon
+                        source='check-circle'
+                        size={23}
+                        color={systemTheme.colors.primary}
+                      />
+                      :
+                      <ViewExerciseInfo id={item.id} />
+                    }
+                  </Pressable>
+                )}
+                renderSectionHeader={({section: {title}}) => (
+                  <View style={{padding: 5, marginTop: 30}}>
+                    <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
+                  </View>
+                )}
+                stickySectionHeadersEnabled={false}
+                showsVerticalScrollIndicator={false}
+              />
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                  onPress={onPressAddEditTrainerExercise}
+                  disabled={selectedExercises.length === 0}
+              >
+                Add
+              </Button>
+              <Button onPress={() => { setSelectedExercises([]); setExerciseTrainerEditListVisible(false)}}>Cancel</Button>
+            </Dialog.Actions>
+          </Dialog>
           {/* End of dialog */}
         </Portal>
         <View style={{marginTop: 30, gap: 10, alignItems: 'center'}}>
@@ -563,7 +852,7 @@ const Workout = () => {
                       style={{position: 'absolute', top: -15, right: -10}}
                     >
                       <TemplateMenu
-                        editTemplate={() => {}}
+                        editTemplate={() => onPressEditTemplate(template.template_id)}
                         deleteTemplate={() => onPressDeleteTemplate(template.template_id)}
                       />
                     </View>
@@ -646,7 +935,7 @@ const Workout = () => {
                       style={{position: 'absolute', top: -15, right: -10}}
                     >
                       <TemplateMenu
-                        editTemplate={() => {}}
+                        editTemplate={() => onPressEditTrainerTemplate(template.template_id)}
                         deleteTemplate={() => onPressDeleteTrainerTemplate(template.template_id)}
                       />
                     </View>

@@ -46,12 +46,27 @@ const updateTemplate = async (templateId: number, templateName: string) => {
   }).where(eq(template.template_id, templateId))
 }
 
+const updateTrainerTemplate = async (templateId: number, templateName: string, custom: number, difficulty: string, creatorId: number) => {
+  const request = await axios.patch(`${baseURL}/template/update`, {templateId, template_name: templateName, custom, difficulty, creatorId})
+  return request
+}
+
+const createTrainerItem = async (templateId: number, templateItems: Array<TemplateItemProps>) => {
+  const request = await axios.post(`${baseURL}/template/create/item`, {templateId, templateItems})
+  return request
+}
+
 const deleteTemplate = async (templateId: number) => {
   return await db.delete(template).where(eq(template.template_id, templateId))
 }
 
 const deleteTrainerTemplate = async (templateId: number) => {
   const request = await axios.delete(`${baseURL}/template/${templateId}`)
+  return request
+}
+
+const deleteTrainerItemTemplate = async (templateId: number) => {
+  const request = await axios.delete(`${baseURL}/template/item/delete/${templateId}`)
   return request
 }
 
@@ -70,5 +85,8 @@ export default {
   deleteTrainerTemplate,
   deleteAllTemplate,
   findTrainerTemplateById,
-  findTrainerTemplateItemById
+  findTrainerTemplateItemById,
+  updateTrainerTemplate,
+  deleteTrainerItemTemplate,
+  createTrainerItem
 }
