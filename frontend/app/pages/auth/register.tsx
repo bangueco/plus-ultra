@@ -29,6 +29,7 @@ export default function Register () {
   const [email, setEmail] = useState<string | undefined>(undefined)
   const [password, setPassword] = useState<string | undefined>(undefined)
   const [confirmPassword, setConfirmPassword] = useState<string | undefined>(undefined)
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const [birthdate, setBirthDate] = useState<Date | undefined>(undefined)
   const [role, setRole] = useState<Role | undefined>(undefined)
 
@@ -163,8 +164,9 @@ export default function Register () {
             <TextInput
               mode="outlined"
               label="Password"
-              secureTextEntry={true}
+              secureTextEntry={!showPassword}
               left={<TextInput.Icon icon="lock" />}
+              right={<TextInput.Icon onPress={() => setShowPassword(!showPassword)} icon={showPassword ? 'eye' : 'eye-off'} />}
               onChangeText={handleChangeText(setPassword)}
             />
             {passwordErrorMessage && <ErrorMessage text={passwordErrorMessage} />}
@@ -173,8 +175,9 @@ export default function Register () {
             <TextInput
               mode="outlined"
               label="Confirm Password"
-              secureTextEntry={true}
+              secureTextEntry={!showPassword}
               left={<TextInput.Icon icon="lock" />}
+              right={<TextInput.Icon onPress={() => setShowPassword(!showPassword)} icon={showPassword ? 'eye' : 'eye-off'} />}
               onChangeText={handleChangeText(setConfirmPassword)}
             />
             {confirmPasswordErrorMessage && <ErrorMessage text={confirmPasswordErrorMessage} />}

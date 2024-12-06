@@ -20,6 +20,7 @@ export default function Login () {
 
   const [username, setUsername] = useState<string | undefined>()
   const [password, setPassword] = useState<string | undefined>()
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const [usernameErrorMessage, setUsernameErrorMessage] =  useState<string>('')
   const [passwordErrorMessage, setPasswordErrorMessage] =  useState<string>('')
@@ -103,6 +104,7 @@ export default function Login () {
               label="Password"
               secureTextEntry={true}
               left={<TextInput.Icon icon="lock" />}
+              right={<TextInput.Icon onPress={() => setShowPassword(!showPassword)} icon={showPassword ? 'eye' : 'eye-off'} />}
               onChangeText={handleChangeText(setPassword)}
             />
             {(passwordErrorMessage || errorMessage) && <ErrorMessage style={{marginTop: 3}} text={passwordErrorMessage || errorMessage} />}
