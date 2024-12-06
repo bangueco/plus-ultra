@@ -234,6 +234,7 @@ const Profile = () => {
                     style={{width: '100%'}}
                     onChangeText={(e) => setUserWeight(e)}
                     value={userWeight}
+                    inputMode="numeric"
                   />
                   <TextInput
                     mode="outlined"
@@ -241,6 +242,7 @@ const Profile = () => {
                     style={{width: '100%'}}
                     onChangeText={(e) => setUserHeight(e)}
                     value={userHeight}
+                    inputMode="numeric"
                   />
                   <Pressable onPress={onPressSubmitInfo}>
                     <Text style={{fontSize: 20, color: systemTheme.colors.text}}>Submit</Text>

@@ -56,12 +56,14 @@ const UserInfo = () => {
         label="Weight (kg)"
         style={{width: '100%'}}
         onChangeText={(e) => setUserWeight(e)}
+        inputMode="numeric"
       />
       <TextInput
         mode="outlined"
         label="Height (cm)"
         style={{width: '100%'}}
         onChangeText={(e) => setUserHeight(e)}
+        inputMode="numeric"
       />
       <View style={{position: 'absolute', bottom: 45}}>
         <Button mode="elevated" maxFontSizeMultiplier={30} onPress={onPressSubmitInfo}>Submit</Button>
