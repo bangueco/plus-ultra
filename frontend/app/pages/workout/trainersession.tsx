@@ -14,6 +14,7 @@ import { useTabNavigation } from "@/hooks/useTabsNavigation";
 import historyExerciseService from "@/services/historyExercise.service";
 import { useHistoryStore } from "@/store/useHistoryStore";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import SuggestionGuide from "@/components/SuggestionGuide";
 
 export default function TrainerSession({route}: TrainerSessionProps) {
 
@@ -258,6 +259,9 @@ export default function TrainerSession({route}: TrainerSessionProps) {
           </Button>
         </View>
       </View>
+      <View>
+        <SuggestionGuide />
+      </View>
       <View style={styles.workoutName}>
         <Text style={{fontSize: 28, color: systemTheme.colors.text, fontWeight: 'bold'}}>{templateName}</Text>
       </View>
@@ -345,8 +349,8 @@ export default function TrainerSession({route}: TrainerSessionProps) {
           }
         </ScrollView>
       </View>
-      <View style={{justifyContent: 'center', padding: 20}}>
-        <View>
+      <View style={{justifyContent: 'center', paddingTop: 10}}>
+        <View style={{gap: 5}}>
           {
             workoutStarted
             ?
@@ -366,6 +370,18 @@ export default function TrainerSession({route}: TrainerSessionProps) {
               Start Workout
             </Button>
           }
+          {
+            !workoutStarted
+            ?
+            <Button
+              mode="contained"
+              onPress={() => console.log("TODO: add manual entry")}
+            >
+              Manual entry
+            </Button>
+            :
+            <></>
+          }
         </View>
       </View>
     </View>
@@ -375,7 +391,7 @@ export default function TrainerSession({route}: TrainerSessionProps) {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    marginTop: '15%',
+    marginTop: '10%',
     height: '100%',
     padding: 10
   },
@@ -385,7 +401,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   workoutName: {
-    paddingTop: 25,
+    paddingTop: 10,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
