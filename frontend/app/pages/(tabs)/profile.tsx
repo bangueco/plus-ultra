@@ -31,16 +31,13 @@ const Profile = () => {
   const [userWeight, setUserWeight] = useState<string>()
   const [userHeight, setUserHeight] = useState<string>()
 
-  const {logout, user, getUserInfo, getUserPreferences} = useUserStore()
+  const {logout, user, getUserInfo, getUserPreferences, preferences} = useUserStore()
   const {fetchTrainers, trainer, fetchTrainerTemplates} = useTrainerStore()
 
-  const toggleProfileVisibility = async () => {
-    const pref = await asyncStore.getItem('preferences')
-    if (!pref) return
-    const parsedPreferences: PreferencesProps = JSON.parse(pref)
-    setUserFitnessLevel(parsedPreferences.fitnessLevel)
-    setUserHeight(parsedPreferences.height)
-    setUserWeight(parsedPreferences.weight)
+  const toggleProfileVisibility = () => {
+    setUserFitnessLevel(preferences.fitnessLevel)
+    setUserHeight(String(preferences.height))
+    setUserWeight(String(preferences.weight))
     setVisibleProfile(!visibleProfile)
   }
 
@@ -95,7 +92,7 @@ const Profile = () => {
       getUserInfo()
 
       await fetchTrainers()
-      return await fetchTrainerTemplates(0)
+      return await fetchTrainerTemplates(user.id)
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)
@@ -147,7 +144,8 @@ const Profile = () => {
       
       await fetchTrainers()
       Alert.alert(req.data.message)
-      return await fetchTrainerTemplates(parsedUserInfo.trainerId ?? 0)
+      if (!user.trainerId) return
+      return await fetchTrainerTemplates(user.trainerId)
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)
@@ -194,7 +192,8 @@ const Profile = () => {
 
       const userData: User = JSON.parse(userJson)
       userData.approved = userStatus.approved
-      return SecureStore.setItem('user', JSON.stringify(userData))
+      SecureStore.setItem('user', JSON.stringify(userData))
+      return getUserInfo()
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)
@@ -332,34 +331,40 @@ const Profile = () => {
                 Refresh clients
               </Button>
             </View>
-            <FlatList
-              data={trainer.find(e => e.id === user.id)?.clients.filter((client) => client.username.toLowerCase().includes(searchQuery.toLowerCase()))}
-              renderItem={({item}) => (
-                <View key={item.id} style={{
-                    padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'column',
-                    alignItems: 'flex-start', borderRadius: 10, gap: 10, justifyContent: 'center'
-                  }}>
-                  <View>
-                    <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Client name: {item.username}</Text>
-                    <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Client email: {item.email}</Text>
+            {
+              trainer.find(e => e.id === user.id)?.clients.length === 0
+              ?
+              <Text style={{textAlign: 'center', color: systemTheme.colors.text}}>You have no clients yet</Text>
+              :
+              <FlatList
+                data={trainer.find(e => e.id === user.id)?.clients.filter((client) => client.username.toLowerCase().includes(searchQuery.toLowerCase()))}
+                renderItem={({item}) => (
+                  <View key={item.id} style={{
+                      padding: 10, borderWidth: 1, marginTop: 10, borderColor: systemTheme.colors.border, flexDirection: 'column',
+                      alignItems: 'flex-start', borderRadius: 10, gap: 10, justifyContent: 'center'
+                    }}>
+                    <View>
+                      <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Client name: {item.username}</Text>
+                      <Text style={{color: systemTheme.colors.text, fontSize: 18}}>Client email: {item.email}</Text>
+                    </View>
+                    <View>
+                      {
+                        item.approved === true
+                        ?
+                        <Button mode="contained" onPress={async () => await onPressLeaveTrainer(item.id)}>
+                          Kick
+                        </Button>
+                        :
+                        <View style={{flexDirection: 'row', gap: 10}}>
+                          <Button mode="contained" onPress={async () => await onPressApproveClient(item.id)} >Approve</Button>
+                          <Button mode="contained" onPress={async () => await onPressCancelClient(item.id)} >Cancel</Button>
+                        </View>
+                      }
+                    </View>
                   </View>
-                  <View>
-                    {
-                      item.approved === true
-                      ?
-                      <Button mode="contained" onPress={async () => await onPressLeaveTrainer(item.id)}>
-                        Kick
-                      </Button>
-                      :
-                      <View style={{flexDirection: 'row', gap: 10}}>
-                        <Button mode="contained" onPress={async () => await onPressApproveClient(item.id)} >Approve</Button>
-                        <Button mode="contained" onPress={async () => await onPressCancelClient(item.id)} >Cancel</Button>
-                      </View>
-                    }
-                  </View>
-                </View>
-              )}
-            />
+                )}
+              />
+            }
           </View>
         }
       </View>

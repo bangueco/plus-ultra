@@ -19,25 +19,21 @@ import { SecureStore } from '@/lib/secureStore';
 import { User } from '@/types/user';
 import exerciseService from '@/services/exercise.service';
 import YoutubePlayer from "react-native-youtube-iframe";
-
-type Preferences = {
-  firstTime: boolean,
-  darkMode: boolean,
-  fitnessLevel: string
-}
+import { useUserStore } from '@/store/useUserStore';
 
 export default function Scan() {
   const camera = useRef<CameraView>(null)
   
   const systemTheme = useSystemTheme()
 
-  const [preferences, setPreferences] = useState<Preferences>({darkMode: false, firstTime:false, fitnessLevel:""})
   const [cameraActive, setCameraActive] = useState<Boolean>(false)
   const [equipmentExercises, setEquipmentExercises] = useState<EquipmentExercises>()
   const [loading, setLoading] = useState<Boolean>(false)
   const [photo, setPhoto] = useState<CameraCapturedPicture | ImagePicker.ImagePickerAsset | null>(null)
   const [cameraReady, setCameraReady] = useState<Boolean>(false)
   const [permission, requestPermission] = useCameraPermissions()
+
+  const { preferences, getUserPreferences } = useUserStore()
 
   const [currentSelected, setCurrentSelected] = useState<string>('all')
 
@@ -58,17 +54,8 @@ export default function Scan() {
     setVisible(true)
   }
 
-  const setUserPreferences = async () => {
-    const preference = await asyncStore.getItem('preferences')
-
-    if (!preference) return
-
-    const parsedPreference: Preferences = JSON.parse(preference)
-    setPreferences(parsedPreference)
-  }
-
   useEffect(() => {
-    setUserPreferences().then(() => console.log("Preferences set successfully!"))
+    getUserPreferences().then(() => console.log("Preferences set successfully!"))
   }, [])
 
   const filterByDifficulty = (exercise: Array<ExerciseInfo>) => {
@@ -212,12 +199,12 @@ export default function Scan() {
         onValueChange={(e) => setCurrentSelected(e)}
         buttons={[
           {
-            value: 'all',
-            label: 'All Exercises',
+            value: 'recommended',
+            label: 'Recommended Exercises',
           },
           {
-            value: 'recommended',
-            label: 'Recommended',
+            value: 'all',
+            label: 'All Exercises',
           },
         ]}
         />
@@ -262,7 +249,7 @@ export default function Scan() {
         {
           currentSelected === 'recommended' && (
             <SectionList
-              extraData={equipmentExercises.exercises}
+              extraData={preferences.fitnessLevel}
               sections={sortByMuscleGroup(filterByDifficulty(equipmentExercises.exercises))}
               renderItem={({item}) => (
                 <CustomPressable

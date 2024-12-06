@@ -2,6 +2,7 @@ import { fitnessLevel } from "@/constants/exercise";
 import { useRootNavigation } from "@/hooks/useRootNavigation";
 import useSystemTheme from "@/hooks/useSystemTheme"
 import asyncStore from "@/lib/asyncStore";
+import { useUserStore } from "@/store/useUserStore";
 import { StackActions } from "@react-navigation/native";
 import { useState } from "react";
 import { Alert, View } from "react-native"
@@ -16,6 +17,8 @@ const UserInfo = () => {
   const [userFitnessLevel, setUserFitnessLevel] = useState<string>()
   const [userWeight, setUserWeight] = useState<string>()
   const [userHeight, setUserHeight] = useState<string>()
+
+  const { getUserPreferences } = useUserStore()
 
   console.log(userFitnessLevel)
 
@@ -38,6 +41,7 @@ const UserInfo = () => {
     }
 
     await asyncStore.setItem('preferences', {firstTime: false, darkMode: false, fitnessLevel: userFitnessLevel, weight: userWeight, height: userHeight})
+    await getUserPreferences()
 
     return useRootNavigation.dispatch(StackActions.replace('Tabs'))
   }

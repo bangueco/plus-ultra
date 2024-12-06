@@ -343,8 +343,15 @@ const Workout = () => {
   }
 
   const onPressRefreshTrainerTemplates = async () => {
-    await fetchTrainerTemplates(user.trainerId ?? 0)
-    await getUserPreferences()
+    if (user.trainerId) {
+      await fetchTrainerTemplates(user.trainerId)
+      await getUserPreferences()
+    }
+
+    if (user.role === 'TRAINER') {
+      await fetchTrainerTemplates(user.id)
+      await getUserPreferences()
+    }
   }
 
   useEffect(() => {
@@ -916,6 +923,13 @@ const Workout = () => {
             <View style={{gap: 5, flexGrow: 1}}>
               <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', gap: 10, paddingBottom: 20}}>
                 <Text style={{color: systemTheme.colors.text, fontSize: 20}}>Template for clients</Text>
+                <Button
+                  mode="contained"
+                  icon="reload"
+                  onPress={async () => await onPressRefreshTrainerTemplates()}
+                >
+                  Refresh
+                </Button>
                 <CustomPressable
                   buttonStyle={{backgroundColor: systemTheme.colors.primary, borderRadius: 5, width: '90%'}}
                   textStyle={{fontSize: 20, color: 'white'}}

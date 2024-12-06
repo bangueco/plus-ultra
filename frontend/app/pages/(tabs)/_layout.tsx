@@ -39,7 +39,7 @@ export default function TabsLayout() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { fetchHistory } = useHistoryStore()
   const { fetchExercise } = useExerciseStore()
-  const { getUserInfo, user } = useUserStore()
+  const { getUserInfo, user, getUserPreferences } = useUserStore()
   const { fetchTrainerTemplates } = useTrainerStore()
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export default function TabsLayout() {
     const checkFirstTime = async () => {
       try {
         const firstTimeData = await asyncStore.getItem('preferences');
+        console.log(firstTimeData)
         
         if (!firstTimeData) {
           // Initialize preferences if not found
@@ -66,6 +67,7 @@ export default function TabsLayout() {
             weight: 70
           };
           await asyncStore.setItem('preferences', defaultPreferences);
+          await getUserPreferences()
           return;
         }
         
