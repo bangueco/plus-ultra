@@ -29,6 +29,7 @@ const handleZodError = (error: ZodError) => {
       case ZodIssueCode.invalid_type:
       case ZodIssueCode.invalid_string:
       case ZodIssueCode.too_small:
+      case ZodIssueCode.custom:
         return {field: issue.path[0], message: issue.message}
       default:
         return {message: `unspecified zod issue error: ${issue.code}.`}
