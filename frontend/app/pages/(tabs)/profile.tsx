@@ -220,13 +220,9 @@ const Profile = () => {
             >
               <View style={{justifyContent: 'center', width: '100%', padding: 10, position: 'absolute', bottom: 0, top: 0, backgroundColor: 'rgba(52, 52, 52, 0.7)'}}>
                 <View style={{backgroundColor: systemTheme.colors.background, padding: 10, flexDirection: 'column', gap: 10}}>
-                  <RNPickerSelect
-                    style={{inputAndroid: {color: systemTheme.colors.text}}}
-                    onValueChange={onValueChangeFitnessLevel}
-                    items={fitnessLevel}
-                    placeholder={{label: 'What is your fitness level?'}}
-                    value={userFitnessLevel}
-                  />
+                  {
+                    <Text style={{fontSize: 25, textAlign: 'center', color: systemTheme.colors.text}}>Hello, {user.username}!</Text>
+                  }
                   <TextInput
                     mode="outlined"
                     label="Weight (kg)"
@@ -242,6 +238,13 @@ const Profile = () => {
                     onChangeText={(e) => setUserHeight(e)}
                     value={userHeight}
                     inputMode="numeric"
+                  />
+                  <RNPickerSelect
+                    style={{inputAndroid: {color: systemTheme.colors.text}}}
+                    onValueChange={onValueChangeFitnessLevel}
+                    items={fitnessLevel}
+                    placeholder={{label: 'What is your fitness level?'}}
+                    value={userFitnessLevel}
                   />
                   <Pressable onPress={onPressSubmitInfo}>
                     <Text style={{fontSize: 20, color: systemTheme.colors.text}}>Submit</Text>
