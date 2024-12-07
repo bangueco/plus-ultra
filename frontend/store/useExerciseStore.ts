@@ -8,16 +8,17 @@ type State = {
 }
 
 type Action = {
-  fetchExercise: () => Promise<void>,
+  fetchExercise: (userId: number) => Promise<void>,
   addExercise: (exerciseName: string, muscleGroup: string, equipmentName: string, createdBy: number) => Promise<SQLiteRunResult>,
 }
 
 export const useExerciseStore = create<State & Action>((set) => ({
   exercise: [],
-  fetchExercise: async () => {
+  fetchExercise: async (userId: number) => {
     try {
-      const exercises = await exerciseService.getAllExercise()
-      set({exercise: exercises})
+      const defaultExercises = await exerciseService.getExerciseByCreatorId(0)
+      const userExercises = await exerciseService.getExerciseByCreatorId(userId)
+      set({exercise: [...defaultExercises, ...userExercises]})
     } catch (error) {
       console.error(error)
     }

@@ -38,7 +38,7 @@ export default function TabsLayout() {
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { fetchHistory } = useHistoryStore()
-  const { fetchExercise } = useExerciseStore()
+  const { fetchExercise, exercise } = useExerciseStore()
   const { getUserInfo, user, getUserPreferences } = useUserStore()
   const { fetchTrainerTemplates } = useTrainerStore()
 
@@ -90,9 +90,12 @@ export default function TabsLayout() {
   
 
   useEffect(() => {
-    fetchHistory()
-    fetchExercise()
     getUserInfo()
+    fetchHistory()
+
+    if (user.id !== 0) {
+      fetchExercise(user.id)
+    }
   }, [])
 
   return (
