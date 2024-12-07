@@ -18,13 +18,16 @@ const getExerciseByCreatorId = async (creatorId: number) => {
   return await db.select().from(exercise).where(eq(exercise.created_by, creatorId))
 }
 
-const createExercise = async (exerciseName: string, exerciseMuscleGroup: string, exerciseEquipment: string, createdBy: number) => {
+const createExercise = async (exerciseName: string, exerciseMuscleGroup: string, exerciseEquipment: string, createdBy: number, youtubeLink: string, description: string, difficulty: string) => {
   return await db.insert(exercise).values({
     name: exerciseName,
     muscle_group: exerciseMuscleGroup,
     equipment: exerciseEquipment,
     custom: 1,
-    created_by: createdBy
+    created_by: createdBy,
+    video_id: youtubeLink,
+    difficulty: difficulty,
+    instructions: description
   })
 }
 

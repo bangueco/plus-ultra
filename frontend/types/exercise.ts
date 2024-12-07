@@ -4,7 +4,7 @@ export type ExerciseInfo = {
     muscle_group: string,
     equipment: string,
     difficulty?: string | null,
-    custom: number | null,
+    custom: number,
     instructions?: string | null,
     created_by: number,
     video_id?: string | null
