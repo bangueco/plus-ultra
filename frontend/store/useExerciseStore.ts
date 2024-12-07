@@ -9,7 +9,8 @@ type State = {
 
 type Action = {
   fetchExercise: (userId: number) => Promise<void>,
-  addExercise: (exerciseName: string, muscleGroup: string, equipmentName: string, createdBy: number) => Promise<SQLiteRunResult>,
+  addExercise: (exerciseName: string, muscleGroup: string, equipmentName: string, createdBy: number, youtubeLink: string, description: string, difficulty: string) => Promise<SQLiteRunResult>,
+  removeExercise: (id: number) => Promise<void>
 }
 
 export const useExerciseStore = create<State & Action>((set) => ({
@@ -23,8 +24,8 @@ export const useExerciseStore = create<State & Action>((set) => ({
       console.error(error)
     }
   },
-  addExercise: async (exerciseName, muscleGroup, equipmentName, createdBy) => {
-    const newExercise = await exerciseService.createExercise(exerciseName, muscleGroup, equipmentName, createdBy)
+  addExercise: async (exerciseName, muscleGroup, equipmentName, createdBy, youtubeLink, description, difficulty) => {
+    const newExercise = await exerciseService.createExercise(exerciseName, muscleGroup, equipmentName, createdBy, youtubeLink, description, difficulty)
 
     set((state) => ({
       exercise: [...state.exercise, {
@@ -39,4 +40,11 @@ export const useExerciseStore = create<State & Action>((set) => ({
 
     return newExercise
   },
+  removeExercise: async (id: number) => {
+    const deleteExercise = await exerciseService.deleteExercise(id)
+
+    set((state) => ({
+      exercise: [...state.exercise.filter(e => e.exercise_id !== id)]
+    }))
+  }
 }))
