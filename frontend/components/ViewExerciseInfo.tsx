@@ -47,6 +47,7 @@ const ViewExerciseInfo = ({id}: ViewExerciseInfoProps) => {
               currentSelectedExercise.video_id && <YoutubePlayer height={150} videoId={currentSelectedExercise.video_id} />
             }
             <Text style={{color: systemTheme.colors.text, textAlign: 'justify'}}>{currentSelectedExercise?.instructions}</Text>
+            <Text style={{color: systemTheme.colors.primary, textAlign: 'justify', fontSize: 10, paddingTop: 15}}>Note: For pregnant and persons with disabilities please consult your doctor before performing these exercise.</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setVisible(false)}>OK</Button>

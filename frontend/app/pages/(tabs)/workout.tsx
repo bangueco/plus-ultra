@@ -496,6 +496,7 @@ const Workout = () => {
                 currentGuide.video_id && <YoutubePlayer height={150} videoId={currentGuide.video_id} />
               }
               <Text style={{textAlign: 'justify', color: systemTheme.colors.text}}>{currentGuide?.instructions}</Text>
+              <Text style={{color: systemTheme.colors.primary, textAlign: 'justify', fontSize: 10, paddingTop: 15}}>Note: For pregnant and persons with disabilities please consult your doctor before performing these exercise.</Text>
             </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={handleGuideDismiss}>OK</Button>
