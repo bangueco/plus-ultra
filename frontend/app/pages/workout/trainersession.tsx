@@ -26,6 +26,10 @@ export default function TrainerSession({route}: TrainerSessionProps) {
   const [restTimer, setRestTimer] = useState<string>('60')
   const [restTimerVisible, setRestTimerVisible] = useState<boolean>(false)
   const [time, setTime] = useState(0);
+  const [manualHours, setManualHours] = useState<string>('0')
+  const [manualMinutes, setManualMinutes] = useState<string>('0')
+  const [manualSeconds, setManualSeconds] = useState<string>('0')
+  const [manualWorkoutStarted, setManualWorkoutStarted] = useState<boolean>(false)
   const [workoutStarted, setWorkoutStarted] = useState<boolean>(false)
   const [cancelWorkoutVisible, setCancelWorkoutVisible] = useState<boolean>(false)
   const [templateName, setTemplateName] = useState<string>('')
@@ -58,41 +62,74 @@ export default function TrainerSession({route}: TrainerSessionProps) {
     return setWorkoutStarted(true)
   }
 
+  const onPressStartManualWorkout = () => {
+    return setManualWorkoutStarted(true)
+  }
+
   const onPressFinishWorkout = async () => {
     if (!useTabNavigation.isReady()) return
 
-    setWorkoutStarted(false)
     useTabNavigation.navigate('History')
 
-    const history = await addHistory(templateName, hours, minutes, seconds)
+    if (workoutStarted) {
+      setWorkoutStarted(false)
 
-    if (!history) return null;
+      const history = await addHistory(templateName, hours, minutes, seconds)
 
-    const results = await Promise.allSettled(
-      performedWorkout.map(async (workout) => {
-        await historyExerciseService.createHistoryExercise(
-          history.lastInsertRowId,
-          workout.template_item_id,
-          workout.template_id,
-          workout.reps,
-          workout.weight,
-          workout.exercise_name
-        )
-        addHistoryExercise(history.lastInsertRowId, workout.template_item_id, workout.template_id, workout.reps, workout.weight, workout.exercise_name)
-      })
-    )
+      if (!history) return null;
 
-    console.log(results)
+      await Promise.allSettled(
+        performedWorkout.map(async (workout) => {
+          await historyExerciseService.createHistoryExercise(
+            history.lastInsertRowId,
+            workout.template_item_id,
+            workout.template_id,
+            workout.reps,
+            workout.weight,
+            workout.exercise_name
+          )
+          addHistoryExercise(history.lastInsertRowId, workout.template_item_id, workout.template_id, workout.reps, workout.weight, workout.exercise_name)
+        })
+      )
 
-    return onPressGoBack()
+      return onPressGoBack()
+    }
+
+    if (manualWorkoutStarted) {
+      setManualWorkoutStarted(false)
+
+      const history = await addHistory(templateName, Number(manualHours), Number(manualMinutes), Number(manualSeconds))
+
+      if (!history) return null;
+
+      await Promise.allSettled(
+        performedWorkout.map(async (workout) => {
+          await historyExerciseService.createHistoryExercise(
+            history.lastInsertRowId,
+            workout.template_item_id,
+            workout.template_id,
+            workout.reps,
+            workout.weight,
+            workout.exercise_name
+          )
+          addHistoryExercise(history.lastInsertRowId, workout.template_item_id, workout.template_id, workout.reps, workout.weight, workout.exercise_name)
+        })
+      )
+
+      return onPressGoBack()
+    }
+
   }
-
-  console.log(performedWorkout)
 
   const onPressCheckSet = async (setId: number, templateItemId: number, templateId: number, exerciseName: string) => {
     if (performedWorkout.some(workout => workout.set_id === setId)) {
       const filter = performedWorkout.filter(item => item.set_id !== setId)
       return setPerformedWorkout(filter)
+    }
+
+    if (!isPlaying && !remainingTimeVisible && !manualWorkoutStarted) {
+      setIsPlaying(true)
+      setRemainingTimeVisible(true)
     }
 
     const exerciseSetInfo = await exerciseSetService.getExerciseSetById(setId)
@@ -245,13 +282,45 @@ export default function TrainerSession({route}: TrainerSessionProps) {
             />
           }
         </View>
-        <Text style={{fontSize: 18, color: systemTheme.colors.text}}>
-          {hours}:{minutes.toString().padStart(2, "0")}:
-          {seconds.toString().padStart(2, "0")}
-        </Text>
+        {
+          !manualWorkoutStarted && (
+            <Text style={{fontSize: 18, color: systemTheme.colors.text}}>
+              {hours}:{minutes.toString().padStart(2, "0")}:
+              {seconds.toString().padStart(2, "0")}
+            </Text>
+          )
+        }
+        {
+          manualWorkoutStarted &&
+          <>
+            <TextInput
+              onChangeText={(e) => setManualHours(e.padStart(2, '0'))}
+              defaultValue={String(manualHours).padStart(2, '0')}
+              keyboardType="numeric"
+              maxLength={2}
+              placeholder="HH"
+            />
+            <Text>:</Text>
+            <TextInput
+              onChangeText={(e) => setManualMinutes(e.padStart(2, '0'))}
+              defaultValue={String(manualMinutes).padStart(2, '0')}
+              keyboardType="numeric"
+              maxLength={2}
+              placeholder="MM"
+            />
+            <Text>:</Text>
+            <TextInput
+              onChangeText={(e) => setManualSeconds(e.padStart(2, '0'))}
+              defaultValue={String(manualSeconds).padStart(2, '0')}
+              keyboardType="numeric"
+              maxLength={2}
+              placeholder="SS"
+            />
+          </>
+        }
         <View>
           <Button
-            disabled={!workoutStarted}
+            disabled={!workoutStarted && !manualWorkoutStarted}
             mode="contained"
             onPress={onPressFinishWorkout}
           >
@@ -267,8 +336,8 @@ export default function TrainerSession({route}: TrainerSessionProps) {
       </View>
       <View style={{height: '60%', borderWidth: 1, padding: 10, borderColor: systemTheme.colors.text, borderRadius: 10}}>
         <ScrollView contentContainerStyle={styles.exercisesContainer} showsVerticalScrollIndicator={false}>
-          {
-            templateExercises && templateExercises.map((exercise, index) => (
+        {
+          templateExercises && templateExercises.map((exercise, index) => (
               <View key={index}>
                 <Text style={{color: systemTheme.colors.primary, fontSize: 15}}>{index + 1}. {exercise.template_item_name}</Text>
                 <DataTable style={{paddingBottom: 30}}>
@@ -286,7 +355,6 @@ export default function TrainerSession({route}: TrainerSessionProps) {
                           renderRightActions={() => (
                             <View>
                               <IconButton
-                                disabled={!workoutStarted}
                                 mode="contained"
                                 icon="trash-can"
                                 onPress={() => onPressDeleteSet(set.exercise_set_id)}
@@ -307,7 +375,7 @@ export default function TrainerSession({route}: TrainerSessionProps) {
                                 }}
                                 defaultValue={set.weight.toString()}
                                 onChangeText={(e) => onChangeWeight(set.exercise_set_id, e)}
-                                editable={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
+                                editable={manualWorkoutStarted || workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
                                 selectTextOnFocus={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
                               />
                             </DataTable.Cell>
@@ -319,12 +387,13 @@ export default function TrainerSession({route}: TrainerSessionProps) {
                                 }}
                                 defaultValue={set.reps.toString()}
                                 onChangeText={(e) => onChangeReps(set.exercise_set_id, e)}
-                                editable={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
+                                editable={manualWorkoutStarted || workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
                                 selectTextOnFocus={workoutStarted && !performedWorkout.some(workout => workout.set_id === set.exercise_set_id)}
                               />
                             </DataTable.Cell>
                             <DataTable.Cell>
                               <IconButton
+                                disabled={!workoutStarted && !manualWorkoutStarted}
                                 icon={
                                   performedWorkout.some(workout => workout.set_id === set.exercise_set_id)
                                   ? "checkbox-marked-circle"
@@ -341,7 +410,7 @@ export default function TrainerSession({route}: TrainerSessionProps) {
                     }
                   </GestureHandlerRootView>
                 </DataTable>
-                <Button disabled={!workoutStarted} mode="contained" onPress={() => onPressAddSet(exercise.template_id, exercise.template_item_id)}>
+                <Button disabled={!workoutStarted && !manualWorkoutStarted} mode="contained" onPress={() => onPressAddSet(exercise.template_id, exercise.template_item_id)}>
                   Add set
                 </Button>
               </View>
@@ -351,38 +420,34 @@ export default function TrainerSession({route}: TrainerSessionProps) {
       </View>
       <View style={{justifyContent: 'center', paddingTop: 10}}>
         <View style={{gap: 5}}>
-          {
-            workoutStarted
-            ?
-            <Button
-              buttonColor="red"
-              textColor="white"
-              mode="contained"
-              onPress={() => setCancelWorkoutVisible(true)}
-            >
-              Cancel Workout
-            </Button>
-            :
-            <Button
-              mode="contained"
-              onPress={onPressStartWorkout}
-            >
-              Start Workout
-            </Button>
-          }
-          {
-            !workoutStarted
-            ?
-            <Button
-              mode="contained"
-              onPress={() => console.log("TODO: add manual entry")}
-            >
-              Manual entry
-            </Button>
-            :
-            <></>
-          }
-        </View>
+            {
+              workoutStarted || manualWorkoutStarted
+              ?
+              <Button
+                buttonColor="red"
+                textColor="white"
+                mode="contained"
+                onPress={() => setCancelWorkoutVisible(true)}
+              >
+                Cancel Workout
+              </Button>
+              :
+              <>
+                <Button
+                  mode="contained"
+                  onPress={onPressStartWorkout}
+                >
+                  Start Workout
+                </Button>
+                <Button
+                mode="contained"
+                onPress={onPressStartManualWorkout}
+                >
+                  Manual entry
+                </Button>
+              </>
+            }
+          </View>
       </View>
     </View>
   )
