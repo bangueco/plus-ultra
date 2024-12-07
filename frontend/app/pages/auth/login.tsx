@@ -102,7 +102,7 @@ export default function Login () {
             <TextInput
               mode="outlined"
               label="Password"
-              secureTextEntry={true}
+              secureTextEntry={!showPassword}
               left={<TextInput.Icon icon="lock" />}
               right={<TextInput.Icon onPress={() => setShowPassword(!showPassword)} icon={showPassword ? 'eye' : 'eye-off'} />}
               onChangeText={handleChangeText(setPassword)}
