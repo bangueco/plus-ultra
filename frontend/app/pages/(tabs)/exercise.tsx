@@ -2,7 +2,7 @@ import { Alert, Modal, SectionList, StyleSheet, Text, View } from "react-native"
 import CustomPressable from "@/components/custom/CustomPressable"
 import { useState } from "react"
 import CustomTextInput from "@/components/custom/CustomTextInput"
-import { equipment, muscle_group } from "@/constants/exercise"
+import { equipment, fitnessLevel, muscle_group } from "@/constants/exercise"
 import RNPickerSelect from 'react-native-picker-select';
 import useSystemTheme from "@/hooks/useSystemTheme"
 import { Button, Dialog, Portal, Searchbar } from "react-native-paper"
@@ -11,10 +11,11 @@ import exerciseService from "@/services/exercise.service"
 import { useExerciseStore } from "@/store/useExerciseStore"
 import { useUserStore } from "@/store/useUserStore"
 import YoutubePlayer from "react-native-youtube-iframe";
+import TemplateMenu from "@/components/TemplateMenu"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
-  const { addExercise, exercise } = useExerciseStore()
+  const { addExercise, exercise, removeExercise } = useExerciseStore()
 
   const { user } = useUserStore()
 
@@ -23,13 +24,55 @@ const Exercise = () => {
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
 
-  const [exerciseName, setExerciseName] = useState<string>('')
-  const [muscleGroup, setMuscleGroup] = useState<string>('')
-  const [equipmentName, setEquipmentName] = useState<string>('')
+  const [exerciseName, setExerciseName] = useState<string>()
+  const [youtubeLink, setYoutubeLink] = useState<string>()
+  const [description, setDescription] = useState<string>()
+  const [muscleGroup, setMuscleGroup] = useState<string>()
+  const [equipmentName, setEquipmentName] = useState<string>()
+  const [difficulty, setDifficulty] = useState<string>()
+
+  function getYouTubeVideoId(url: string) {
+    try {
+        const parsedUrl = new URL(url);
+
+        if (parsedUrl.hostname.includes('youtube.com')) {
+            if (parsedUrl.pathname === '/watch') {
+                return parsedUrl.searchParams.get('v');
+            } else if (parsedUrl.pathname.startsWith('/embed/')) {
+                return parsedUrl.pathname.split('/embed/')[1];
+            }
+        }
+
+        if (parsedUrl.hostname === 'youtu.be') {
+            // Extract the video ID from the pathname
+            return parsedUrl.pathname.slice(1);
+        }
+
+        return null;
+    } catch (error) {
+        console.error("Invalid URL:", error);
+        return null;
+    }
+}
 
   const onPressNewExercise = async () => {
+
+    if (!exerciseName || !muscleGroup || !equipmentName || !youtubeLink || !description || !difficulty) {
+      return Alert.alert("All fields are required!")
+    }
+
     try {
-      return await addExercise(exerciseName, muscleGroup, equipmentName, user.id)
+      setVisibleModal(!visibleModal)
+      const youtubeId = getYouTubeVideoId(youtubeLink)
+      return await addExercise(exerciseName, muscleGroup, equipmentName, user.id, youtubeId ?? '', description, difficulty)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onPressRemoveExercise = async (id: number) => {
+    try {
+      return await removeExercise(id)
     } catch (error) {
       console.error(error)
     }
@@ -83,6 +126,21 @@ const Exercise = () => {
                   <CustomTextInput
                     placeholder="Enter exercise name"
                     onChangeText={(e) => setExerciseName(e)}
+                    value={exerciseName}
+                  />
+                </View>
+                <View style={{padding: 10}}>
+                  <CustomTextInput
+                    placeholder="Enter youtube video link"
+                    onChangeText={(e) => setYoutubeLink(e)}
+                    value={youtubeLink}
+                  />
+                </View>
+                <View style={{padding: 10}}>
+                  <CustomTextInput
+                    placeholder="Enter description"
+                    onChangeText={(e) => setDescription(e)}
+                    value={description}
                   />
                 </View>
                 <View style={{padding: 10, marginTop: 3}}>
@@ -94,10 +152,18 @@ const Exercise = () => {
                   />
                 </View>
                 <View style={{padding: 10, marginTop: 3}}>
-                <RNPickerSelect
+                  <RNPickerSelect
                     placeholder={{label: 'Select muscle group', value: null}}
                     onValueChange={(value) => setMuscleGroup(value)}
                     items={muscle_group}
+                    style={pickerSelectStyles}
+                  />
+                </View>
+                <View style={{padding: 10, marginTop: 3}}>
+                  <RNPickerSelect
+                    placeholder={{label: 'Select difficulty', value: null}}
+                    onValueChange={(value) => setDifficulty(value)}
+                    items={fitnessLevel}
                     style={pickerSelectStyles}
                   />
                 </View>
@@ -157,13 +223,29 @@ const Exercise = () => {
           )
         }))}
         renderItem={({item}) => (
-          <CustomPressable 
-            key={item.id} 
-            text={item.name} 
-            textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
-            buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
-            onPress={() => onPressSelectExercise(item.id)}
-          />
+          <View>
+            <CustomPressable 
+              key={item.id} 
+              text={item.name} 
+              textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+              buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
+              onPress={() => onPressSelectExercise(item.id)}
+            />
+            {
+              item.custom
+              ?
+              <View
+                style={{position: 'absolute', top: -15, right: -10}}
+              >
+                <TemplateMenu
+                  editTemplate={() => {}}
+                  deleteTemplate={() => onPressRemoveExercise(item.id)}
+                />
+              </View>
+              :
+              <></>
+            }
+          </View>
         )}
         renderSectionHeader={({section: {title}}) => (
           <View style={{padding: 5, marginTop: 30}}>

@@ -92,11 +92,14 @@ export default function TabsLayout() {
   useEffect(() => {
     getUserInfo()
     fetchHistory()
+  }, [])
 
+  useEffect(() => {
     if (user.id !== 0) {
+      console.log(user.id)
       fetchExercise(user.id)
     }
-  }, [])
+  }, [user])
 
   return (
     <PaperProvider theme={systemTheme}>
