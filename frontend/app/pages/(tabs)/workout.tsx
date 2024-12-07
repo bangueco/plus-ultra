@@ -56,7 +56,7 @@ const Workout = () => {
     exercises: [],
     difficulty: null
   })
-  const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string, video_id?: string | null}>({name: '', instructions: '', video_id: ''})
+  const [currentGuide, setCurrentGuide] = useState<{name: string, instructions?: string, video_id?: string | null, difficulty: string | null}>({name: '', instructions: '', video_id: '', difficulty: ''})
 
   const fetchTemplates = async () => {
     try {
@@ -282,11 +282,11 @@ const Workout = () => {
       const exercise = await exerciseService.getExerciseById(id)
 
       if (exercise && exercise[0].instructions) {
-        return setCurrentGuide({name: exercise[0].name, instructions: exercise[0].instructions, video_id: exercise[0].video_id})
+        return setCurrentGuide({name: exercise[0].name, instructions: exercise[0].instructions, video_id: exercise[0].video_id, difficulty: exercise[0].difficulty})
       }
 
       if (exercise && exercise[0].name) {
-        return setCurrentGuide({name: exercise[0].name})
+        return setCurrentGuide({name: exercise[0].name, difficulty: exercise[0].difficulty})
       }
     } catch (error) {
       console.error(error)
@@ -421,6 +421,19 @@ const Workout = () => {
             <Dialog.Title style={{textAlign: 'center'}}>
               <Text>{currentTemplate.template_name}</Text>
             </Dialog.Title>
+            <View style={{justifyContent: 'center', paddingBottom: 20, alignItems: 'center'}}>
+              <Text style={{fontSize: 15, color:
+                    currentTemplate.difficulty === 'Beginner'
+                    ? 'greenyellow'
+                    : currentTemplate.difficulty === 'Intermediate'
+                    ? 'orange'
+                    : currentTemplate.difficulty === 'Advanced'
+                    ? 'red'
+                    : 'black'}
+                  }>
+                  {currentTemplate.difficulty}
+              </Text>
+            </View>
             <Dialog.ScrollArea style={{borderColor: systemTheme.colors.outline}}>
               <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 25, marginTop: 5, maxHeight: 400}}>
                 {
@@ -458,32 +471,6 @@ const Workout = () => {
                 }
               </ScrollView>
             </Dialog.ScrollArea>
-            {
-              currentTemplate.difficulty && <View style={{
-                position: 'absolute',
-                bottom: 60,
-                left: 10,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 3
-              }}>
-                <Text style={{fontSize: 15, color: systemTheme.colors.text,}}>
-                  Difficulty:
-                </Text>
-                <Text style={{fontSize: 15, color:
-                    currentTemplate.difficulty === 'Beginner'
-                    ? 'green' 
-                    : currentTemplate.difficulty === 'Intermediate'
-                    ? 'orange'
-                    : currentTemplate.difficulty === 'Advanced'
-                    ? 'red'
-                    : 'black'}
-                  }>
-                  {currentTemplate.difficulty}
-                </Text>
-              </View>
-            }
             <Dialog.Actions>
               <Button onPress={onPressStartTrainerWorkout}>Start Workout</Button>
             </Dialog.Actions>
@@ -491,6 +478,19 @@ const Workout = () => {
           {/* Show pop up dialog for viewing exercise guides */}
           <Dialog visible={guideVisible} onDismiss={handleGuideDismiss}>
             <Dialog.Title style={{textAlign: 'center'}}>{currentGuide?.name}</Dialog.Title>
+            <View style={{justifyContent: 'center', paddingBottom: 20, alignItems: 'center'}}>
+              <Text style={{fontSize: 15, color:
+                    currentGuide.difficulty === 'Beginner'
+                    ? 'greenyellow'
+                    : currentGuide.difficulty === 'Intermediate'
+                    ? 'orange'
+                    : currentGuide.difficulty === 'Advanced'
+                    ? 'red'
+                    : 'black'}
+                  }>
+                  {currentGuide.difficulty}
+              </Text>
+            </View>
             <Dialog.Content>
               {
                 currentGuide.video_id && <YoutubePlayer height={150} videoId={currentGuide.video_id} />

@@ -37,7 +37,7 @@ export default function Scan() {
 
   const [currentSelected, setCurrentSelected] = useState<string>('all')
 
-  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, video_id: string }>({ name: '', instructions: '', video_id: '' });
+  const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, video_id: string, difficulty: string}>({ name: '', instructions: '', video_id: '', difficulty: '' });
   const [visible, setVisible] = useState<boolean>(false)
 
   const onPressSelectExercise = async (id: number) => {
@@ -48,7 +48,8 @@ export default function Scan() {
     setCurrentSelectedExercise({
       name: getExercise[0].name,
       instructions: getExercise[0].instructions ?? '',
-      video_id: getExercise[0].video_id ?? ''
+      video_id: getExercise[0].video_id ?? '',
+      difficulty: getExercise[0].difficulty ?? ''
     })
 
     setVisible(true)
@@ -185,14 +186,14 @@ export default function Scan() {
 
   if (equipmentExercises) {
     return (
-      <View style={{paddingTop: '15%', justifyContent: 'center', alignItems: 'center', gap: 10, paddingBottom: '15%'}}>
-        <Pressable onPress={() => setEquipmentExercises(undefined)}>
-          <Text style={{color: systemTheme.colors.primary, paddingLeft: 10, fontSize: 15}}>Exit Result Page</Text>
+      <View style={{paddingTop: '15%', justifyContent: 'center', alignItems: 'center', gap: 10, flex: 1, position: 'relative'}}>
+        <Pressable style={{position: 'absolute', top: '5%', left: 5}} onPress={() => setEquipmentExercises(undefined)}>
+          <Text style={{color: systemTheme.colors.primary, paddingLeft: 10, fontSize: 15}}>Back</Text>
         </Pressable>
         <Text style={{color: systemTheme.colors.text}}>{equipmentExercises.equipment_name.toUpperCase()}</Text>
         <Image
           source={equipmentImages[equipmentExercises.equipment_name] ?? require('@/assets/images/equipments/no-image.jpg')}
-          style={{height: 350, width: 350}}
+          style={{height: 250, width: '100%', resizeMode: 'center'}}
         />
         <SegmentedButtons
         value={currentSelected}
@@ -211,6 +212,19 @@ export default function Scan() {
         <Portal>
           <Dialog visible={visible} onDismiss={() => setVisible(false)}>
             <Dialog.Title style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>{currentSelectedExercise?.name}</Dialog.Title>
+            <View style={{justifyContent: 'center', paddingBottom: 20, alignItems: 'center'}}>
+              <Text style={{fontSize: 15, color:
+                    currentSelectedExercise.difficulty === 'Beginner'
+                    ? 'greenyellow'
+                    : currentSelectedExercise.difficulty === 'Intermediate'
+                    ? 'orange'
+                    : currentSelectedExercise.difficulty === 'Advanced'
+                    ? 'red'
+                    : 'black'}
+                  }>
+                  {currentSelectedExercise.difficulty}
+              </Text>
+            </View>
             <Dialog.Content style={{gap: 10}}>
               {
                 currentSelectedExercise.video_id && <YoutubePlayer height={150} videoId={currentSelectedExercise.video_id} />
@@ -223,54 +237,56 @@ export default function Scan() {
             </Dialog.Actions>
           </Dialog>
         </Portal>
-        {
-          currentSelected === 'all' && (
-            <SectionList
-              extraData={equipmentExercises.exercises}
-              sections={sortByMuscleGroup(equipmentExercises.exercises)}
-              renderItem={({item}) => (
-                <CustomPressable
-                  key={item.id} 
-                  text={item.name} 
-                  textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
-                  buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
-                  onPress={() => onPressSelectExercise(item.id)}
-                />
-              )}
-              renderSectionHeader={({section: {title}}) => (
-                <View style={{padding: 5, marginTop: 30}}>
-                  <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
-                </View>
-              )}
-              stickySectionHeadersEnabled={false}
-              showsVerticalScrollIndicator={false}
-            />
-          )
-        }
-        {
-          currentSelected === 'recommended' && (
-            <SectionList
-              extraData={preferences.fitnessLevel}
-              sections={sortByMuscleGroup(filterByDifficulty(equipmentExercises.exercises))}
-              renderItem={({item}) => (
-                <CustomPressable
-                  key={item.id} 
-                  text={item.name} 
-                  textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
-                  buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
-                  onPress={() => onPressSelectExercise(item.id)}
-                />
-              )}
-              renderSectionHeader={({section: {title}}) => (
-                <View style={{padding: 5, marginTop: 30}}>
-                  <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
-                </View>
-              )}
-              stickySectionHeadersEnabled={false}
-              showsVerticalScrollIndicator={false}
-            />
-          )
-        }
+        <View style={{flex: 1}}>
+          {
+            currentSelected === 'all' && (
+              <SectionList
+                extraData={equipmentExercises.exercises}
+                sections={sortByMuscleGroup(equipmentExercises.exercises)}
+                renderItem={({item}) => (
+                  <CustomPressable
+                    key={item.id} 
+                    text={item.name} 
+                    textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+                    buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
+                    onPress={() => onPressSelectExercise(item.id)}
+                  />
+                )}
+                renderSectionHeader={({section: {title}}) => (
+                  <View style={{padding: 5, marginTop: 10}}>
+                    <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
+                  </View>
+                )}
+                stickySectionHeadersEnabled={false}
+                showsVerticalScrollIndicator={false}
+              />
+            )
+          }
+          {
+            currentSelected === 'recommended' && (
+              <SectionList
+                extraData={preferences.fitnessLevel}
+                sections={sortByMuscleGroup(filterByDifficulty(equipmentExercises.exercises))}
+                renderItem={({item}) => (
+                  <CustomPressable
+                    key={item.id} 
+                    text={item.name} 
+                    textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+                    buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
+                    onPress={() => onPressSelectExercise(item.id)}
+                  />
+                )}
+                renderSectionHeader={({section: {title}}) => (
+                  <View style={{padding: 5, marginTop: 10}}>
+                    <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
+                  </View>
+                )}
+                stickySectionHeadersEnabled={false}
+                showsVerticalScrollIndicator={false}
+              />
+            )
+          }
+        </View>
       </View>
     )
   }
