@@ -31,11 +31,14 @@ const createExercise = async (exerciseName: string, exerciseMuscleGroup: string,
   })
 }
 
-const editExercise = async (exerciseId: number, exerciseName: string, exerciseMuscleGroup: string, exerciseEquipment: string) => {
+const editExercise = async (exerciseId: number, exerciseName: string, exerciseMuscleGroup: string, exerciseEquipment: string, youtubeLink: string, description: string, difficulty: string) => {
   return await db.update(exercise).set({
     name: exerciseName,
     muscle_group: exerciseMuscleGroup,
-    equipment: exerciseEquipment
+    equipment: exerciseEquipment,
+    video_id: youtubeLink,
+    difficulty: difficulty,
+    instructions: description
   }).where(eq(exercise.exercise_id, exerciseId))
 }
 

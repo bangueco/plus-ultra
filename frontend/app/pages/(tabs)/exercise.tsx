@@ -15,15 +15,17 @@ import TemplateMenu from "@/components/TemplateMenu"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
-  const { addExercise, exercise, removeExercise } = useExerciseStore()
+  const { addExercise, exercise, removeExercise, fetchExercise } = useExerciseStore()
 
   const { user } = useUserStore()
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, video_id: string, difficulty: string }>({ name: '', instructions: '', video_id: '', difficulty: '' });
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
+  const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
 
+  const [exerciseId, setExerciseId] = useState<number>(0)
   const [exerciseName, setExerciseName] = useState<string>()
   const [youtubeLink, setYoutubeLink] = useState<string>()
   const [description, setDescription] = useState<string>()
@@ -70,6 +72,36 @@ const Exercise = () => {
     }
   }
 
+  const onPressSaveEdit = async () => {
+    if (!exerciseName || !muscleGroup || !equipmentName || !youtubeLink || !description || !difficulty) {
+      return Alert.alert("All fields are required!")
+    }
+
+    try {
+      setVisibleEditModal(!visibleEditModal)
+      const youtubeId = getYouTubeVideoId(youtubeLink)
+      await exerciseService.editExercise(exerciseId, exerciseName, muscleGroup, equipmentName, youtubeId ?? '', description, difficulty)
+      await fetchExercise(user.id)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onPressEditExercise = async (id: number) => {
+
+    const getExercise = await exerciseService.getExerciseById(id)
+
+    if (getExercise) {
+      setExerciseId(getExercise[0].exercise_id)
+      setExerciseName(getExercise[0].name)
+      setEquipmentName(getExercise[0].equipment)
+      setMuscleGroup(getExercise[0].muscle_group)
+      setDifficulty(getExercise[0].difficulty ?? '')
+      setDescription(getExercise[0].instructions ?? '')
+      setYoutubeLink(getExercise[0].video_id ?? '')
+    }
+  }
+
   const onPressRemoveExercise = async (id: number) => {
     try {
       return await removeExercise(id)
@@ -110,6 +142,85 @@ const Exercise = () => {
           onChangeText={(e) => setSearchQuery(e)}
           value={searchQuery}
         />
+        {/* Pop up modal for editing existing exercise */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={visibleEditModal}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setVisibleEditModal(!visibleEditModal);
+          }}>
+          <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(52, 52, 52, 0.7)'}}>
+            <View style={[style.modalStyle, {backgroundColor: systemTheme.colors.background}]}>
+              <Text style={{textAlign: 'center', fontSize: 20, padding: 10, color: 'white'}}>Add new exercise</Text>
+              <View>
+                <View style={{padding: 10}}>
+                  <CustomTextInput
+                    placeholder="Enter exercise name"
+                    onChangeText={(e) => setExerciseName(e)}
+                    value={exerciseName}
+                  />
+                </View>
+                <View style={{padding: 10}}>
+                  <CustomTextInput
+                    placeholder="Enter youtube video link"
+                    onChangeText={(e) => setYoutubeLink(e)}
+                  />
+                </View>
+                <View style={{padding: 10}}>
+                  <CustomTextInput
+                    placeholder="Enter description"
+                    onChangeText={(e) => setDescription(e)}
+                    value={description}
+                  />
+                </View>
+                <View style={{padding: 10, marginTop: 3}}>
+                  <RNPickerSelect
+                    placeholder={{label: 'Select equipment', value: null}}
+                    onValueChange={(value) => setEquipmentName(value)}
+                    items={equipment}
+                    style={pickerSelectStyles}
+                    value={equipmentName}
+                  />
+                </View>
+                <View style={{padding: 10, marginTop: 3}}>
+                  <RNPickerSelect
+                    placeholder={{label: 'Select muscle group', value: null}}
+                    onValueChange={(value) => setMuscleGroup(value)}
+                    items={muscle_group}
+                    style={pickerSelectStyles}
+                    value={muscleGroup}
+                  />
+                </View>
+                <View style={{padding: 10, marginTop: 3}}>
+                  <RNPickerSelect
+                    placeholder={{label: 'Select difficulty', value: null}}
+                    onValueChange={(value) => setDifficulty(value)}
+                    items={fitnessLevel}
+                    style={pickerSelectStyles}
+                    value={difficulty}
+                  />
+                </View>
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center', padding: 10, flexDirection: 'row', gap: 10}}>
+                <CustomPressable
+                  text="Edit"
+                  buttonStyle={{backgroundColor: 'green', padding: 10, borderRadius: 5, flex: 1}}
+                  textStyle={{fontSize: 15, color: 'white'}}
+                  onPress={onPressSaveEdit}
+                />
+                <CustomPressable
+                  text="Cancel"
+                  buttonStyle={{backgroundColor: 'red', padding: 10, borderRadius: 5, flex: 1}}
+                  textStyle={{fontSize: 15, color: 'white'}}
+                  onPress={() => setVisibleEditModal(!visibleEditModal)}
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
+        {/* Pop up modal for creating new exercise */}
         <Modal
           animationType="fade"
           transparent={true}
@@ -238,7 +349,10 @@ const Exercise = () => {
                 style={{position: 'absolute', top: -15, right: -10}}
               >
                 <TemplateMenu
-                  editTemplate={() => {}}
+                  editTemplate={() => {
+                    setVisibleEditModal(true)
+                    onPressEditExercise(item.id)
+                  }}
                   deleteTemplate={() => onPressRemoveExercise(item.id)}
                 />
               </View>

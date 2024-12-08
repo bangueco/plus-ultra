@@ -19,6 +19,7 @@ export const useExerciseStore = create<State & Action>((set) => ({
     try {
       const defaultExercises = await exerciseService.getExerciseByCreatorId(0)
       const userExercises = await exerciseService.getExerciseByCreatorId(userId)
+      set({exercise: []})
       set({exercise: [...defaultExercises, ...userExercises]})
     } catch (error) {
       console.error(error)
