@@ -364,7 +364,7 @@ export default function WorkoutSession({route}: RootProps) {
                               />
                             </View>
                           )}
-                          enabled={workoutStarted}
+                          enabled={workoutStarted || manualWorkoutStarted}
                         >
                           <DataTable.Row key={set.exercise_set_id}>
                             <DataTable.Cell>{index + 1}</DataTable.Cell>

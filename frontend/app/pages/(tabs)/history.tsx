@@ -109,7 +109,7 @@ const History = () => {
                       }
                     </View>
                     <View style={{marginLeft: 30}}>
-                      <Text style={{color: systemTheme.colors.primary, fontSize: 18}}>Weight</Text>
+                      <Text style={{color: systemTheme.colors.primary, fontSize: 18}}>Best Weight</Text>
                       {
                         historyExercise
                           .filter(itemExe => itemExe.history_id === item.history_id) // Filter by history_id

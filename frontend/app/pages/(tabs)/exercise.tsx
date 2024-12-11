@@ -180,7 +180,7 @@ const Exercise = () => {
                     placeholder={{label: 'Select equipment', value: null}}
                     onValueChange={(value) => setEquipmentName(value)}
                     items={equipment}
-                    style={pickerSelectStyles}
+                    style={{inputAndroid: {color: systemTheme.colors.text}}}
                     value={equipmentName}
                   />
                 </View>
@@ -189,7 +189,7 @@ const Exercise = () => {
                     placeholder={{label: 'Select muscle group', value: null}}
                     onValueChange={(value) => setMuscleGroup(value)}
                     items={muscle_group}
-                    style={pickerSelectStyles}
+                    style={{inputAndroid: {color: systemTheme.colors.text}}}
                     value={muscleGroup}
                   />
                 </View>
@@ -198,7 +198,7 @@ const Exercise = () => {
                     placeholder={{label: 'Select difficulty', value: null}}
                     onValueChange={(value) => setDifficulty(value)}
                     items={fitnessLevel}
-                    style={pickerSelectStyles}
+                    style={{inputAndroid: {color: systemTheme.colors.text}}}
                     value={difficulty}
                   />
                 </View>
@@ -259,7 +259,7 @@ const Exercise = () => {
                     placeholder={{label: 'Select equipment', value: null}}
                     onValueChange={(value) => setEquipmentName(value)}
                     items={equipment}
-                    style={pickerSelectStyles}
+                    style={{inputAndroid: {color: systemTheme.colors.text}}}
                   />
                 </View>
                 <View style={{padding: 10, marginTop: 3}}>
@@ -267,7 +267,7 @@ const Exercise = () => {
                     placeholder={{label: 'Select muscle group', value: null}}
                     onValueChange={(value) => setMuscleGroup(value)}
                     items={muscle_group}
-                    style={pickerSelectStyles}
+                    style={{inputAndroid: {color: systemTheme.colors.text}}}
                   />
                 </View>
                 <View style={{padding: 10, marginTop: 3}}>
@@ -275,7 +275,7 @@ const Exercise = () => {
                     placeholder={{label: 'Select difficulty', value: null}}
                     onValueChange={(value) => setDifficulty(value)}
                     items={fitnessLevel}
-                    style={pickerSelectStyles}
+                    style={{inputAndroid: {color: systemTheme.colors.text}}}
                   />
                 </View>
               </View>

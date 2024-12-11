@@ -79,13 +79,17 @@ const Profile = () => {
       const req = await trainerService.leaveTrainer(userId)
 
       const userInfo = await SecureStore.getItemAsync('user')
-      
+
       if (!userInfo) return Alert.alert("User info not found!")
 
       const userInfoTrainer: UserTrainer = req.data
       const parsedUserInfo: User = JSON.parse(userInfo)
 
       parsedUserInfo.trainerId = userInfoTrainer.trainerId
+
+      if (user.approved) {
+        parsedUserInfo.approved = false
+      }
 
       await SecureStore.setItemAsync('user', JSON.stringify(parsedUserInfo))
 
