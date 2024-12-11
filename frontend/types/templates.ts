@@ -1,7 +1,8 @@
 export type TemplatesType = {
   template_id: number,
   template_name: string,
-  custom: number | null
+  custom: number | null,
+  created_by: number
 }
 
 export type TemplateItem = {

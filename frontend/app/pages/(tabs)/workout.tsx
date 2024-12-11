@@ -60,7 +60,7 @@ const Workout = () => {
 
   const fetchTemplates = async () => {
     try {
-      const customTemplates = await templateService.findTemplateByCreator(1)
+      const customTemplates = await templateService.findTemplateByCreator(user.id)
       const exampleTemplates = await templateService.findTemplateByCreator(0)
       return setWorkoutTemplates([...exampleTemplates, ...customTemplates])
     } catch (error) {
@@ -850,8 +850,8 @@ const Workout = () => {
             <Text style={{color: systemTheme.colors.text, fontSize: 20}}># My templates</Text>
             <View style={styles.templates}>
               {
-                workoutTemplates && workoutTemplates.filter((template) => template.custom === 1).length > 0 ? (
-                  workoutTemplates.filter((template) => template.custom === 1).map((template) => (
+                workoutTemplates && workoutTemplates.filter((template) => template.created_by === user.id).length > 0 ? (
+                  workoutTemplates.filter((template) => template.created_by === user.id).map((template) => (
                   <Pressable
                     key={template.template_id}
                     style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
