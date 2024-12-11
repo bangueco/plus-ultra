@@ -5,6 +5,10 @@ const getAllHistory = async () => {
   return await db.select().from(history)
 }
 
+const deleteAllHistory = async () => {
+  return await db.delete(history)
+}
+
 const createHistory = async (templateName: string, elapsedTime: string, caloriesBurned: number, date: string) => {
   return await db.insert(history).values({
     template_name: templateName,
@@ -15,5 +19,5 @@ const createHistory = async (templateName: string, elapsedTime: string, calories
 }
 
 export default {
-  getAllHistory, createHistory
+  getAllHistory, deleteAllHistory, createHistory
 }

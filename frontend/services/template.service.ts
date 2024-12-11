@@ -13,10 +13,15 @@ const getTemplateById = async (templateId: number) => {
   return await db.select().from(template).where(eq(template.template_id, templateId))
 }
 
-const createTemplate = async (templateName: string, custom: boolean) => {
+const findTemplateByCreator = async (creator: number) => {
+  return await db.select().from(template).where(eq(template.created_by, creator))
+}
+
+const createTemplate = async (templateName: string, custom: boolean, creator: number) => {
   return await db.insert(template).values({
     template_name: templateName,
-    custom: custom ? 1 : 0
+    custom: custom ? 1 : 0,
+    created_by: creator
   })
 }
 
@@ -88,5 +93,6 @@ export default {
   findTrainerTemplateItemById,
   updateTrainerTemplate,
   deleteTrainerItemTemplate,
-  createTrainerItem
+  createTrainerItem,
+  findTemplateByCreator
 }

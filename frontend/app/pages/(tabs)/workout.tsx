@@ -60,8 +60,9 @@ const Workout = () => {
 
   const fetchTemplates = async () => {
     try {
-      const templates = await templateService.getAllTemplate()
-      return setWorkoutTemplates(templates)
+      const customTemplates = await templateService.findTemplateByCreator(1)
+      const exampleTemplates = await templateService.findTemplateByCreator(0)
+      return setWorkoutTemplates([...exampleTemplates, ...customTemplates])
     } catch (error) {
       console.error(error)
     }
@@ -110,7 +111,7 @@ const Workout = () => {
   const onPressCreateTemplate = async () => {
     try {
 
-      const initTemplate = await templateService.createTemplate(newTemplate.template_name, true)
+      const initTemplate = await templateService.createTemplate(newTemplate.template_name, true, user.id)
 
       await templateItemService.createTemplateItem(initTemplate.lastInsertRowId, ...newTemplate.exercises)
 

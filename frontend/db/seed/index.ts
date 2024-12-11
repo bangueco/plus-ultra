@@ -36,9 +36,9 @@ export default async function seed() {
       });
     }));
 
-    const pushDay = await templateService.createTemplate('Push Day', false)
-    const pullDay = await templateService.createTemplate('Pull Day', false)
-    const legDay = await templateService.createTemplate('Leg Day', false)
+    const pushDay = await templateService.createTemplate('Push Day', false, 0)
+    const pullDay = await templateService.createTemplate('Pull Day', false, 0)
+    const legDay = await templateService.createTemplate('Leg Day', false, 0)
 
     await templateItemService.createTemplateItem(pushDay.lastInsertRowId, ...pushDayExercises)
     await templateItemService.createTemplateItem(pullDay.lastInsertRowId, ...pullDayExercises)

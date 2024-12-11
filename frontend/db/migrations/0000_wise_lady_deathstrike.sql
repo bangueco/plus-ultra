@@ -44,7 +44,8 @@ CREATE TABLE `HistoryExercise` (
 CREATE TABLE `Template` (
 	`template_id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`template_name` text NOT NULL,
-	`custom` integer DEFAULT 0
+	`custom` integer DEFAULT 0,
+	`created_by` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `TemplateItem` (

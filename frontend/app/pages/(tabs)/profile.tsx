@@ -14,6 +14,7 @@ import { AxiosError } from "axios"
 import trainerService from "@/services/trainer.service"
 import { SecureStore } from "@/lib/secureStore"
 import authService from "@/services/auth.service"
+import historyService from "@/services/history.service"
 
 type PreferencesProps = {
   firstTime: boolean,
@@ -42,6 +43,7 @@ const Profile = () => {
   }
 
   const logoutUser = async () => {
+    await historyService.deleteAllHistory()
     setVisibleProfile(!visibleProfile)
     logout()
     if (useRootNavigation.isReady()) {

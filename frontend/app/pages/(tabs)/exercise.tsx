@@ -153,7 +153,7 @@ const Exercise = () => {
           }}>
           <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(52, 52, 52, 0.7)'}}>
             <View style={[style.modalStyle, {backgroundColor: systemTheme.colors.background}]}>
-              <Text style={{textAlign: 'center', fontSize: 20, padding: 10, color: 'white'}}>Add new exercise</Text>
+              <Text style={{textAlign: 'center', fontSize: 20, padding: 10, color: systemTheme.colors.text}}>Edit exercise</Text>
               <View>
                 <View style={{padding: 10}}>
                   <CustomTextInput
@@ -231,7 +231,7 @@ const Exercise = () => {
           }}>
           <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(52, 52, 52, 0.7)'}}>
             <View style={[style.modalStyle, {backgroundColor: systemTheme.colors.background}]}>
-              <Text style={{textAlign: 'center', fontSize: 20, padding: 10, color: 'white'}}>Add new exercise</Text>
+              <Text style={{textAlign: 'center', fontSize: 20, padding: 10, color: systemTheme.colors.text}}>Add new exercise</Text>
               <View>
                 <View style={{padding: 10}}>
                   <CustomTextInput
