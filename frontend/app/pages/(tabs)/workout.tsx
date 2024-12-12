@@ -836,7 +836,7 @@ const Workout = () => {
           </Dialog>
           {/* End of dialog */}
         </Portal>
-        <View style={{marginTop: 30, gap: 10, alignItems: 'center'}}>
+        <View style={{marginTop: 15, gap: 10, alignItems: 'center', paddingBottom: 30}}>
           <Text style={{color: systemTheme.colors.text, fontSize: 17}}>Start Workout</Text>
           <CustomPressable
             buttonStyle={{backgroundColor: systemTheme.colors.primary, borderRadius: 5, width: '90%'}}
@@ -923,8 +923,11 @@ const Workout = () => {
             </View>
             :
             <View style={{gap: 5, flexGrow: 1}}>
-              <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', gap: 10, paddingBottom: 20}}>
-                <Text style={{color: systemTheme.colors.text, fontSize: 20}}>Template for clients</Text>
+              <Text style={{color: systemTheme.colors.text, fontSize: 20, textAlign: 'center'}}>Template for clients</Text>
+              <View style={{paddingBottom: 20, justifyContent: 'space-between', flexDirection: 'row', padding: 5}}>
+                <Button mode="contained" icon="plus" onPress={() => setNewClientTemplateVisible(true)}>
+                  Add new client template
+                </Button>
                 <Button
                   mode="contained"
                   icon="reload"
@@ -932,12 +935,6 @@ const Workout = () => {
                 >
                   Refresh
                 </Button>
-                <CustomPressable
-                  buttonStyle={{backgroundColor: systemTheme.colors.primary, borderRadius: 5, width: '90%'}}
-                  textStyle={{fontSize: 20, color: 'white'}}
-                  text="Add new template for clients"
-                  onPress={() => setNewClientTemplateVisible(true)}
-                />
               </View>
               <View style={styles.templates}>
                 {

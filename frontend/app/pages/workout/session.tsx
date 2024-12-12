@@ -300,22 +300,25 @@ export default function WorkoutSession({route}: RootProps) {
               keyboardType="numeric"
               maxLength={2}
               placeholder="HH"
+              style={{color: systemTheme.colors.text}}
             />
-            <Text>:</Text>
+            <Text style={{color: systemTheme.colors.text}}>:</Text>
             <TextInput
               onChangeText={(e) => setManualMinutes(e.padStart(2, '0'))}
               defaultValue={String(manualMinutes).padStart(2, '0')}
               keyboardType="numeric"
               maxLength={2}
               placeholder="MM"
+              style={{color: systemTheme.colors.text}}
             />
-            <Text>:</Text>
+            <Text style={{color: systemTheme.colors.text}}>:</Text>
             <TextInput
               onChangeText={(e) => setManualSeconds(e.padStart(2, '0'))}
               defaultValue={String(manualSeconds).padStart(2, '0')}
               keyboardType="numeric"
               maxLength={2}
               placeholder="SS"
+              style={{color: systemTheme.colors.text}}
             />
           </>
         }
