@@ -19,8 +19,6 @@ const ViewExerciseInfo = ({id}: ViewExerciseInfoProps) => {
   const onPressSelectExercise = async (id: number) => {
     const getExercise = await exerciseService.getExerciseById(id)
 
-    if (getExercise[0]?.custom === 1) return Alert.alert('This exercise is custom, you cannot view it.')
-
     setCurrentSelectedExercise({
       name: getExercise[0].name,
       instructions: getExercise[0].instructions ?? '',
