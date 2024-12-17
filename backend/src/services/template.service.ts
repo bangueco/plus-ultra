@@ -17,12 +17,13 @@ const findTemplateItemsByTemplateId = async (templateId: number) => {
   return await prisma.templateItem.findMany({where: {template_id: templateId}})
 }
 
-const createTemplate = async (templateName: string, custom: number, difficulty: Difficulty, creatorId: number) => {
+const createTemplate = async (templateName: string, custom: number, difficulty: Difficulty, creatorId: number, clientName: string | null) => {
   return await prisma.template.create({data: {
     template_name: templateName,
     custom,
     difficulty,
-    creatorId
+    creatorId,
+    client_name: clientName
   }})
 }
 

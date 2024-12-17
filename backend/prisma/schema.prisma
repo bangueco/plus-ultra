@@ -37,6 +37,7 @@ model Template {
   creatorId Int
   user User @relation("UserTemplate", fields: [creatorId], references: [id])
   items TemplateItem[] @relation("TemplateItems")
+  client_name String?
 }
 
 model TemplateItem {

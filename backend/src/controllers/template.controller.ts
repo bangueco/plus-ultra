@@ -16,6 +16,7 @@ type TemplateProps = {
   difficulty: Difficulty
   creatorId: number
   templateItems: Array<TemplateItemProps>
+  client_name: string | null
 }
 
 type AddTemplateProps = {
@@ -73,14 +74,14 @@ const findTemplateItemByTemplateId = async (request: Request, response: Response
 
 const createTemplate = async (request: Request, response: Response, next: NextFunction) => {
 
-  const { template_name, custom, difficulty, creatorId, templateItems } = request.body as TemplateProps
+  const { template_name, custom, difficulty, creatorId, templateItems, client_name } = request.body as TemplateProps
 
   try {
     if (!template_name || !custom || !difficulty || !creatorId || !templateItems) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Some fields are required!")
 
     if (!Array.isArray(templateItems)) throw new ApiError(HttpStatusCode.BAD_REQUEST, "templateItems field must be an array!")
 
-    const newTemplate = await templateService.createTemplate(template_name, custom, difficulty, creatorId)
+    const newTemplate = await templateService.createTemplate(template_name, custom, difficulty, creatorId, client_name)
     templateItems.map(async (item) => {
       await templateService.createTemplateItem(item.item_name, item.muscleGroup, newTemplate.template_id, item.exercise_id)
     })
