@@ -40,8 +40,8 @@ const findTemplatesByCreator = async (creatorId: number) => {
   return request
 }
 
-const createTrainerTemplate = async (templateName: string, custom: number, difficulty: string, creatorId: number, templateItems: Array<TemplateItemProps>) => {
-  const request = await axios.post(`${baseURL}/template/create`, {template_name: templateName, custom, difficulty, creatorId, templateItems})
+const createTrainerTemplate = async (templateName: string, custom: number, difficulty: string, creatorId: number, client_name: string | null, templateItems: Array<TemplateItemProps>) => {
+  const request = await axios.post(`${baseURL}/template/create`, {template_name: templateName, custom, difficulty, client_name, creatorId, templateItems})
   return request
 }
 
@@ -51,8 +51,8 @@ const updateTemplate = async (templateId: number, templateName: string) => {
   }).where(eq(template.template_id, templateId))
 }
 
-const updateTrainerTemplate = async (templateId: number, templateName: string, custom: number, difficulty: string, creatorId: number) => {
-  const request = await axios.patch(`${baseURL}/template/update`, {templateId, template_name: templateName, custom, difficulty, creatorId})
+const updateTrainerTemplate = async (templateId: number, templateName: string, custom: number, difficulty: string, creatorId: number, client_name: string | null) => {
+  const request = await axios.patch(`${baseURL}/template/update`, {templateId, template_name: templateName, custom, client_name, difficulty, creatorId})
   return request
 }
 

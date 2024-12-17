@@ -48,31 +48,42 @@ export default function SuggestionGuide() {
   if (preferences.fitnessLevel === "Beginner" && bmi < 18.5) {
     return (
       <Text style={{ fontSize: 12, textAlign: 'center' }}>
-        You are a {preferences.fitnessLevel}, and your BMI is {bmi}, which means you are considered {determineBMI(bmi)}. 
-        It is recommended to take a maximum of 3 sets per exercise and focus on building strength gradually. Be sure to incorporate balanced nutrition into your routine to help improve your overall health.
+        You are a {preferences.fitnessLevel}, and your BMI is {bmi}, which means you are considered {determineBMI(bmi)}.{"\n\n"}
+        <Text style={{ fontWeight: "bold" }}>Recommended Sets: 2-3 per exercise</Text>{"\n"}
+        <Text style={{ fontWeight: "bold" }}>Recommended Reps: 8-12 per set</Text>{"\n"}
+        <Text style={{ fontWeight: "bold" }}>Rest Time: 60-90 seconds between sets</Text>{"\n\n"}
+        Focus on bodyweight exercises and light strength training to build a solid foundation. Prioritize form, recover properly, and incorporate balanced nutrition to support healthy weight gain.
       </Text>
     );
   } else if (preferences.fitnessLevel === "Beginner" && bmi >= 18.5) {
     return (
       <Text style={{ fontSize: 12, textAlign: 'center' }}>
-        You are a {preferences.fitnessLevel}, and your BMI is {bmi}, which means you are considered {determineBMI(bmi)}. 
-        It's a great time to start your fitness journey! Focus on mastering form and gradually increasing intensity. Aim for a balanced workout routine with 3-4 sets per exercise.
+        You are a {preferences.fitnessLevel}, and your BMI is {bmi}, which means you are considered {determineBMI(bmi)}.{"\n\n"}
+        <Text style={{ fontWeight: "bold" }}>Recommended Sets: 3-4 per exercise</Text>{"\n"}
+        <Text style={{ fontWeight: "bold" }}>Recommended Reps: 10-15 per set</Text>{"\n"}
+        <Text style={{ fontWeight: "bold" }}>Rest Time: 60-90 seconds between sets</Text>{"\n\n"}
+        Start your fitness journey with compound movements like squats, push-ups, and rows. Focus on mastering form, increasing endurance, and ensuring proper rest between sets.
       </Text>
     );
   } else if (preferences.fitnessLevel === "Intermediate" && bmi < 18.5) {
     return (
       <Text style={{ fontSize: 12, textAlign: 'center' }}>
-        You are an {preferences.fitnessLevel}, and your BMI is {bmi}, which means you are considered {determineBMI(bmi)}. 
-        At this stage, focus on improving your strength and muscle mass, with more sets per exercise (up to 4-5). 
-        Ensure that your nutrition supports muscle growth and recovery.
+        You are an {preferences.fitnessLevel}, and your BMI is {bmi}, which means you are considered {determineBMI(bmi)}.{"\n\n"}
+        <Text style={{ fontWeight: "bold" }}>Recommended Sets: 4-5 per exercise</Text>{"\n"}
+        <Text style={{ fontWeight: "bold" }}>Recommended Reps: 8-10 per set</Text>{"\n"}
+        <Text style={{ fontWeight: "bold" }}>Rest Time: 90-120 seconds between sets</Text>{"\n\n"}
+        Prioritize progressive overload with muscle-building exercises like squats, deadlifts, presses, and pull-ups. Longer rest ensures you recover for optimal performance and strength gains.
       </Text>
     );
   } else {
     return (
       <Text style={{ fontSize: 12, textAlign: 'center' }}>
-        You are a {preferences.fitnessLevel}, and your BMI is {bmi}, which means you are considered {determineBMI(bmi)}. 
-        Keep pushing yourself with more challenging workouts and aim for 4-5 sets per exercise. Be sure to fuel your body with the proper nutrients to support your active lifestyle.
+        You are a {preferences.fitnessLevel}, and your BMI is {bmi}, which means you are considered {determineBMI(bmi)}.{"\n\n"}
+        <Text style={{ fontWeight: "bold" }}>Recommended Sets: 4-5 per exercise</Text>{"\n"}
+        <Text style={{ fontWeight: "bold" }}>Recommended Reps: 6-12 per set</Text>{"\n"}
+        <Text style={{ fontWeight: "bold" }}>Rest Time: 90-120 seconds between sets</Text>{"\n\n"}
+        Push yourself with more challenging workouts, incorporating higher weights or intensity. Ensure you rest adequately between sets for recovery and sustained progress.
       </Text>
     );
-  }
+  }  
 }

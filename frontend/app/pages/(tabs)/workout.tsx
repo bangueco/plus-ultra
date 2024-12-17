@@ -39,6 +39,7 @@ const Workout = () => {
   const [newTemplateVisible, setNewTemplateVisible] = useState<boolean>(false)
   const [newClientTemplateVisible, setNewClientTemplateVisible] = useState<boolean>(false)
   const [difficulty, setDifficulty] = useState<string>('')
+  const [clientName, setClientName] = useState<string|null>(null)
   const [newTemplate, setNewTemplate] = useState<NewTemplateItem>({template_name: '', exercises: []})
   const [editTemplate, setEditTemplate] = useState<EditTemplateItem>({template_id: 0, template_name: '', exercises: []})
   const [exerciseListVisible, setExerciseListVisible] = useState<boolean>(false)
@@ -132,7 +133,7 @@ const Workout = () => {
     try {
 
       if (!difficulty) return Alert.alert("Difficulty field is required!")
-      await templateService.createTrainerTemplate(newTemplate.template_name, 1, difficulty, user.id, newTemplate.exercises)
+      await templateService.createTrainerTemplate(newTemplate.template_name, 1, difficulty, user.id, clientName, newTemplate.exercises)
       setNewTemplate({...newTemplate, template_name: '', exercises: []})
 
       setNewClientTemplateVisible(false)
@@ -632,7 +633,7 @@ const Workout = () => {
                     return Alert.alert("Please select a proper difficulty level")
                   }
                   if (editTemplate.template_id) {
-                    await templateService.updateTrainerTemplate(editTemplate.template_id, editTemplate.template_name, 1, difficulty, user.id)
+                    await templateService.updateTrainerTemplate(editTemplate.template_id, editTemplate.template_name, 1, difficulty, user.id, clientName)
                   }
                   setEditTrainerTemplateVisible(false)
                   await fetchTrainerTemplates(user.id)
@@ -655,6 +656,7 @@ const Workout = () => {
                 placeholder={{label: 'Workout template difficulty'}}
                 value={difficulty}
               />
+              <TextInput label="Enter client username (empty for general use)" style={{backgroundColor: 'transparent'}} onChangeText={(e) => setClientName(e) } />
               <ScrollView
                 style={{height: 200}}
               >

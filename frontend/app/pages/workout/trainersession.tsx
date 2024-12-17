@@ -337,7 +337,7 @@ export default function TrainerSession({route}: TrainerSessionProps) {
       <View style={styles.workoutName}>
         <Text style={{fontSize: 28, color: systemTheme.colors.text, fontWeight: 'bold'}}>{templateName}</Text>
       </View>
-      <View style={{height: '60%', borderWidth: 1, padding: 10, borderColor: systemTheme.colors.text, borderRadius: 10}}>
+      <View style={{height: '45%', borderWidth: 1, padding: 10, borderColor: systemTheme.colors.text, borderRadius: 10}}>
         <ScrollView contentContainerStyle={styles.exercisesContainer} showsVerticalScrollIndicator={false}>
         {
           templateExercises && templateExercises.map((exercise, index) => (

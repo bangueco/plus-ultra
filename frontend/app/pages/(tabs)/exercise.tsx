@@ -371,7 +371,7 @@ const Exercise = () => {
                 />
               </View>
               :
-              <></>
+              null
             }
           </View>
         )}
