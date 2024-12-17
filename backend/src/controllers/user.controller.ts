@@ -35,12 +35,74 @@ const verifyEmail = async (request: Request, response: Response, next: NextFunct
 
     if (!user) throw new ApiError(HttpStatusCode.BAD_REQUEST, "Username not found!")
 
-    if (user.emailToken === String(emailToken)) {
-      await userService.updateUser(user.id, {isEmailValid: true})
-      return response.status(HttpStatusCode.OK).json({message: "Email is now verified!"})
-    } else {
-      return response.status(HttpStatusCode.BAD_REQUEST).json({message: "Cannot verify email."})
-    }
+      if (user.emailToken === String(emailToken)) {
+        await userService.updateUser(user.id, { isEmailValid: true });
+        return response
+          .status(HttpStatusCode.OK)
+          .send(`
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Email Verification</title>
+                <style>
+                  body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f9;
+                    margin: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                  }
+                  .container {
+                    background: #ffffff;
+                    padding: 20px 30px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    border-radius: 10px;
+                    text-align: center;
+                    max-width: 400px;
+                    margin: auto;
+                  }
+                  h1 {
+                    color: #4CAF50;
+                    font-size: 24px;
+                  }
+                  p {
+                    color: #555555;
+                    font-size: 16px;
+                    margin-top: 10px;
+                  }
+                  a {
+                    display: inline-block;
+                    margin-top: 20px;
+                    text-decoration: none;
+                    background-color: #4CAF50;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    font-weight: bold;
+                  }
+                  a:hover {
+                    background-color: #45a049;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="container">
+                  <h1>Email Verified Successfully!</h1>
+                  <p>Your email address has been successfully verified.</p>
+                  <p>Return to application</p>
+                </div>
+              </body>
+            </html>
+          `);
+      } else {
+        return response
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: "Invalid email verification token." });
+      }
 
   } catch (error) {
     return next(error)
