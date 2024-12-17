@@ -53,6 +53,7 @@ export type TemplateTrainerProps = {
   custom: number,
   difficulty: string,
   creatorId: number
+  client_name: string | number
 }
 
 export type TemplateTrainerItemProps = {
