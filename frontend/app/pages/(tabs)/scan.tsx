@@ -12,7 +12,6 @@ import { Button, Dialog, Portal, SegmentedButtons } from 'react-native-paper';
 import sortByMuscleGroup from '@/hooks/sortByMuscleGroup';
 import CustomPressable from '@/components/custom/CustomPressable';
 import { ExerciseInfo } from '@/types/exercise';
-import asyncStore from '@/lib/asyncStore';
 import { Image } from 'expo-image';
 import { equipmentImages } from '@/constants/equipmentImages';
 import { SecureStore } from '@/lib/secureStore';
@@ -20,6 +19,7 @@ import { User } from '@/types/user';
 import exerciseService from '@/services/exercise.service';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { useUserStore } from '@/store/useUserStore';
+import EquipmentDescription from '@/components/EquipmentDescription';
 
 export default function Scan() {
   const camera = useRef<CameraView>(null)
@@ -34,8 +34,6 @@ export default function Scan() {
   const [permission, requestPermission] = useCameraPermissions()
 
   const { preferences, getUserPreferences } = useUserStore()
-
-  const [currentSelected, setCurrentSelected] = useState<string>('all')
 
   const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, video_id: string, difficulty: string}>({ name: '', instructions: '', video_id: '', difficulty: '' });
   const [visible, setVisible] = useState<boolean>(false)
@@ -191,22 +189,9 @@ export default function Scan() {
         <Text style={{color: systemTheme.colors.text}}>{equipmentExercises.equipment_name.toUpperCase()}</Text>
         <Image
           source={equipmentImages[equipmentExercises.equipment_name] ?? require('@/assets/images/equipments/no-image.jpg')}
-          style={{height: 250, width: '100%', resizeMode: 'center'}}
+          style={{height: 200, width: '100%', resizeMode: 'center'}}
         />
-        <SegmentedButtons
-        value={currentSelected}
-        onValueChange={(e) => setCurrentSelected(e)}
-        buttons={[
-          {
-            value: 'recommended',
-            label: 'Recommended Exercises',
-          },
-          {
-            value: 'all',
-            label: 'All Exercises',
-          },
-        ]}
-        />
+        <EquipmentDescription equipment_name={equipmentExercises.equipment_name} />
         <Portal>
           <Dialog visible={visible} onDismiss={() => setVisible(false)}>
             <Dialog.Title style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>{currentSelectedExercise?.name}</Dialog.Title>
@@ -236,54 +221,27 @@ export default function Scan() {
           </Dialog>
         </Portal>
         <View style={{flex: 1}}>
-          {
-            currentSelected === 'all' && (
-              <SectionList
-                extraData={equipmentExercises.exercises}
-                sections={sortByMuscleGroup(equipmentExercises.exercises)}
-                renderItem={({item}) => (
-                  <CustomPressable
-                    key={item.id} 
-                    text={item.name} 
-                    textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
-                    buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
-                    onPress={() => onPressSelectExercise(item.id)}
-                  />
-                )}
-                renderSectionHeader={({section: {title}}) => (
-                  <View style={{padding: 5, marginTop: 10}}>
-                    <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
-                  </View>
-                )}
-                stickySectionHeadersEnabled={false}
-                showsVerticalScrollIndicator={false}
+        <Text style={{color: systemTheme.colors.primary, fontSize: 20, textAlign: 'center'}}>Recommended</Text>
+        <SectionList
+            extraData={preferences.fitnessLevel}
+            sections={sortByMuscleGroup(filterByDifficulty(equipmentExercises.exercises))}
+            renderItem={({item}) => (
+              <CustomPressable
+                key={item.id} 
+                text={item.name} 
+                textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
+                buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
+                onPress={() => onPressSelectExercise(item.id)}
               />
-            )
-          }
-          {
-            currentSelected === 'recommended' && (
-              <SectionList
-                extraData={preferences.fitnessLevel}
-                sections={sortByMuscleGroup(filterByDifficulty(equipmentExercises.exercises))}
-                renderItem={({item}) => (
-                  <CustomPressable
-                    key={item.id} 
-                    text={item.name} 
-                    textStyle={{fontSize: 17, textAlign: 'center', color: systemTheme.colors.text}} 
-                    buttonStyle={{padding: 10, borderBottomWidth: 1, borderBottomColor: systemTheme.colors.border, backgroundColor: 'transparent'}}
-                    onPress={() => onPressSelectExercise(item.id)}
-                  />
-                )}
-                renderSectionHeader={({section: {title}}) => (
-                  <View style={{padding: 5, marginTop: 10}}>
-                    <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
-                  </View>
-                )}
-                stickySectionHeadersEnabled={false}
-                showsVerticalScrollIndicator={false}
-              />
-            )
-          }
+            )}
+            renderSectionHeader={({section: {title}}) => (
+              <View style={{padding: 5, marginTop: 10}}>
+                <Text style={{fontSize: 10, color: systemTheme.colors.text}}># {title.toUpperCase()}</Text>
+              </View>
+            )}
+            stickySectionHeadersEnabled={false}
+            showsVerticalScrollIndicator={false}
+          />
         </View>
       </View>
     )

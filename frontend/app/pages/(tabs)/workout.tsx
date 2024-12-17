@@ -20,6 +20,7 @@ import { AxiosError } from "axios"
 import RNPickerSelect from 'react-native-picker-select';
 import { fitnessLevel } from "@/constants/exercise"
 import { useTrainerStore } from "@/store/useTrainerStore"
+import { ExerciseInfo } from "@/types/exercise"
 
 type Preferences = {
   firstTime: boolean,
@@ -332,6 +333,18 @@ const Workout = () => {
 
   const filterByDifficulty = (exercise: Array<TemplateTrainerProps>) => {
 
+    if (!preferences) return exercise
+
+    if (preferences.fitnessLevel === 'Beginner') {
+      return exercise.filter(diff => diff.difficulty === 'Beginner')
+    } else if (preferences.fitnessLevel === 'Intermediate') {
+      return exercise.filter(diff => diff.difficulty !== 'Advanced')
+    } else {
+      return exercise
+    }
+  }
+
+  const filterExerciseByDifficulty = (exercise: Array<ExerciseInfo>) => {
     if (!preferences) return exercise
 
     if (preferences.fitnessLevel === 'Beginner') {
@@ -678,7 +691,7 @@ const Workout = () => {
             <Dialog.Content style={{height: 350}}>
               <SectionList
                 extraData={exercise}
-                sections={sortByMuscleGroup(exercise)}
+                sections={sortByMuscleGroup(filterExerciseByDifficulty(exercise))}
                 renderItem={({item}) => (
                   <Pressable key={item.id} style={{
                         flexDirection: 'row',

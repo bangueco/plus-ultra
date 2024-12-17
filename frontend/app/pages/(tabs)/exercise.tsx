@@ -12,12 +12,13 @@ import { useExerciseStore } from "@/store/useExerciseStore"
 import { useUserStore } from "@/store/useUserStore"
 import YoutubePlayer from "react-native-youtube-iframe";
 import TemplateMenu from "@/components/TemplateMenu"
+import { ExerciseInfo } from "@/types/exercise"
 
 const Exercise = () => {
   const systemTheme = useSystemTheme()
   const { addExercise, exercise, removeExercise, fetchExercise } = useExerciseStore()
 
-  const { user } = useUserStore()
+  const { user, preferences } = useUserStore()
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentSelectedExercise, setCurrentSelectedExercise] = useState<{ name: string, instructions: string, video_id: string, difficulty: string }>({ name: '', instructions: '', video_id: '', difficulty: '' });
@@ -69,6 +70,19 @@ const Exercise = () => {
       return await addExercise(exerciseName, muscleGroup, equipmentName, user.id, youtubeId ?? '', description, difficulty)
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const filterByDifficulty = (exercise: Array<ExerciseInfo>) => {
+
+    if (!preferences) return exercise
+
+    if (preferences.fitnessLevel === 'Beginner') {
+      return exercise.filter(diff => diff.difficulty === 'Beginner')
+    } else if (preferences.fitnessLevel === 'Intermediate') {
+      return exercise.filter(diff => diff.difficulty !== 'Advanced')
+    } else {
+      return exercise
     }
   }
 
@@ -327,7 +341,7 @@ const Exercise = () => {
       </Portal>
       <SectionList
         extraData={searchQuery}
-        sections={sortByMuscleGroup(exercise).map(section => ({
+        sections={sortByMuscleGroup(filterByDifficulty(exercise)).map(section => ({
           ...section,
           data: section.data.filter(item => 
             item.name.toLowerCase().includes(searchQuery.toLowerCase())
