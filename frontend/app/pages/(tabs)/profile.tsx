@@ -98,7 +98,7 @@ const Profile = () => {
       getUserInfo()
 
       await fetchTrainers()
-      return await fetchTrainerTemplates(user.id)
+      return await fetchTrainerTemplates(user.id, user.username)
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)
@@ -124,7 +124,7 @@ const Profile = () => {
       getUserInfo()
 
       await fetchTrainers()
-      return await fetchTrainerTemplates(parsedUserInfo.trainerId ?? 0)
+      return await fetchTrainerTemplates(parsedUserInfo.trainerId ?? 0, user.username)
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)
@@ -151,7 +151,7 @@ const Profile = () => {
       await fetchTrainers()
       Alert.alert(req.data.message)
       if (!user.trainerId) return
-      return await fetchTrainerTemplates(user.trainerId)
+      return await fetchTrainerTemplates(user.trainerId, user.username)
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)
@@ -178,7 +178,7 @@ const Profile = () => {
       
       await fetchTrainers()
       Alert.alert(req.data.message)
-      return await fetchTrainerTemplates(parsedUserInfo.trainerId ?? 0)
+      return await fetchTrainerTemplates(parsedUserInfo.trainerId ?? 0, user.username)
     } catch (error) {
       if (error instanceof AxiosError) {
         Alert.alert(error.response?.data.message)

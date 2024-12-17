@@ -138,7 +138,7 @@ const Workout = () => {
 
       setNewClientTemplateVisible(false)
 
-      return await fetchTrainerTemplates(user.id)
+      return await fetchTrainerTemplates(user.id, user.username)
 
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -214,7 +214,7 @@ const Workout = () => {
   const onPressDeleteTrainerTemplate = async (id: number) => {
     try {
       await templateService.deleteTrainerTemplate(id)
-      await fetchTrainerTemplates(user.id)
+      await fetchTrainerTemplates(user.id, user.username)
     } catch (error) {
       console.error(error)
     }
@@ -359,12 +359,12 @@ const Workout = () => {
 
   const onPressRefreshTrainerTemplates = async () => {
     if (user.trainerId) {
-      await fetchTrainerTemplates(user.trainerId)
+      await fetchTrainerTemplates(user.trainerId, user.username)
       await getUserPreferences()
     }
 
     if (user.role === 'TRAINER') {
-      await fetchTrainerTemplates(user.id)
+      await fetchTrainerTemplates(user.id, user.username)
       await getUserPreferences()
     }
   }
@@ -373,12 +373,12 @@ const Workout = () => {
     fetchTemplates().catch((error) => console.error(error))
 
     if (user.role === "TRAINER") {
-      fetchTrainerTemplates(user.id).catch(error => console.error(error.data.message))
+      fetchTrainerTemplates(user.id, user.username).catch(error => console.error(error.data.message))
       getUserPreferences().catch(error => console.error(error.data.message))
     }
 
     if (user.role === "USER" && user.trainerId) {
-      fetchTrainerTemplates(user.trainerId).catch(error => console.error(error.data.message))
+      fetchTrainerTemplates(user.trainerId, user.username).catch(error => console.error(error.data.message))
       getUserPreferences().catch(error => console.error(error.data.message))
     }
   }, [])
@@ -636,7 +636,7 @@ const Workout = () => {
                     await templateService.updateTrainerTemplate(editTemplate.template_id, editTemplate.template_name, 1, difficulty, user.id, clientName)
                   }
                   setEditTrainerTemplateVisible(false)
-                  await fetchTrainerTemplates(user.id)
+                  await fetchTrainerTemplates(user.id, user.username)
                 }}
               >
                 OK
