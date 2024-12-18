@@ -32,7 +32,7 @@ export const useTrainerStore = create<State & Action>((set) => ({
     try {
       const trainerTemplate = await templateService.findTemplatesByCreator(id)
       const extractedData: Array<TemplateTrainerProps> = trainerTemplate.data
-      const generalTemplates = extractedData.filter(e => e.client_name === null)
+      const generalTemplates = extractedData
       return set({trainerTemplate: [...generalTemplates]})
     } catch (error) {
       if (error instanceof AxiosError) {
