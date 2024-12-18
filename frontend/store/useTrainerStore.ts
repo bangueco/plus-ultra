@@ -14,7 +14,7 @@ type State = {
 
 type Action = {
   fetchTrainers: () => Promise<void>
-  fetchTrainerTemplates: (id: number, username: string) => Promise<void>
+  fetchTrainerTemplates: (id: number) => Promise<void>
 }
 
 export const useTrainerStore = create<State & Action>((set) => ({
@@ -28,13 +28,12 @@ export const useTrainerStore = create<State & Action>((set) => ({
       console.error(error)
     }
   },
-  fetchTrainerTemplates: async (id: number, username: string) => {
+  fetchTrainerTemplates: async (id: number) => {
     try {
       const trainerTemplate = await templateService.findTemplatesByCreator(id)
       const extractedData: Array<TemplateTrainerProps> = trainerTemplate.data
       const generalTemplates = extractedData.filter(e => e.client_name === null)
-      const clientSpecificTemplates = extractedData.filter(e => e.client_name === username)
-      return set({trainerTemplate: [...generalTemplates, ...clientSpecificTemplates]})
+      return set({trainerTemplate: [...generalTemplates]})
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error.response?.data)

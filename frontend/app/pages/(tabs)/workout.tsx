@@ -132,13 +132,13 @@ const Workout = () => {
   const onPressCreateTrainerTemplate = async () => {
     try {
 
-      if (!difficulty) return Alert.alert("Difficulty field is required!")
+      if (!difficulty || !clientName) return Alert.alert("All fields are required!")
       await templateService.createTrainerTemplate(newTemplate.template_name, 1, difficulty, user.id, clientName, newTemplate.exercises)
       setNewTemplate({...newTemplate, template_name: '', exercises: []})
 
       setNewClientTemplateVisible(false)
 
-      return await fetchTrainerTemplates(user.id, user.username)
+      return await fetchTrainerTemplates(user.id)
 
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -214,7 +214,7 @@ const Workout = () => {
   const onPressDeleteTrainerTemplate = async (id: number) => {
     try {
       await templateService.deleteTrainerTemplate(id)
-      await fetchTrainerTemplates(user.id, user.username)
+      await fetchTrainerTemplates(user.id)
     } catch (error) {
       console.error(error)
     }
@@ -359,12 +359,12 @@ const Workout = () => {
 
   const onPressRefreshTrainerTemplates = async () => {
     if (user.trainerId) {
-      await fetchTrainerTemplates(user.trainerId, user.username)
+      await fetchTrainerTemplates(user.trainerId)
       await getUserPreferences()
     }
 
     if (user.role === 'TRAINER') {
-      await fetchTrainerTemplates(user.id, user.username)
+      await fetchTrainerTemplates(user.id)
       await getUserPreferences()
     }
   }
@@ -373,12 +373,12 @@ const Workout = () => {
     fetchTemplates().catch((error) => console.error(error))
 
     if (user.role === "TRAINER") {
-      fetchTrainerTemplates(user.id, user.username).catch(error => console.error(error.data.message))
+      fetchTrainerTemplates(user.id).catch(error => console.error(error.data.message))
       getUserPreferences().catch(error => console.error(error.data.message))
     }
 
     if (user.role === "USER" && user.trainerId) {
-      fetchTrainerTemplates(user.trainerId, user.username).catch(error => console.error(error.data.message))
+      fetchTrainerTemplates(user.trainerId).catch(error => console.error(error.data.message))
       getUserPreferences().catch(error => console.error(error.data.message))
     }
   }, [])
@@ -636,7 +636,7 @@ const Workout = () => {
                     await templateService.updateTrainerTemplate(editTemplate.template_id, editTemplate.template_name, 1, difficulty, user.id, clientName)
                   }
                   setEditTrainerTemplateVisible(false)
-                  await fetchTrainerTemplates(user.id, user.username)
+                  await fetchTrainerTemplates(user.id)
                 }}
               >
                 OK
@@ -656,7 +656,7 @@ const Workout = () => {
                 placeholder={{label: 'Workout template difficulty'}}
                 value={difficulty}
               />
-              <TextInput label="Enter client username (empty for general use)" style={{backgroundColor: 'transparent'}} onChangeText={(e) => setClientName(e) } />
+              <TextInput label="Enter client username" style={{backgroundColor: 'transparent'}} onChangeText={(e) => setClientName(e) } />
               <ScrollView
                 style={{height: 200}}
               >
@@ -921,7 +921,7 @@ const Workout = () => {
               </View>
               <View style={styles.templates}>
                 {
-                  trainerTemplate && user.approved && filterByDifficulty(trainerTemplate).map((template) => (
+                  trainerTemplate && user.approved && filterByDifficulty(trainerTemplate).filter(e => e.client_name === user.username).map((template) => (
                     <Pressable
                       key={template.template_id}
                       style={[styles.templateContainerStyle, {borderColor: systemTheme.colors.outline, backgroundColor: systemTheme.colors.card}]}
