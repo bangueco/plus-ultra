@@ -1,3 +1,6 @@
+import { View } from "react-native";
+import { Text } from "react-native-paper";
+
 type EquipmentDescriptionProps = {
   equipment_name: string
 }
@@ -25,9 +28,8 @@ export default function EquipmentDescription({ equipment_name }: EquipmentDescri
   };
 
   return (
-    <div>
-      <h3>{equipment_name}</h3>
-      <p>{getDescription(equipment_name)}</p>
-    </div>
+    <View>
+      <Text>{getDescription(equipment_name)}</Text>
+    </View>
   );
 }
